@@ -1,0 +1,1 @@
+# Schedule 관련 API 엔드포인트 정의

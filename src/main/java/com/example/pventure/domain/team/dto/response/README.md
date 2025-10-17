@@ -1,0 +1,1 @@
+# Team 관련 API 응답 DTO
