@@ -8,3 +8,4 @@ ApiResponse, PageResponse 등 프로젝트 전반에서 일관된 응답 구조�
 ```java
 return ApiResponse.success("조회 성공", data);
 return PageResponse.of(items, totalElements);
+```

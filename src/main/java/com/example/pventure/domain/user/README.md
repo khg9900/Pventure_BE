@@ -31,3 +31,4 @@ userService.updateProfile(userId, updateProfileRequestDto);
 
 // 회원 탈퇴
 userService.deleteUser(userId);
+```

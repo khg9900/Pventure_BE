@@ -35,3 +35,4 @@ List<PhotoResponse> photos = photoService.getPhotosByAlbum(albumId);
 
 // 사진 상세 조회
 PhotoResponse detail = photoService.getPhoto(photoId);
+```

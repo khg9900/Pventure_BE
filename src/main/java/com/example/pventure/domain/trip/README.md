@@ -31,3 +31,4 @@ tripService.deleteTrip(tripId);
 
 // 여행 상세 조회
 TripResponse detail = tripService.getTrip(tripId);
+```

@@ -18,3 +18,4 @@ AI 관련 공통 기능 및 모듈을 관리합니다.
 private RecommendationService recommendationService;
 
 List<Item> recommended = recommendationService.getRecommendations(userId);
+```

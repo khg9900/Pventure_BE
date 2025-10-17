@@ -23,3 +23,4 @@ AuthResponse response = authService.login(loginRequestDto);
 
 // 토큰 재발급
 TokenResponse newToken = authService.refreshToken(refreshTokenRequestDto);
+```

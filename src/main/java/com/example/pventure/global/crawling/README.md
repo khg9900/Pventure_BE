@@ -18,3 +18,4 @@ HTML 파싱, API 호출, 스케줄 기반 데이터 수집 등을 포함합니�
 private CrawlingService crawlingService;
 
 List<Data> results = crawlingService.crawlSite("https://example.com");
+```

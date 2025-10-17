@@ -34,3 +34,4 @@ scheduleService.deleteSchedule(scheduleId);
 
 // 일정 상세 조회
 ScheduleResponse detail = scheduleService.getSchedule(scheduleId);
+```

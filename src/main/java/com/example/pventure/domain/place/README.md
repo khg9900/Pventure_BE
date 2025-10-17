@@ -19,7 +19,7 @@ place/
 - 장소 상세 조회
 
 ## 활용 예시
-
+```java
 // 장소 등록
 PlaceResponse place = placeService.createPlace(createPlaceRequestDto);
 
@@ -28,3 +28,4 @@ PlaceResponse updatedPlace = placeService.updatePlace(placeId, updatePlaceReques
 
 // 장소 삭제
 placeService.deletePlace(placeId);
+```

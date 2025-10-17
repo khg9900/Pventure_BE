@@ -14,3 +14,4 @@
 
 ```java
 String formattedDate = DateUtils.format(LocalDateTime.now(), "yyyy-MM-dd");
+```

@@ -32,3 +32,4 @@ memberService.removeMember(teamId, memberId);
 
 // 팀 멤버 목록 조회
 List<MemberResponse> members = memberService.getTeamMembers(teamId);
+```

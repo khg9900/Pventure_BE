@@ -6,7 +6,7 @@
 
 ---
 
-## 📁 폴더 구조
+## 폴더 구조
 
 tripFolder/
 ├── controller/ # API 엔드포인트 정의
@@ -19,7 +19,7 @@ tripFolder/
 
 ---
 
-## ⚙️ 주요 기능
+## 주요 기능
 
 - 여행-폴더 매핑 생성 및 삭제
 - 폴더 내 여행 목록 조회
@@ -28,7 +28,7 @@ tripFolder/
 
 ---
 
-## 💡 활용 예시
+## 활용 예시
 
 ```java
 // 여행을 폴더에 연결
@@ -42,3 +42,4 @@ FolderResponse folder = tripFolderService.getFolderByTrip(tripId);
 
 // 여행-폴더 매핑 삭제
 tripFolderService.unlinkTripFromFolder(tripId, folderId);
+```

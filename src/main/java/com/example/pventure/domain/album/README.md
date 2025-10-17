@@ -35,3 +35,4 @@ albumService.deleteAlbum(albumId);
 
 // 앨범 조회
 AlbumResponse detail = albumService.getAlbum(albumId);
+```

@@ -31,3 +31,4 @@ List<TeamResponse> teams = teamService.getUserTeams(userId);
 
 // 팀 정보 수정
 teamService.updateTeam(teamId, updateTeamRequestDto);
+```

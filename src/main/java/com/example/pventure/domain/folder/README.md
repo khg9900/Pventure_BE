@@ -21,6 +21,7 @@ folder/
 - 여행, 앨범, 사진 등과의 연동
 - 사용자별 폴더 트리 관리  
 
+```java
 // 폴더 생성
 FolderResponse folder = folderService.createFolder(createFolderRequestDto, userId);
 
@@ -32,3 +33,4 @@ folderService.deleteFolder(folderId);
 
 // 기본 폴더 조회
 FolderResponse defaultFolder = folderService.getDefaultFolder(userId);
+```
