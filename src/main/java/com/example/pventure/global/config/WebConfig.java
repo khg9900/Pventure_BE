@@ -25,23 +25,13 @@ public class WebConfig implements WebMvcConfigurer {
                 .map(String::trim)
                 .filter(s -> !s.isEmpty())
                 .toList();
+        boolean isWildcard = origins.size() == 1 && "*".equals(origins.get(0));
 
         registry.addMapping("/**")
                 .allowedOrigins(origins.toArray(new String[0]))
                 .allowedMethods("*")
                 .allowedHeaders("*")
-                .allowCredentials(true);
-    }
-
-    @Override
-    public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> resolvers) {
-        resolvers.add(0, (request, response, handler, ex) -> {
-
-            if (response.getStatus() == HttpStatus.NOT_FOUND.value()) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "페이지를 찾을 수 없습니다");
-            }
-            return null;
-        });
+                .allowCredentials(isWildcard);
     }
 
     @Override

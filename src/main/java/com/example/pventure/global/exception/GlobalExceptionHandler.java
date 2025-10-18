@@ -13,12 +13,16 @@ import org.springframework.web.server.ResponseStatusException;
 public class GlobalExceptionHandler {
 
     // 존재하지 않는 요청에 대한 예외
-    @ExceptionHandler({ResponseStatusException.class, HttpRequestMethodNotSupportedException.class})
+    @ExceptionHandler({ResponseStatusException.class})
     public ResponseEntity<?> handleNoPageFoundException(Exception e) {
         log.warn("NoHandlerFoundException or HttpRequestMethodNotSupportedException: {}", e.getMessage());
         return ApiResponseHelper.fail(new ApiException(ErrorCode.NOT_FOUND_ENDPOINT));
     }
-
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+     public ResponseEntity<?> handleMethodNotSupported(HttpRequestMethodNotSupportedException e) {
+        log.warn("HttpRequestMethodNotSupportedException: {}", e.getMessage());
+        return ApiResponseHelper.fail(new ApiException(ErrorCode.METHOD_NOT_ALLOWED));
+    }
 
     // 커스텀 예외
     @ExceptionHandler(ApiException.class)

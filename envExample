@@ -5,7 +5,7 @@ BASE_URL=http://localhost:8080
 # 데이터베이스
 DB_URL=jdbc:mysql://localhost:3306/Pventure
 DB_USERNAME=root
-DB_PASSWORD=1234
+DB_PASSWORD=your_db_secret_here
 
 # JPA
 JPA_DDL_AUTO=update
@@ -27,7 +27,7 @@ REDIS_HOST=localhost
 REDIS_PORT=6379
 
 # JWT
-JWT_SECRET=mysecretkey
+JWT_SECRET=your_secure_random_secret_here
 JWT_EXPIRATION=30
 JWT_REFRESH_EXPIRATION=1440
 
