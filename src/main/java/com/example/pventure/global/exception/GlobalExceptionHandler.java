@@ -15,7 +15,7 @@ public class GlobalExceptionHandler {
 
     // 존재하지 않는 요청(엔드포인트) 처리
     @ExceptionHandler({ResponseStatusException.class})
-    public ResponseEntity<?> handleNoPageFoundException(Exception e) {
+    public ResponseEntity<?> handleNoPageFoundException(ResponseStatusException e) {
         log.warn("NoHandlerFoundException or HttpRequestMethodNotSupportedException: {}", e.getMessage());
         return ApiResponseHelper.fail(new ApiException(ErrorCode.NOT_FOUND_ENDPOINT));
     }
