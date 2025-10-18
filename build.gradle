@@ -4,7 +4,7 @@ plugins {
     id 'java'
 }
 
-group = 'com.issuemaker'
+group = 'com.Pventure'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
@@ -31,7 +31,6 @@ dependencies {
 
     // Database
     implementation 'com.mysql:mysql-connector-j:8.2.0'
-    runtimeOnly 'mysql:mysql-connector-java'
 
     // ==============================================================
     // 🔐 JWT / Authentication
@@ -44,7 +43,7 @@ dependencies {
     // ==============================================================
     // 🧰 Utility
     // ==============================================================
-    implementation 'io.springfox:springfox-boot-starter:3.0.0'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0'
 
     // ==============================================================
     // ⚡ Redis
@@ -60,7 +59,8 @@ dependencies {
     // ==============================================================
     // 🧮 QueryDSL (Jakarta)
     // ==============================================================
-    implementation 'com.querydsl:querydsl-jpa:5.1.0:jakarta'
+    implementation 'io.github.openfeign.querydsl:querydsl-jpa:6.11'
+    implementation 'io.github.openfeign.querydsl:querydsl-apt:6.11'
     annotationProcessor 'com.querydsl:querydsl-apt:5.1.0:jakarta'
     annotationProcessor 'jakarta.annotation:jakarta.annotation-api'
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api'

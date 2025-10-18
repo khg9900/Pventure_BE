@@ -25,8 +25,4 @@ public record ApiResponse<T>(
     public static <T> ApiResponse<T> fail(final ApiException e) {
         return new ApiResponse<>(e.getErrorCode().getHttpStatus(), false, null, ExceptionDto.of(e.getErrorCode()));
     }
-
-    public static ApiResponse<Void> noContent() {
-        return new ApiResponse<>(HttpStatus.NO_CONTENT, true, null, null);
-    }
 }
