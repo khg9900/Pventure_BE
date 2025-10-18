@@ -4,6 +4,7 @@ import com.example.pventure.global.response.ApiResponseHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
@@ -12,16 +13,26 @@ import org.springframework.web.server.ResponseStatusException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 존재하지 않는 요청에 대한 예외
+    // 존재하지 않는 요청(엔드포인트) 처리
     @ExceptionHandler({ResponseStatusException.class})
     public ResponseEntity<?> handleNoPageFoundException(Exception e) {
         log.warn("NoHandlerFoundException or HttpRequestMethodNotSupportedException: {}", e.getMessage());
         return ApiResponseHelper.fail(new ApiException(ErrorCode.NOT_FOUND_ENDPOINT));
     }
+
+    //지원되지 않는 HTTP 메서드 예외 처리
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
      public ResponseEntity<?> handleMethodNotSupported(HttpRequestMethodNotSupportedException e) {
         log.warn("HttpRequestMethodNotSupportedException: {}", e.getMessage());
         return ApiResponseHelper.fail(new ApiException(ErrorCode.METHOD_NOT_ALLOWED));
+    }
+
+    //유효성 검사 실패(@Valid, @Validated) 예외 처리
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
+        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+        log.warn("Validation failed: {}", message);
+        return ApiResponseHelper.fail(new ApiException(ErrorCode.INVALID_INPUT_VALUE));
     }
 
     // 커스텀 예외
@@ -37,4 +48,6 @@ public class GlobalExceptionHandler {
         log.error("Unexpected exception caught: {}", e.getMessage(), e);
         return ApiResponseHelper.fail(new ApiException(ErrorCode.INTERNAL_SERVER_ERROR));
     }
+
+
 }
