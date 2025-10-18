@@ -4,6 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
@@ -102,5 +107,12 @@ public enum ErrorCode {
     private final String code;
     private final HttpStatus httpStatus;
     private final String message;
-}
+
+    private static final Map<String, ErrorCode> BY_CODE =
+            Arrays.stream(values()).collect(Collectors.toUnmodifiableMap(ErrorCode::getCode, Function.identity()));
+
+    public static ErrorCode fromCode(String code) {
+        return BY_CODE.get(code);}
+    }
+
 
