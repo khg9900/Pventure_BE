@@ -24,7 +24,7 @@ public class Folder extends BaseEntity {
     private Team team;
 
     @Column(nullable = false)
-    private Boolean isDefault;
+    private boolean isDefault;
 
     @Builder.Default
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -23,19 +23,19 @@ public class Member extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
-    User user;
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", nullable = false)
-    Team team;
+    private Team team;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    TeamRole teamRole;
+    private TeamRole teamRole;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    TeamStatus teamStatus;
+    private TeamStatus teamStatus;
 
 
 }
