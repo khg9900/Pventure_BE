@@ -13,7 +13,7 @@ import lombok.*;
 @Builder
 @Table(
         uniqueConstraints = @UniqueConstraint(
-                name = "uk_member_user_team",
+                name = "uk_tripfolder_trip_folder",
                 columnNames = {"trip_id", "folder_id"}
         )
 )

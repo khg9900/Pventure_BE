@@ -5,6 +5,8 @@ import com.example.pventure.domain.user.entity.User;
 import com.example.pventure.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,5 +21,5 @@ public class Team extends BaseEntity {
     private User user;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Member> members;
+    private List<Member> members= new ArrayList<>();;
 }

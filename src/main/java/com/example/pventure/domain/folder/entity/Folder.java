@@ -6,6 +6,7 @@ import com.example.pventure.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,5 +27,5 @@ public class Folder extends BaseEntity {
     private Boolean isDefault;
 
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TripFolder> tripFolders;
+    private List<TripFolder> tripFolders= new ArrayList<>();;
 }
