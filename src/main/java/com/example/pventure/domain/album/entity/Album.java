@@ -23,6 +23,7 @@ public class Album extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String title;
 
+    @Builder.Default
     @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Photo> photos= new ArrayList<>();;
+    private List<Photo> photos = new ArrayList<>();
 }

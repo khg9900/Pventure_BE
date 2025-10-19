@@ -20,6 +20,7 @@ public class Team extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Builder.Default
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Member> members= new ArrayList<>();;
+    private List<Member> members = new ArrayList<>();
 }

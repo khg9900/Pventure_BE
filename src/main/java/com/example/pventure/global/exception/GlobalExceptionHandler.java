@@ -3,6 +3,7 @@ package com.example.pventure.global.exception;
 import com.example.pventure.global.response.ApiResponseHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -30,9 +31,11 @@ public class GlobalExceptionHandler {
     //유효성 검사 실패(@Valid, @Validated) 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
+        FieldError fieldError = (FieldError) e.getBindingResult().getAllErrors().get(0);
+        String fieldName = fieldError.getField();
         String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         log.warn("Validation failed: {}", message);
-        return ApiResponseHelper.fail(new ApiException(ErrorCode.INVALID_INPUT_VALUE));
+        return ApiResponseHelper.fail(new ApiException(ErrorCode.INVALID_INPUT_VALUE, fieldName));
     }
 
     // 커스텀 예외

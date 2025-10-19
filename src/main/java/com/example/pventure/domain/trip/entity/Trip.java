@@ -38,6 +38,7 @@ public class Trip extends BaseEntity {
     @JoinColumn(name = "team_id", nullable = false)
     private Team team;
 
+    @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<TripFolder> folders= new ArrayList<>();;
+    private List<TripFolder> folders = new ArrayList<>();
 }
