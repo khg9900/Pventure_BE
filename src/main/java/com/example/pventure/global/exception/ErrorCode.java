@@ -112,7 +112,8 @@ public enum ErrorCode {
             Arrays.stream(values()).collect(Collectors.toUnmodifiableMap(ErrorCode::getCode, Function.identity()));
 
     public static ErrorCode fromCode(String code) {
-        return BY_CODE.get(code);}
+        return BY_CODE.get(code);
     }
+}
 
 

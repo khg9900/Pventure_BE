@@ -13,20 +13,28 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_member_user_team",
+                columnNames = {"user_id", "team_id"}
+        )
+)
 public class Member extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id")
+    @JoinColumn(name = "team_id", nullable = false)
     Team team;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     TeamRole teamRole;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     TeamStatus teamStatus;
 
 

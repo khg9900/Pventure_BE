@@ -7,16 +7,16 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     // 존재하지 않는 요청(엔드포인트) 처리
-    @ExceptionHandler({ResponseStatusException.class})
-    public ResponseEntity<?> handleNoPageFoundException(ResponseStatusException e) {
-        log.warn("NoHandlerFoundException or HttpRequestMethodNotSupportedException: {}", e.getMessage());
+    @ExceptionHandler({NoResourceFoundException.class})
+    public ResponseEntity<?> handleNoPageFoundException(NoResourceFoundException e) {
+        log.warn("NoResourceFoundException: {}", e.getMessage());
         return ApiResponseHelper.fail(new ApiException(ErrorCode.NOT_FOUND_ENDPOINT));
     }
 

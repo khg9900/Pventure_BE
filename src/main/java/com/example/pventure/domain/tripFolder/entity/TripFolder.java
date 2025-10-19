@@ -11,6 +11,12 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
+@Table(
+        uniqueConstraints = @UniqueConstraint(
+                name = "uk_member_user_team",
+                columnNames = {"trip_id", "folder_id"}
+        )
+)
 public class TripFolder extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)

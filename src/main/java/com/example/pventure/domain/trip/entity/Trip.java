@@ -27,6 +27,7 @@ public class Trip extends BaseEntity {
     private String destination;
 
     private LocalDate startDate;
+
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)

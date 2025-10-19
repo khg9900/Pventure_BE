@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-
 public class Team extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
