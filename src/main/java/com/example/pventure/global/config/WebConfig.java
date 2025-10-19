@@ -11,7 +11,7 @@ import java.util.List;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
-    @Value("${cors.allowed-origins}")
+    @Value("${CORS_ALLOWED_ORIGINS}")
     private String corsAllowedOrigins;
 
     @Override
