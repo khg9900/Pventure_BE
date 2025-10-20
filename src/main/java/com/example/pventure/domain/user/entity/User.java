@@ -6,7 +6,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+            @UniqueConstraint(
+                name = "uk_users_provider",
+                columnNames = {"social_provider", "provider_id"}
+            )
+    }
+)
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,9 +31,10 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private SocialProvider socialProvider;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String providerId;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
 

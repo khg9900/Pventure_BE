@@ -10,6 +10,7 @@ auth/
     ├── request/ # API 요청 DTO
     └── response/ # API 응답 DTO
 
+## 주요 기능
 - 로그인 / 로그아웃
 - AccessToken / RefreshToken 발급 및 검증
 - 토큰 재발급
