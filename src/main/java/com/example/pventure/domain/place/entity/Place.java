@@ -24,13 +24,13 @@ public class Place extends BaseEntity {
     private String address;
 
     @Column
-    @DecimalMax(value = "-90.0")
-    @DecimalMin(value = "90.0")
+    @DecimalMax(value = "90.0")
+    @DecimalMin(value = "-90.0")
     private Double latitude;
 
     @Column
-    @DecimalMax(value = "-180.0")
-    @DecimalMin(value = "180.0")
+    @DecimalMax(value = "180.0")
+    @DecimalMin(value = "-180.0")
     private Double longitude;
 
     @Enumerated(EnumType.STRING)

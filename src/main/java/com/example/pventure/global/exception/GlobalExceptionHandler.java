@@ -31,7 +31,7 @@ public class GlobalExceptionHandler {
     //유효성 검사 실패(@Valid, @Validated) 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
-        FieldError fieldError = e.getBindingResult().getFieldError();;
+        FieldError fieldError = e.getBindingResult().getFieldError();
         String fieldName = fieldError != null ? fieldError.getField() : null;
         String message = fieldError != null ? fieldError.getDefaultMessage() : "Validation failed";
         log.warn("Validation failed: {} ({})", message, fieldName);
