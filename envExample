@@ -10,7 +10,7 @@ DB_PASSWORD=your_db_secret_here
 # JPA
 JPA_DDL_AUTO=update
 JPA_SHOW_SQL=true
-HIBERNATE_DIALECT=org.hibernate.dialect.MySQL8Dialect
+HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect
 
 # OAuth
 GOOGLE_CLIENT_ID=your_google_client_id
