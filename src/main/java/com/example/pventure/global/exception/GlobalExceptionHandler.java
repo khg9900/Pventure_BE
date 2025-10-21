@@ -3,20 +3,21 @@ package com.example.pventure.global.exception;
 import com.example.pventure.global.response.ApiResponseHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     // 존재하지 않는 요청(엔드포인트) 처리
-    @ExceptionHandler({ResponseStatusException.class})
-    public ResponseEntity<?> handleNoPageFoundException(ResponseStatusException e) {
-        log.warn("NoHandlerFoundException or HttpRequestMethodNotSupportedException: {}", e.getMessage());
+    @ExceptionHandler({NoResourceFoundException.class})
+    public ResponseEntity<?> handleNoPageFoundException(NoResourceFoundException e) {
+        log.warn("NoResourceFoundException: {}", e.getMessage());
         return ApiResponseHelper.fail(new ApiException(ErrorCode.NOT_FOUND_ENDPOINT));
     }
 
@@ -30,9 +31,11 @@ public class GlobalExceptionHandler {
     //유효성 검사 실패(@Valid, @Validated) 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
-        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        log.warn("Validation failed: {}", message);
-        return ApiResponseHelper.fail(new ApiException(ErrorCode.INVALID_INPUT_VALUE));
+        FieldError fieldError = e.getBindingResult().getFieldError();
+        String fieldName = fieldError != null ? fieldError.getField() : null;
+        String message = fieldError != null ? fieldError.getDefaultMessage() : "Validation failed";
+        log.warn("Validation failed: {} ({})", message, fieldName);
+        return ApiResponseHelper.fail(new ApiException(ErrorCode.INVALID_INPUT_VALUE, fieldName));
     }
 
     // 커스텀 예외

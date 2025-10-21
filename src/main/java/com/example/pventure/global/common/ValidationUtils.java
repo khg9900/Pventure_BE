@@ -13,7 +13,7 @@ public class ValidationUtils {
 
     public static void requireNonEmpty(String str, String fieldName) {
         if (!StringUtils.hasText(str)) {
-            throw new ApiException(ErrorCode.BAD_REQUEST);
+            throw new ApiException(ErrorCode.BAD_REQUEST, fieldName + " must not be empty");
         }
     }
 }

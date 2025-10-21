@@ -2,7 +2,7 @@ version: '3.9'
 
 services:
   redis:
-    image: redis:7.0
+    image: redis:7.4.6
     container_name: pventure_redis
     ports:
       - "6379:6379"
