@@ -1,0 +1,14 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:7.0
+    container_name: pventure_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - pventure_network
+
+networks:
+  pventure_network:
+    driver: bridge
