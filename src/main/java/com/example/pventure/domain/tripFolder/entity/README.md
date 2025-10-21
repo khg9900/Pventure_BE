@@ -1,0 +1,1 @@
+# Trip-Folder 관련 엔티티

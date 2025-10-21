@@ -31,10 +31,10 @@ public class GlobalExceptionHandler {
     //유효성 검사 실패(@Valid, @Validated) 예외 처리
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException e) {
-        FieldError fieldError = (FieldError) e.getBindingResult().getAllErrors().get(0);
-        String fieldName = fieldError.getField();
-        String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
-        log.warn("Validation failed: {}", message);
+        FieldError fieldError = e.getBindingResult().getFieldError();
+        String fieldName = fieldError != null ? fieldError.getField() : null;
+        String message = fieldError != null ? fieldError.getDefaultMessage() : "Validation failed";
+        log.warn("Validation failed: {} ({})", message, fieldName);
         return ApiResponseHelper.fail(new ApiException(ErrorCode.INVALID_INPUT_VALUE, fieldName));
     }
 
