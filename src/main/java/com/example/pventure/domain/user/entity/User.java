@@ -6,7 +6,15 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+            @UniqueConstraint(
+                name = "uk_users_provider",
+                columnNames = {"social_provider", "provider_id"}
+            )
+    }
+)
 @Getter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -20,12 +28,13 @@ public class User extends BaseEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @Column(name = "social_provider", nullable = false)
     private SocialProvider socialProvider;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "provider_id", nullable = false)
     private String providerId;
 
+    @Column(columnDefinition = "TEXT")
     private String imageUrl;
 
 

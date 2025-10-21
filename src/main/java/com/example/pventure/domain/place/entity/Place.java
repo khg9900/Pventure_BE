@@ -4,6 +4,8 @@ import com.example.pventure.domain.place.enums.PlaceCategory;
 import com.example.pventure.domain.schedule.entity.Schedule;
 import com.example.pventure.global.entity.BaseEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import lombok.*;
 
 @Entity
@@ -22,9 +24,13 @@ public class Place extends BaseEntity {
     private String address;
 
     @Column
+    @DecimalMax(value = "90.0")
+    @DecimalMin(value = "-90.0")
     private Double latitude;
 
     @Column
+    @DecimalMax(value = "180.0")
+    @DecimalMin(value = "-180.0")
     private Double longitude;
 
     @Enumerated(EnumType.STRING)
