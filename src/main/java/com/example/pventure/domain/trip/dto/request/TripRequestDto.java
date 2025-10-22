@@ -1,6 +1,5 @@
 package com.example.pventure.domain.trip.dto.request;
 
-import com.example.pventure.domain.team.entity.Team;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.trip.enums.TripStatus;
 import jakarta.validation.constraints.*;
@@ -8,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
 
@@ -21,8 +21,8 @@ public class TripRequestDto {
     @Size(max = 100, message = "제목은 100자 이내로 입력해주세요.")
     private String title;
 
-    @Size(max = 500, message = "설명은 500자 이내로 입력해주세요.")
-    private String description;
+    @URL(message = "썸네일 URL 형식이 올바르지 않습니다.")
+    private String thumbnail;
 
     @NotBlank(message = "여행 목적지는 필수 입력값입니다.")
     private String destination;
@@ -39,15 +39,14 @@ public class TripRequestDto {
         return !endDate.isBefore(startDate);
     }
 
-    public Trip toEntity(Team team) {
+    public Trip toEntity() {
         return Trip.builder()
                 .title(title)
-                .description(description)
+                .thumbnail(thumbnail)
                 .destination(destination)
                 .status(tripStatus != null ? tripStatus : TripStatus.PLANNED)
                 .startDate(startDate)
                 .endDate(endDate)
-                .team(team)
                 .build();
     }
 }

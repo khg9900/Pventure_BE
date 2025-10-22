@@ -18,7 +18,7 @@ public class MemberSummaryDto{
 
     private String email;
 
-    public static MemberSummaryDto of(Member member) {
+    public static MemberSummaryDto from(Member member) {
         return MemberSummaryDto.builder()
                 .id(member.getId())
                 .name(member.getUser().getName())

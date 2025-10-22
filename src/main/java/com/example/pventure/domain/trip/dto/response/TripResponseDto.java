@@ -22,7 +22,7 @@ public class TripResponseDto {
 
     private String title;
 
-    private String description;
+    private String thumbnail;
 
     private TripStatus tripStatus;
 
@@ -32,14 +32,14 @@ public class TripResponseDto {
 
     private List<MemberSummaryDto> members;
 
-    public static TripResponseDto of(Trip trip, List<MemberSummaryDto> members) {
+    public static TripResponseDto from(Trip trip, List<MemberSummaryDto> members) {
         return TripResponseDto.builder()
                 .id(trip.getId())
                 .title(trip.getTitle())
-                .description(trip.getDescription())
+                .thumbnail(trip.getThumbnail())
                 .tripStatus(trip.getStatus())
-                .startDate(trip.getStartDate() != null ? trip.getStartDate(): null )
-                .endDate(trip.getEndDate() != null ? trip.getEndDate(): null)
+                .startDate(trip.getStartDate())
+                .endDate(trip.getEndDate())
                 .members(members)
                 .build();
     }
