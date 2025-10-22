@@ -23,8 +23,9 @@ public class Folder extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    @Builder.Default
     @Column(nullable = false)
-    private boolean isDefault;
+    private boolean isDefault = true;
 
     @Builder.Default
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
