@@ -33,6 +33,9 @@ public class Schedule extends BaseEntity {
     @Column(length = 500)
     private String memo;
 
+    @Column(nullable = false)
+    private boolean isCompleted;
+
     @Builder.Default
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Place> places = new ArrayList<>();

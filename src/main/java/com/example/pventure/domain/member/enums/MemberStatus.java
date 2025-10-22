@@ -1,5 +1,5 @@
 package com.example.pventure.domain.member.enums;
 
-public enum TeamStatus {
+public enum MemberStatus {
     ACCEPTED, PENDING, REJECTED
 }

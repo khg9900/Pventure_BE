@@ -1,6 +1,6 @@
 package com.example.pventure.domain.trip.entity;
 
-import com.example.pventure.domain.team.entity.Team;
+import com.example.pventure.domain.member.entity.Member;
 import com.example.pventure.domain.trip.enums.TripStatus;
 import com.example.pventure.domain.tripFolder.entity.TripFolder;
 import com.example.pventure.global.entity.BaseEntity;
@@ -21,11 +21,11 @@ public class Trip extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(length = 500)
-    private String description;
-
     @Column(nullable = false)
     private String destination;
+
+    @Column(columnDefinition = "TEXT")
+    private String thumbnail;
 
     private LocalDate startDate;
 
@@ -34,11 +34,11 @@ public class Trip extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private TripStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", nullable = false)
-    private Team team;
-
     @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TripFolder> folders = new ArrayList<>();
+
+    @Builder.Default
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Member> members = new ArrayList<>();
 }

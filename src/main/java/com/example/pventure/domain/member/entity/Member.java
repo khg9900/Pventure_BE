@@ -1,8 +1,8 @@
 package com.example.pventure.domain.member.entity;
 
-import com.example.pventure.domain.member.enums.TeamRole;
-import com.example.pventure.domain.member.enums.TeamStatus;
-import com.example.pventure.domain.team.entity.Team;
+import com.example.pventure.domain.member.enums.MemberRole;
+import com.example.pventure.domain.member.enums.MemberStatus;
+import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.user.entity.User;
 import com.example.pventure.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -15,8 +15,8 @@ import lombok.*;
 @Builder
 @Table(
         uniqueConstraints = @UniqueConstraint(
-                name = "uk_member_user_team",
-                columnNames = {"user_id", "team_id"}
+                name = "uk_member_user_trip",
+                columnNames = {"user_id", "trip_id"}
         )
 )
 public class Member extends BaseEntity {
@@ -26,16 +26,16 @@ public class Member extends BaseEntity {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", nullable = false)
-    private Team team;
+    @JoinColumn(name = "trip_id", nullable = false)
+    private Trip trip;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TeamRole teamRole;
+    private MemberRole memberRole;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TeamStatus teamStatus;
+    private MemberStatus memberStatus;
 
 
 }
