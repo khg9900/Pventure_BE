@@ -24,10 +24,10 @@ VALUES
     (2, 2, 1, NOW(), NOW());
 
 -- 5. Schedule
-INSERT INTO schedule (id, trip_id, date, day, sequence, memo, created_at, updated_at)
+INSERT INTO schedule (id, trip_id, date, day, sequence, memo, is_completed, created_at, updated_at)
 VALUES
-    (1, 1, '2025-11-01', 1, 1, '첫째날 일정', NOW(), NOW()),
-    (2, 1, '2025-11-02', 2, 1, '둘째날 일정', NOW(), NOW());
+    (1, 1, '2025-11-01', 1, 1, '첫째날 일정', FALSE, NOW(), NOW()),
+    (2, 1, '2025-11-02', 2, 1, '둘째날 일정', FALSE, NOW(), NOW());
 
 -- 6. Place
 INSERT INTO place (id, name, link, address, latitude, longitude, place_category, schedule_id, created_at, updated_at)
