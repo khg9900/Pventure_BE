@@ -11,7 +11,7 @@ public interface TripService {
 
     List<TripResponseDto> getTrips(Long userId);
 
-    TripResponseDto getTrip(Long userId, Long tripId);
+    TripResponseDto getTrip(Long tripId);
 
     TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto tripRequestDto);
 

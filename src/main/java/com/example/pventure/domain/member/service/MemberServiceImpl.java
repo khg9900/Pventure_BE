@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -43,12 +44,29 @@ public class MemberServiceImpl implements MemberService {
                 orElseThrow(()-> new ApiException(ErrorCode.NOT_FOUND_TRIP)); // 인터페이스 메서드 사용
 
         Member invitee = memberRequestDto.toEntity(user, trip);
+
         memberRepository.save(invitee);
 
-        List<Member> allMembers = memberRepository.findByTrip(trip);
+        return this.getMemberSummaryDtoList(trip);
+    }
 
-        return allMembers.stream()
+    @Override
+    public List<Member> getMembers(Trip trip) {
+        return memberRepository.findByTrip(trip).stream()
+                .toList();
+    }
+
+    @Override
+    public List<MemberSummaryDto> getMemberSummaryDtoList(Trip trip) {
+        return memberRepository.findByTrip(trip).stream()
                 .map(MemberSummaryDto::from)
+                .toList();
+    }
+
+    @Override
+    public List<Trip> getTripsByUser(User user) {
+        return memberRepository.findByUser(user).stream()
+                .map(Member::getTrip)
                 .toList();
     }
 
