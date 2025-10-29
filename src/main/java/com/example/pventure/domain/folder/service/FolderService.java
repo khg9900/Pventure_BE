@@ -4,5 +4,5 @@ import com.example.pventure.domain.folder.entity.Folder;
 import com.example.pventure.domain.user.entity.User;
 
 public interface FolderService {
-    Folder getUserDefaultFolder(User user);
+    Folder getDefaultFolderForUser(User user);
 }

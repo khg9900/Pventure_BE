@@ -32,50 +32,48 @@ public class MemberServiceImpl implements MemberService {
                 .toEntity(user, trip);
 
         memberRepository.save(owner);
-
         return List.of(MemberSummaryDto.from(owner));
     }
 
     @Override
     @Transactional
     public List<MemberSummaryDto> inviteMember(User user, Long tripId, MemberRequestDto memberRequestDto) {
-        Trip trip = tripRepository.findById(tripId).
-                orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP)); // 인터페이스 메서드 사용
+        Trip trip = getTripOrThrow(tripId);
 
         Member invitee = memberRequestDto.toEntity(user, trip);
-
         memberRepository.save(invitee);
 
-        return this.getMemberSummaryDtoList(trip);
+        return getMemberSummaryDtoList(trip);
     }
-
 
     @Override
     public List<MemberSummaryDto> getMemberSummaryDtoList(Trip trip) {
-        return memberRepository.findByTrip(trip).stream()
+        return memberRepository.findByTripWithUser(trip).stream()
                 .map(MemberSummaryDto::from)
                 .toList();
     }
 
     @Override
     public boolean canEdit(User user, Trip trip) {
-        return memberRepository.findByTrip(trip).stream()
-                .anyMatch(member -> member.getUser().equals(user) &&
-                        (member.getMemberRole() == MemberRole.OWNER ||
-                                member.getMemberRole() == MemberRole.EDITOR));
+        return memberRepository.existsByTripAndUserAndMemberRoleIn(
+                trip, user, List.of(MemberRole.OWNER, MemberRole.EDITOR)
+        );
     }
 
     @Override
     public boolean canDelete(User user, Trip trip) {
-        return memberRepository.findByTrip(trip).stream()
-                .anyMatch(member -> member.getUser().equals(user) &&
-                        member.getMemberRole() == MemberRole.OWNER);
+        return memberRepository.existsByTripAndUserAndMemberRole(
+                trip, user, MemberRole.OWNER
+        );
     }
 
     @Override
     public boolean isMember(User user, Trip trip) {
-        return memberRepository.findByTrip(trip).stream()
-                .anyMatch(member -> member.getUser().equals(user));
+        return memberRepository.existsByTripAndUser(trip, user);
+    }
+
+    private Trip getTripOrThrow(Long tripId) {
+        return tripRepository.findById(tripId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
     }
 }
-

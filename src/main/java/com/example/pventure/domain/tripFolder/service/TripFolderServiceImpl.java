@@ -17,7 +17,7 @@ public class TripFolderServiceImpl implements TripFolderService {
 
     @Transactional
     @Override
-    public TripFolder createTripFolder(Trip trip,Folder folder) {
-        return tripFolderRepository.save(new TripFolder(trip, folder));
+    public void createTripFolder(Trip trip,Folder folder) {
+        tripFolderRepository.save(new TripFolder(trip, folder));
     }
 }

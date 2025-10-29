@@ -17,7 +17,7 @@ public class FolderServiceImpl implements FolderService {
     private final FolderRepository folderRepository;
 
     @Override
-    public Folder getUserDefaultFolder(User user) {
+    public Folder getDefaultFolderForUser(User user) {
 
         return folderRepository.findDefaultFolderByUser(user)
                 .orElseThrow(()->new ApiException(ErrorCode.NOT_FOUND_FOLDER));

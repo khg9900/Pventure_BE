@@ -12,4 +12,5 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 
     @Query("SELECT f FROM Folder f WHERE f.user = :user AND f.isDefault = true")
     Optional<Folder> findDefaultFolderByUser(@Param("user") User user);
+
 }

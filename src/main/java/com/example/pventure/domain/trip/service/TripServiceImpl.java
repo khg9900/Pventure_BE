@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class TripServiceImpl implements TripService{
+public class TripServiceImpl implements TripService {
 
     private final UserRepository userRepository;
     private final TripRepository tripRepository;
@@ -36,26 +36,25 @@ public class TripServiceImpl implements TripService{
     @Transactional
     @Override
     public TripResponseDto createTrip(Long userId, TripRequestDto tripRequestDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
+        User user = getUserOrThrow(userId);
 
         Trip trip = tripRepository.save(tripRequestDto.toEntity());
 
-        List<MemberSummaryDto> memberSummaryDtoList = memberService.registerOwner(user, trip);
+        List<MemberSummaryDto> members = memberService.registerOwner(user, trip);
 
-        Folder folder = folderService.getUserDefaultFolder(user);
-        tripFolderService.createTripFolder(trip, folder);
+        Folder defaultFolder = folderService.getDefaultFolderForUser(user);
+        tripFolderService.createTripFolder(trip, defaultFolder);
 
-        return TripResponseDto.from(trip, memberSummaryDtoList);
+        return TripResponseDto.from(trip, members);
     }
 
     @Override
     public List<TripResponseDto> getTrips(Long userId, TripSearchRequestDto searchRequest) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
+        User user = getUserOrThrow(userId);
 
-        List<Trip> trips = tripRepositoryCustom.findByUserAndDateRange
-                (user, searchRequest.getStartDate(), searchRequest.getEndDate());
+        List<Trip> trips = tripRepositoryCustom.findByUserAndDateRange(
+                user, searchRequest.getStartDate(), searchRequest.getEndDate()
+        );
 
         return trips.stream()
                 .map(trip -> TripResponseDto.from(trip, memberService.getMemberSummaryDtoList(trip)))
@@ -64,11 +63,8 @@ public class TripServiceImpl implements TripService{
 
     @Override
     public TripResponseDto getTrip(Long userId, Long tripId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
-
-        Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
+        User user = getUserOrThrow(userId);
+        Trip trip = getTripOrThrow(tripId);
 
         if (!memberService.isMember(user, trip)) {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
@@ -77,14 +73,11 @@ public class TripServiceImpl implements TripService{
         return TripResponseDto.from(trip, memberService.getMemberSummaryDtoList(trip));
     }
 
-    @Override
     @Transactional
+    @Override
     public TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto tripRequestDto) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
-
-        Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
+        User user = getUserOrThrow(userId);
+        Trip trip = getTripOrThrow(tripId);
 
         if (!memberService.canEdit(user, trip)) {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
@@ -94,18 +87,14 @@ public class TripServiceImpl implements TripService{
         if (tripRequestDto.getDestination() != null) trip.updateDestination(tripRequestDto.getDestination());
         trip.updateDates(tripRequestDto.getStartDate(), tripRequestDto.getEndDate());
 
-        List<MemberSummaryDto> memberSummaryDtoList = memberService.getMemberSummaryDtoList(trip);
-        return TripResponseDto.from(trip, memberSummaryDtoList);
+        return TripResponseDto.from(trip, memberService.getMemberSummaryDtoList(trip));
     }
 
-    @Override
     @Transactional
+    @Override
     public void deleteTrip(Long userId, Long tripId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
-
-        Trip trip = tripRepository.findById(tripId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
+        User user = getUserOrThrow(userId);
+        Trip trip = getTripOrThrow(tripId);
 
         if (!memberService.canDelete(user, trip)) {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
@@ -114,5 +103,13 @@ public class TripServiceImpl implements TripService{
         tripRepository.delete(trip);
     }
 
+    private User getUserOrThrow(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
+    }
 
+    private Trip getTripOrThrow(Long tripId) {
+        return tripRepository.findById(tripId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
+    }
 }
