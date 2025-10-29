@@ -34,8 +34,6 @@ public class TripController {
             @RequestParam Long userId) {
         List<TripResponseDto> trips = tripService.getTrips(userId,searchRequest);
 
-        System.out.println("startDate = " + searchRequest.getStartDate());
-        System.out.println("endDate = " + searchRequest.getEndDate());
         return ApiResponseHelper.ok(trips);
     }
 

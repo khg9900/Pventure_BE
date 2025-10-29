@@ -7,14 +7,12 @@ import com.example.pventure.domain.user.entity.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
 
 @Repository
-@Slf4j
 @RequiredArgsConstructor
 public class TripRepositoryImpl implements TripRepositoryCustom {
 
@@ -31,7 +29,6 @@ public class TripRepositoryImpl implements TripRepositoryCustom {
                     .and(trip.endDate.isNotNull())
                     .and(trip.startDate.loe(endDate))
                     .and(trip.endDate.goe(startDate));
-                    log.info(startDate.toString(),endDate.toString());
         } else {
             builder.and(trip.startDate.isNull())
                     .and(trip.endDate.isNull());

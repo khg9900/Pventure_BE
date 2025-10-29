@@ -2,7 +2,6 @@ package com.example.pventure.domain.member.service;
 
 import com.example.pventure.domain.member.dto.request.MemberRequestDto;
 import com.example.pventure.domain.member.dto.response.MemberSummaryDto;
-import com.example.pventure.domain.member.entity.Member;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.user.entity.User;
 
