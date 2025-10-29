@@ -55,8 +55,8 @@ public class Trip extends BaseEntity {
     }
 
     public void updateDates(LocalDate startDate, LocalDate endDate) {
-        if(startDate != null) this.startDate = startDate;
-        if(endDate != null) this.endDate = endDate;
+         this.startDate = startDate;
+         this.endDate = endDate;
     }
 
 

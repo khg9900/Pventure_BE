@@ -1,7 +1,6 @@
 package com.example.pventure.domain.trip.dto.response;
 
 import com.example.pventure.domain.member.dto.response.MemberSummaryDto;
-import com.example.pventure.domain.member.entity.Member;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.trip.enums.TripStatus;
 import lombok.AllArgsConstructor;
@@ -22,6 +21,8 @@ public class TripResponseDto {
 
     private String title;
 
+    private String destination;
+
     private String thumbnail;
 
     private TripStatus tripStatus;
@@ -36,6 +37,7 @@ public class TripResponseDto {
         return TripResponseDto.builder()
                 .id(trip.getId())
                 .title(trip.getTitle())
+                .destination(trip.getDestination())
                 .thumbnail(trip.getThumbnail())
                 .tripStatus(trip.getStatus())
                 .startDate(trip.getStartDate())
