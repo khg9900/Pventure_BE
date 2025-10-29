@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -41,7 +40,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     public List<MemberSummaryDto> inviteMember(User user, Long tripId, MemberRequestDto memberRequestDto) {
         Trip trip = tripRepository.findById(tripId).
-                orElseThrow(()-> new ApiException(ErrorCode.NOT_FOUND_TRIP)); // 인터페이스 메서드 사용
+                orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP)); // 인터페이스 메서드 사용
 
         Member invitee = memberRequestDto.toEntity(user, trip);
 
@@ -50,11 +49,6 @@ public class MemberServiceImpl implements MemberService {
         return this.getMemberSummaryDtoList(trip);
     }
 
-    @Override
-    public List<Member> getMembers(Trip trip) {
-        return memberRepository.findByTrip(trip).stream()
-                .toList();
-    }
 
     @Override
     public List<MemberSummaryDto> getMemberSummaryDtoList(Trip trip) {
@@ -64,11 +58,24 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public List<Trip> getTripsByUser(User user) {
-        return memberRepository.findByUser(user).stream()
-                .map(Member::getTrip)
-                .toList();
+    public boolean canEdit(User user, Trip trip) {
+        return memberRepository.findByTrip(trip).stream()
+                .anyMatch(member -> member.getUser().equals(user) &&
+                        (member.getMemberRole() == MemberRole.OWNER ||
+                                member.getMemberRole() == MemberRole.EDITOR));
     }
 
+    @Override
+    public boolean canDelete(User user, Trip trip) {
+        return memberRepository.findByTrip(trip).stream()
+                .anyMatch(member -> member.getUser().equals(user) &&
+                        member.getMemberRole() == MemberRole.OWNER);
+    }
 
+    @Override
+    public boolean isMember(User user, Trip trip) {
+        return memberRepository.findByTrip(trip).stream()
+                .anyMatch(member -> member.getUser().equals(user));
+    }
 }
+

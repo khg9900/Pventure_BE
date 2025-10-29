@@ -1,6 +1,7 @@
 package com.example.pventure.domain.trip.controller;
 
 import com.example.pventure.domain.trip.dto.request.TripRequestDto;
+import com.example.pventure.domain.trip.dto.request.TripSearchRequestDto;
 import com.example.pventure.domain.trip.dto.response.TripResponseDto;
 import com.example.pventure.domain.trip.service.TripService;
 import com.example.pventure.global.response.ApiResponse;
@@ -28,14 +29,21 @@ public class TripController {
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<TripResponseDto>>> getTrips(@RequestParam Long userId) {
-        List<TripResponseDto> trips = tripService.getTrips(userId);
+    public ResponseEntity<ApiResponse<List<TripResponseDto>>> getTrips(
+            @ModelAttribute TripSearchRequestDto searchRequest,
+            @RequestParam Long userId) {
+        List<TripResponseDto> trips = tripService.getTrips(userId,searchRequest);
+
+        System.out.println("startDate = " + searchRequest.getStartDate());
+        System.out.println("endDate = " + searchRequest.getEndDate());
         return ApiResponseHelper.ok(trips);
     }
 
     @GetMapping("/{tripId}")
-    public ResponseEntity<ApiResponse<TripResponseDto>> getTrip(@PathVariable Long tripId) {
-        TripResponseDto response = tripService.getTrip(tripId);
+    public ResponseEntity<ApiResponse<TripResponseDto>> getTrip(
+            @RequestParam Long userId,
+            @PathVariable Long tripId) {
+        TripResponseDto response = tripService.getTrip(userId, tripId);
         return ApiResponseHelper.ok(response);
     }
 
