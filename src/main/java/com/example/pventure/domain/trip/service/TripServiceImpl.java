@@ -9,7 +9,6 @@ import com.example.pventure.domain.trip.dto.request.TripSearchRequestDto;
 import com.example.pventure.domain.trip.dto.response.TripResponseDto;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.trip.repository.TripRepository;
-import com.example.pventure.domain.trip.repository.TripRepositoryCustom;
 import com.example.pventure.domain.tripFolder.service.TripFolderService;
 import com.example.pventure.domain.user.entity.User;
 import com.example.pventure.domain.user.repository.UserRepository;
@@ -28,7 +27,6 @@ public class TripServiceImpl implements TripService {
 
     private final UserRepository userRepository;
     private final TripRepository tripRepository;
-    private final TripRepositoryCustom tripRepositoryCustom;
     private final MemberService memberService;
     private final FolderService folderService;
     private final TripFolderService tripFolderService;
@@ -52,7 +50,7 @@ public class TripServiceImpl implements TripService {
     public List<TripResponseDto> getTrips(Long userId, TripSearchRequestDto searchRequest) {
         User user = getUserOrThrow(userId);
 
-        List<Trip> trips = tripRepositoryCustom.findByUserAndDateRange(
+        List<Trip> trips = tripRepository.findByUserAndDateRange(
                 user, searchRequest.getStartDate(), searchRequest.getEndDate()
         );
 
