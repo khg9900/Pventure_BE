@@ -31,7 +31,7 @@ public class Schedule extends BaseEntity {
 
     @Builder.Default
     @Column(nullable = false)
-    private boolean isCompleted = false;
+    private boolean completed = false;
 
     @Builder.Default
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
