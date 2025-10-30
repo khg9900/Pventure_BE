@@ -3,6 +3,7 @@ package com.example.pventure.domain.trip.repository;
 import com.example.pventure.domain.member.entity.QMember;
 import com.example.pventure.domain.trip.entity.QTrip;
 import com.example.pventure.domain.trip.entity.Trip;
+import com.example.pventure.domain.user.entity.QUser;
 import com.example.pventure.domain.user.entity.User;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -37,6 +38,8 @@ public class TripRepositoryImpl implements TripRepositoryCustom {
         return queryFactory
                 .selectFrom(trip)
                 .join(trip.members, member)
+                .fetchJoin()
+                .join(member.user, QUser.user)
                 .fetchJoin()
                 .where(builder)
                 .distinct()
