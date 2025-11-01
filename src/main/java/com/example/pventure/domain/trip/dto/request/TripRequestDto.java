@@ -33,6 +33,9 @@ public class TripRequestDto {
 
     private LocalDate endDate;
 
+    @NotNull(message = "폴더는 선택해야 됩니다.")
+    private Long folderId;
+
     @AssertTrue(message = "종료일은 시작일 이후여야 합니다.")
     public boolean isEndDateAfterStartDate() {
         if (startDate == null || endDate == null) return true;

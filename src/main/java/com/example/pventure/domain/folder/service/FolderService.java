@@ -19,5 +19,5 @@ public interface FolderService {
 
     void deleteFolder(Long folderId, Long userId);
 
-    Folder getDefaultFolderForUser(User user);
+    Folder getFolderEntity(User user, Long folderId);
 }
