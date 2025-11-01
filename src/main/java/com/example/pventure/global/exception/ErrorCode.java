@@ -89,6 +89,7 @@ public enum ErrorCode {
     NOT_FOUND_FOLDER("FO00701", HttpStatus.NOT_FOUND, "폴더를 찾을 수 없습니다."),
     DUPLICATE_FOLDER("FO00801", HttpStatus.CONFLICT, "이미 존재하는 폴더입니다."),
     FORBIDDEN_FOLDER_ACCESS("FO00601", HttpStatus.FORBIDDEN, "폴더 접근 권한이 없습니다."),
+    CANNOT_DELETE_DEFAULT_FOLDER("F000602",HttpStatus.FORBIDDEN, "기본 폴더는 삭제할 수 없습니다."),
 
     // ==========================
     // 🔹 FolderTrip (FT)

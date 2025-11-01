@@ -30,4 +30,8 @@ public class Folder extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TripFolder> tripFolders = new ArrayList<>();
+
+    public void updateFolderName(String Name) {
+        this.name = Name;
+    }
 }

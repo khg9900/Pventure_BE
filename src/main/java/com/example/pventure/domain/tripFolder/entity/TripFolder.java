@@ -27,4 +27,11 @@ public class TripFolder extends BaseEntity {
     @JoinColumn(name = "folder_id", nullable = false)
     private Folder folder;
 
+    public void updateFolder(Folder folder) {
+        this.folder = folder;
+    }
+
+    public void updateTrip(Trip trip) {
+        this.trip = trip;
+    }
 }
