@@ -17,10 +17,12 @@ public class FolderRequestDto {
     @NotBlank(message = "폴더 이름을 입력해주세요.")
     private String name;
 
+    private Boolean isDefault;
+
     public Folder toEntity(User user) {
         return Folder.builder()
                 .name(name)
-                .isDefault(false)
+                .isDefault(isDefault != null && isDefault)
                 .user(user)
                 .build();
     }

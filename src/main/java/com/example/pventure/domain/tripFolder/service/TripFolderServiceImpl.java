@@ -78,14 +78,26 @@ public class TripFolderServiceImpl implements TripFolderService {
 
     @Override
     public void deleteTrip(Long folderId, Long tripId, Long userId) {
-        User user = userRepository.findById(userId).
-                orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
-        Trip trip = tripRepository.findById(tripId).
-                orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
-        Folder folder = folderRepository.findByIdAndUser(folderId, user).
-                orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
+        Trip trip = tripRepository.findById(tripId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
+        Folder folder = folderRepository.findByIdAndUser(folderId, user)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
 
-        tripFolderRepository.deleteByTripAndFolder(trip,folder);
+        boolean hasMultipleTrips = tripFolderRepository.existsMoreThanOneByTrip(trip);
+
+        tripFolderRepository.deleteByTripAndFolder(trip, folder);
+
+        if (folder.isDefault() && !hasMultipleTrips) {
+            throw new ApiException(ErrorCode.TRIP_MUST_BELONG_TO_AT_LEAST_ONE_FOLDER);
+        }
+
+        if (!folder.isDefault() && !hasMultipleTrips) {
+            Folder defaultFolder = folderRepository.findDefaultFolderByUser(user)
+                    .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
+            tripFolderRepository.save(new TripFolder(trip, defaultFolder));
+        }
 
     }
 }

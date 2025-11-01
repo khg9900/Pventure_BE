@@ -31,9 +31,13 @@ public class FolderServiceImpl implements FolderService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
 
         Folder folder = requestDto.toEntity(user);
-        folderRepository.save(folder);
 
-        return FolderResponseDto.from(folder);
+        if (folder.isDefault() && folderRepository.existDefaultFolder(user)) {
+            throw new ApiException(ErrorCode.DUPLICATE_FOLDER);
+        }
+
+        Folder savedFolder = folderRepository.save(folder);
+        return FolderResponseDto.from(savedFolder);
     }
 
     @Override

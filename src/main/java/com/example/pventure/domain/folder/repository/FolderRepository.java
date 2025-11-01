@@ -27,4 +27,7 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
         WHERE f.user = :user AND f.id = :id
     """)
     Optional<Folder> findWithTrips(@Param("id") Long id, @Param("user") User user);
+
+    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM Folder f WHERE f.user = :user AND f.isDefault = true")
+    boolean existDefaultFolder(@Param("user") User user);
 }

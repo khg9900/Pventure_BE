@@ -19,7 +19,7 @@ public class FolderTripController {
     private final TripFolderService tripFolderService;
     // 폴더에 여행 추가
     @PostMapping
-    public ResponseEntity<CustomResponse<FolderResponseDto>> addTripToFolder(
+    public ResponseEntity<CustomResponse<FolderResponseDto>> addTrip(
             @RequestParam Long userId,
             @PathVariable Long folderId,
             @RequestParam Long tripId) {
@@ -29,7 +29,7 @@ public class FolderTripController {
 
     // 폴더 내 여행 조회
     @GetMapping
-    public ResponseEntity<CustomResponse<List<TripResponseDto>>> getTripsByFolder(
+    public ResponseEntity<CustomResponse<List<TripResponseDto>>> getTrips(
             @RequestParam Long userId,
             @PathVariable Long folderId) {
         return CustomResponseHelper.ok(tripFolderService.getTrips(folderId, userId));
@@ -37,7 +37,7 @@ public class FolderTripController {
 
     // 폴더에서 여행 삭제
     @DeleteMapping("/{tripId}")
-    public ResponseEntity<Void> removeTripFromFolder(
+    public ResponseEntity<Void> deleteTrip(
             @RequestParam Long userId,
             @PathVariable Long folderId,
             @PathVariable Long tripId) {

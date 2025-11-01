@@ -52,10 +52,10 @@ public class FolderController {
 
     // 폴더 삭제
     @DeleteMapping("/{folderId}")
-    public ResponseEntity<CustomResponse<Void>> deleteFolder(
+    public ResponseEntity<Void> deleteFolder(
             @RequestParam Long userId,
             @PathVariable Long folderId) {
         folderService.deleteFolder(folderId, userId);
-        return CustomResponseHelper.ok(null);
+        return CustomResponseHelper.noContent();
     }
 }
