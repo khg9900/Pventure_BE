@@ -72,6 +72,10 @@ public class FolderServiceImpl implements FolderService {
         Folder folder = folderRepository.findByIdAndUser(folderId, user)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
 
+        if (folder.isDefault()){
+            throw new ApiException(ErrorCode.CANNOT_EDIT_DEFAULT_FOLDER);
+        }
+
         folder.updateFolderName(requestDto.getName());
 
         return FolderResponseDto.from(folder);
@@ -105,7 +109,6 @@ public class FolderServiceImpl implements FolderService {
 
         folderRepository.delete(folder);
     }
-
 
     @Override
     public Folder getFolderEntity(User user, Long folderId) {
