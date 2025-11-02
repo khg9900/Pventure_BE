@@ -10,7 +10,6 @@ import com.example.pventure.global.exception.ApiException;
 import com.example.pventure.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -96,16 +95,7 @@ public class FolderServiceImpl implements FolderService {
         Folder defaultFolder = folderRepository.findDefaultFolderByUser(user)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
 
-        // 삭제할 폴더에 속한 Trip들을 기본 폴더로 이동
-        folder.getTripFolders().forEach(tripFolder -> {
-            try {
-                tripFolder.updateFolder(defaultFolder);
-            } catch (DataIntegrityViolationException e) {
-                // 중복 발생 → 속으로 삼키고 넘어감
-                log.warn("TripFolder 중복 발생, 안전하게 무시합니다. tripId={}, folderId={}",
-                        tripFolder.getTrip().getId(), defaultFolder.getId());
-            }
-        });
+        folder.getTripFolders().forEach(tripFolder -> tripFolder.updateFolder(defaultFolder));
 
         folderRepository.delete(folder);
     }

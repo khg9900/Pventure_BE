@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TripFolderRepository extends JpaRepository<TripFolder, Long> {
 
@@ -18,9 +19,5 @@ public interface TripFolderRepository extends JpaRepository<TripFolder, Long> {
             "WHERE tf.folder = :folder")
     List<TripFolder> findByFolder(@Param("folder")Folder folder);
 
-    void deleteByTripAndFolder(Trip trip, Folder folder);
-
-    @Query("SELECT CASE WHEN COUNT(tf) > 1 THEN true ELSE false END FROM TripFolder tf WHERE tf.trip = :trip")
-    boolean existsMoreThanOneByTrip(@Param("trip") Trip trip);
-
+    Optional<TripFolder> findByTripAndFolder(Trip trip, Folder folder);
 }

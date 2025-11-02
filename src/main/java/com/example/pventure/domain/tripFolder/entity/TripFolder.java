@@ -28,10 +28,29 @@ public class TripFolder extends BaseEntity {
     private Folder folder;
 
     public void updateFolder(Folder folder) {
+
+        if (this.folder != null) {
+            this.folder.getTripFolders().remove(this);
+        }
+
         this.folder = folder;
+
+        if (folder != null) {
+            folder.getTripFolders().add(this);
+        }
     }
 
     public void updateTrip(Trip trip) {
+        // 기존 trip에서 현재 TripFolder 제거
+        if (this.trip != null) {
+            this.trip.getFolders().remove(this);
+        }
+
         this.trip = trip;
+
+        // 새 trip에 현재 TripFolder 추가
+        if (trip != null) {
+            trip.getFolders().add(this);
+        }
     }
 }
