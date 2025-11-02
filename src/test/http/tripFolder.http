@@ -1,0 +1,8 @@
+### 폴더에 여행 추가 (Add Trip to Folder)
+POST http://localhost:8080/api/folders/1/trips?userId=1&tripId=2
+
+### 폴더 내 여행 조회 (Get Trips in Folder)
+GET http://localhost:8080/api/folders/1/trips?userId=1
+
+### 폴더에서 여행 삭제 (Delete Trip from Folder)
+DELETE http://localhost:8080/api/folders/1/trips/2?userId=1

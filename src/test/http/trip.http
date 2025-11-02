@@ -8,7 +8,8 @@ Content-Type: application/json
   "destination": "제주도",
   "tripStatus": "PLANNED",
   "startDate": "2025-11-01",
-  "endDate": "2025-11-03"
+  "endDate": "2025-11-03",
+  "folderId": 1
 }
 
 ### 여행 목록 조회 (Get Trips)
@@ -31,6 +32,6 @@ Content-Type: application/json
 }
 
 ### 여행 삭제 (Delete Trip)
-DELETE http://localhost:8080/api/trips/4?userId=1
+DELETE http://localhost:8080/api/trips/1?userId=1
 
 
