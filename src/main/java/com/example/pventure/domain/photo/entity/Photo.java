@@ -15,7 +15,7 @@ public class Photo extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "album_id", nullable = false)
     private Album album;
-  
+
     @Column(nullable = false,columnDefinition = "TEXT")
     private String url;
 
