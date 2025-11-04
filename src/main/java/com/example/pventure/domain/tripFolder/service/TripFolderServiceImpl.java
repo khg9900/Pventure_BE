@@ -93,7 +93,6 @@ public class TripFolderServiceImpl implements TripFolderService {
         TripFolder tripFolder = tripFolderRepository.findByTripAndFolder(trip, folder)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER_TRIP));
 
-
         if (folder.isDefault() && trip.getFolders().size() == 1) {
             throw new ApiException(ErrorCode.TRIP_MUST_BELONG_TO_AT_LEAST_ONE_FOLDER);
         }
@@ -103,6 +102,8 @@ public class TripFolderServiceImpl implements TripFolderService {
             return;
         }
 
+        trip.getFolders().remove(tripFolder);
+        folder.getTripFolders().remove(tripFolder);
         tripFolderRepository.delete(tripFolder);
     }
 }
