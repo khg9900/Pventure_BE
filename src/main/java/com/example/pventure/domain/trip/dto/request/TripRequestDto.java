@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 @Getter
 @NoArgsConstructor
@@ -27,6 +28,9 @@ public class TripRequestDto {
     @NotBlank(message = "여행 목적지는 필수 입력값입니다.")
     private String destination;
 
+    @NotNull(message = "여행 기간 선택은 필수 입력값입니다.")
+    private Integer totalDuration;
+
     private TripStatus tripStatus;
 
     private LocalDate startDate;
@@ -43,10 +47,17 @@ public class TripRequestDto {
     }
 
     public Trip toEntity() {
+        Integer duration= this.totalDuration;
+
+        if (startDate != null && endDate != null) {
+            duration = Period.between(startDate, endDate).getDays() + 1;
+        }
+
         return Trip.builder()
                 .title(title)
                 .thumbnail(thumbnail)
                 .destination(destination)
+                .totalDuration(duration)
                 .status(tripStatus != null ? tripStatus : TripStatus.PLANNED)
                 .startDate(startDate)
                 .endDate(endDate)

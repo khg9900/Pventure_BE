@@ -27,6 +27,9 @@ public class Trip extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String thumbnail;
 
+    @Column(nullable = false)
+    private Integer totalDuration;
+
     private LocalDate startDate;
 
     private LocalDate endDate;
