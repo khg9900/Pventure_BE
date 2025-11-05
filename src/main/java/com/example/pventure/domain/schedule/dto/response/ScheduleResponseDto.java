@@ -1,6 +1,7 @@
 package com.example.pventure.domain.schedule.dto.response;
 
 import com.example.pventure.domain.schedule.entity.Schedule;
+import com.example.pventure.domain.trip.entity.Trip;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,12 +25,16 @@ public class ScheduleResponseDto {
 
     public static ScheduleResponseDto from(Schedule schedule) {
         LocalDate date = null;
-        if (schedule.getTrip().getStartDate() != null) {
-            date = schedule.getTrip().getStartDate().plusDays(schedule.getDay() - 1);
+        Trip trip = schedule.getTrip();
+        Integer day = schedule.getDay();
+
+        if (trip != null && trip.getStartDate() != null && day != null) {
+            date = trip.getStartDate().plusDays(day - 1);
         }
+
         return ScheduleResponseDto.builder()
                 .scheduleId(schedule.getId())
-                .day(schedule.getDay())
+                .day(day)
                 .sequence(schedule.getSequence())
                 .isCompleted(schedule.isCompleted())
                 .date(date)

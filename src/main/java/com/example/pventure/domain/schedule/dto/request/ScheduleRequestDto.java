@@ -18,12 +18,12 @@ public class ScheduleRequestDto {
     private Boolean isComplete;
     private String memo;
 
-    public Schedule toEntity(Trip trip,Integer sequence) {
+    public Schedule toEntity(Trip trip,Integer finalSeq) {
         return Schedule.builder()
-                .day(this.day)
-                .sequence(sequence)
-                .memo(this.memo)
-                .isCompleted(this.isComplete != null && this.isComplete)
+                .day(day)
+                .sequence(finalSeq)
+                .memo(memo)
+                .isCompleted(isComplete != null && isComplete)
                 .trip(trip)
                 .build();
     }

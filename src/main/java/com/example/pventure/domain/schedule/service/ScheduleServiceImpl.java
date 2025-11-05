@@ -41,7 +41,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         memberService.canEdit(user, trip);
 
-        int finalSeq = sequenceUtil.shiftOnInsert(tripId, dto.getDay(), dto.getSequence());
+        Integer finalSeq = sequenceUtil.shiftOnInsert(tripId, dto.getDay(), dto.getSequence());
         Schedule schedule = scheduleRepository.save(dto.toEntity(trip, finalSeq));
 
         return ScheduleResponseDto.from(schedule);

@@ -34,5 +34,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     Integer findMaxSequence(@Param("tripId") Long tripId, @Param("day") Integer day);
 
     @Query("SELECT s FROM Schedule s WHERE s.trip.id = :tripId AND s.day = :day AND s.sequence = :sequence")
-    Optional<Schedule> findScheduleBySequenceOfDay(Long tripId, Integer day, Integer sequence);
+    Optional<Schedule> findScheduleBySequenceOfDay(@Param("tripId") Long tripId, @Param("day") Integer day, @Param("sequence") Integer sequence);
 }

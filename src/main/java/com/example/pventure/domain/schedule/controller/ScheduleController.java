@@ -47,7 +47,7 @@ public class ScheduleController {
                               "day": 1,
                               "memo": "사진 많이 찍기",
                               "sequence": 1,
-                              "isCompleted": true,
+                              "isCompleted": true
                             }
                             """)))
             @RequestBody ScheduleRequestDto scheduleRequestDto
@@ -92,7 +92,7 @@ public class ScheduleController {
                     content = @Content(examples = @ExampleObject(value = """
                             {
                               "memo": "저녁은 파크 내 식사로",
-                              "isCompleted": true,
+                              "isCompleted": true
                             }
                             """)))
             @RequestBody ScheduleUpdateDto scheduleUpdateDto

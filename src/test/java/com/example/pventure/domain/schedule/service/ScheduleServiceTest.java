@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ScheduleServiceImplFullTest {
+class ScheduleServiceTest {
 
     @Mock private ScheduleRepository scheduleRepository;
     @Mock private TripRepository tripRepository;
