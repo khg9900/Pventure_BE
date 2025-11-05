@@ -39,7 +39,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
 
-        memberService.canEdit(user, trip);
+        if (!memberService.canEdit(user, trip)){
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
 
         Integer finalSeq = sequenceUtil.shiftOnInsert(tripId, dto.getDay(), dto.getSequence());
         Schedule schedule = scheduleRepository.save(dto.toEntity(trip, finalSeq));
@@ -54,7 +56,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
 
-        memberService.isMember(user, trip);
+        if (!memberService.isMember(user, trip)) {
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
 
         List<Schedule> schedules = scheduleRepository.findOrderedSchedules(trip, day);
         return schedules.stream()
@@ -70,7 +74,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
 
-        memberService.canEdit(user, trip);
+        if (!memberService.canEdit(user, trip)){
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
 
         Schedule target = scheduleRepository.findScheduleBySequenceOfDay(tripId, day, dto.getOldSeq())
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_SCHEDULE));
@@ -92,7 +98,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
 
-        memberService.isMember(user, trip);
+        if (!memberService.isMember(user, trip)) {
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
 
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_SCHEDULE));
@@ -112,7 +120,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
 
-        memberService.canEdit(user, trip);
+        if (!memberService.canEdit(user, trip)){
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
 
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_SCHEDULE));
@@ -135,7 +145,9 @@ public class ScheduleServiceImpl implements ScheduleService {
         Trip trip = tripRepository.findById(tripId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
 
-        memberService.canEdit(user, trip);
+        if (!memberService.canEdit(user, trip)){
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
 
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_SCHEDULE));

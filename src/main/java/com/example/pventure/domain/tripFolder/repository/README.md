@@ -1,1 +1,0 @@
-# Trip-Folder 관련 DB 접근

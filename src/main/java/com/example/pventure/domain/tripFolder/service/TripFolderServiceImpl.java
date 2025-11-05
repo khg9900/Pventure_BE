@@ -51,7 +51,9 @@ public class TripFolderServiceImpl implements TripFolderService {
         Folder folder = folderRepository.findByIdAndUser(folderId, user).
                 orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
 
-        memberService.isMember(user, trip);
+        if (!memberService.isMember(user, trip)) {
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
 
         TripFolder tripFolder=createTripFolder(trip,folder);
 
@@ -69,6 +71,12 @@ public class TripFolderServiceImpl implements TripFolderService {
 
         return tripFolders.stream()
                 .map(TripFolder::getTrip)
+                .filter(trip -> {
+                    if (!memberService.isMember(user, trip)) {
+                        throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+                    }
+                    return true;
+                })
                 .map(trip -> {
                     List<MemberSummaryDto> members = memberService.getMemberSummaryDtoList(trip);
                     return TripResponseDto.from(trip, members);
@@ -92,6 +100,10 @@ public class TripFolderServiceImpl implements TripFolderService {
 
         TripFolder tripFolder = tripFolderRepository.findByTripAndFolder(trip, folder)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER_TRIP));
+
+        if (!memberService.isMember(user, trip)) {
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
 
         if (folder.isDefault() && trip.getFolders().size() == 1) {
             throw new ApiException(ErrorCode.TRIP_MUST_BELONG_TO_AT_LEAST_ONE_FOLDER);

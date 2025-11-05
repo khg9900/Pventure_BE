@@ -88,8 +88,7 @@ class ScheduleServiceTest {
         when(tripRepository.findById(anyLong())).thenReturn(Optional.of(trip));
         when(sequenceUtil.shiftOnInsert(trip.getId(), 1, 1)).thenReturn(1);
         when(scheduleRepository.save(any(Schedule.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        memberService.canEdit(user, trip);
+        when(memberService.canEdit(user, trip)).thenReturn(true);
 
         ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모");
         ScheduleResponseDto response = scheduleService.createSchedule(trip.getId(), user.getId(), dto);
@@ -106,8 +105,7 @@ class ScheduleServiceTest {
     void getSchedules_success() {
         when(tripRepository.findById(anyLong())).thenReturn(Optional.of(trip));
         when(scheduleRepository.findOrderedSchedules(trip, 1)).thenReturn(List.of(schedule));
-
-        memberService.isMember(user, trip);
+        when(memberService.isMember(user, trip)).thenReturn(true);
 
         List<ScheduleResponseDto> response = scheduleService.getSchedules(trip.getId(), user.getId(), 1);
         assertEquals(1, response.size());
@@ -119,10 +117,9 @@ class ScheduleServiceTest {
     void updateSchedule_success() {
         when(tripRepository.findById(trip.getId())).thenReturn(Optional.of(trip));
         when(scheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
+        when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        memberService.canEdit(user, trip);
-
-        ScheduleUpdateDto dto = new ScheduleUpdateDto(true,"new memo");
+        ScheduleUpdateDto dto = new ScheduleUpdateDto(true, "new memo");
         ScheduleResponseDto response = scheduleService.updateSchedule(trip.getId(), schedule.getId(), user.getId(), dto);
 
         assertEquals("new memo", response.getMemo());
@@ -136,8 +133,7 @@ class ScheduleServiceTest {
         when(scheduleRepository.findScheduleBySequenceOfDay(trip.getId(), 1, 1))
                 .thenReturn(Optional.of(schedule));
         when(scheduleRepository.findOrderedSchedules(trip, 1)).thenReturn(List.of(schedule));
-
-        memberService.canEdit(user, trip);
+        when(memberService.canEdit(user, trip)).thenReturn(true);
 
         ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L, 2, 1);
         List<ScheduleResponseDto> response = scheduleService.reorderSchedules(trip.getId(), user.getId(), 1, dto);
@@ -152,8 +148,7 @@ class ScheduleServiceTest {
     void deleteSchedule_success() {
         when(tripRepository.findById(trip.getId())).thenReturn(Optional.of(trip));
         when(scheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
-
-        memberService.canEdit(user, trip);
+        when(memberService.canEdit(user, trip)).thenReturn(true);
 
         scheduleService.deleteSchedule(trip.getId(), schedule.getId(), user.getId());
 
@@ -165,9 +160,8 @@ class ScheduleServiceTest {
     @DisplayName("createSchedule 실패 - 없는 유저")
     void createSchedule_fail_userNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
-        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모");
 
-        memberService.canEdit(user, trip);
+        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모");
 
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.createSchedule(trip.getId(), 999L, dto));
@@ -179,8 +173,6 @@ class ScheduleServiceTest {
     void getSchedules_fail_tripNotFound() {
         when(tripRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        memberService.isMember(user, trip);
-
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.getSchedules(999L, user.getId(), 1));
         assertEquals(ErrorCode.NOT_FOUND_TRIP, ex.getErrorCode());
@@ -191,10 +183,9 @@ class ScheduleServiceTest {
     void updateSchedule_fail_scheduleNotFound() {
         when(tripRepository.findById(trip.getId())).thenReturn(Optional.of(trip));
         when(scheduleRepository.findById(999L)).thenReturn(Optional.empty());
+        when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        memberService.canEdit(user, trip);
-
-        ScheduleUpdateDto dto = new ScheduleUpdateDto(true,"memo");
+        ScheduleUpdateDto dto = new ScheduleUpdateDto(true, "memo");
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.updateSchedule(trip.getId(), 999L, user.getId(), dto));
         assertEquals(ErrorCode.NOT_FOUND_SCHEDULE, ex.getErrorCode());
@@ -205,10 +196,9 @@ class ScheduleServiceTest {
     void reorderSchedules_fail_scheduleNotFound() {
         when(tripRepository.findById(trip.getId())).thenReturn(Optional.of(trip));
         when(scheduleRepository.findScheduleBySequenceOfDay(trip.getId(), 1, 1)).thenReturn(Optional.empty());
+        when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        memberService.canEdit(user, trip);
-
-        ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L,2, 1);
+        ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L, 2, 1);
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.reorderSchedules(trip.getId(), user.getId(), 1, dto));
         assertEquals(ErrorCode.NOT_FOUND_SCHEDULE, ex.getErrorCode());
@@ -219,8 +209,7 @@ class ScheduleServiceTest {
     void deleteSchedule_fail_scheduleNotFound() {
         when(tripRepository.findById(trip.getId())).thenReturn(Optional.of(trip));
         when(scheduleRepository.findById(999L)).thenReturn(Optional.empty());
-
-        memberService.canEdit(user, trip);
+        when(memberService.canEdit(user, trip)).thenReturn(true);
 
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.deleteSchedule(trip.getId(), 999L, user.getId()));
