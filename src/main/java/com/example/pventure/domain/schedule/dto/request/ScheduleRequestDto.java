@@ -15,7 +15,7 @@ public class ScheduleRequestDto {
 
     private Integer day;
     private Integer sequence;
-    private Boolean isComplete;
+    private Boolean isCompleted;
     private String memo;
 
     public Schedule toEntity(Trip trip,Integer finalSeq) {
@@ -23,7 +23,7 @@ public class ScheduleRequestDto {
                 .day(day)
                 .sequence(finalSeq)
                 .memo(memo)
-                .isCompleted(isComplete != null && isComplete)
+                .isCompleted(isCompleted != null && isCompleted)
                 .trip(trip)
                 .build();
     }

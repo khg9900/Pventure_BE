@@ -40,7 +40,7 @@ public class TripServiceImpl implements TripService {
 
         List<MemberSummaryDto> members = memberService.registerOwner(user, trip);
 
-        Folder folder= folderService.getFolderEntity(user,tripRequestDto.getFolderId());
+        Folder folder = folderService.getFolderEntity(user,tripRequestDto.getFolderId());
 
         tripFolderService.createTripFolder(trip,folder);
 

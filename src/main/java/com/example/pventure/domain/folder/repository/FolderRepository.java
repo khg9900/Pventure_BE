@@ -21,7 +21,7 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
     Optional<Folder> findByIdAndUser(@Param("id") Long id, @Param("user") User user);
 
     @Query("""
-        SELECT f
+        SELECT DISTINCT f
         FROM Folder f
         LEFT JOIN FETCH f.tripFolders tf
         LEFT JOIN FETCH tf.trip
