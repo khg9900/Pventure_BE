@@ -60,7 +60,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
         }
 
-        List<Schedule> schedules = scheduleRepository.findOrderedSchedules(trip, day);
+        List<Schedule> schedules = scheduleRepository.findByTripAndDay(trip, day);
         return schedules.stream()
                 .map(ScheduleResponseDto::from)
                 .toList();
@@ -78,14 +78,14 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
         }
 
-        Schedule target = scheduleRepository.findScheduleBySequenceOfDay(tripId, day, dto.getOldSeq())
+        Schedule target = scheduleRepository.findByTripAndDayAndSequence(tripId, day, dto.getOldSeq())
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_SCHEDULE));
 
         sequenceUtil.reorder(tripId, day, dto.getOldSeq(), dto.getNewSeq());
 
         target.updateSequence(dto.getNewSeq());
 
-        List<Schedule> schedules = scheduleRepository.findOrderedSchedules(trip, day);
+        List<Schedule> schedules = scheduleRepository.findByTripAndDay(trip, day);
         return schedules.stream()
                 .map(ScheduleResponseDto::from)
                 .toList();

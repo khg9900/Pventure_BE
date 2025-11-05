@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     @Query("SELECT s FROM Schedule s JOIN FETCH s.trip t WHERE t = :trip AND s.day = :day ORDER BY s.sequence")
-    List<Schedule> findOrderedSchedules(@Param("trip") Trip trip, @Param("day") Integer day);
+    List<Schedule> findByTripAndDay(@Param("trip") Trip trip, @Param("day") Integer day);
 
     @Modifying
     @Query("UPDATE Schedule s SET s.sequence = s.sequence + 1 " +
@@ -34,5 +34,5 @@ public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
     Integer findMaxSequence(@Param("tripId") Long tripId, @Param("day") Integer day);
 
     @Query("SELECT s FROM Schedule s WHERE s.trip.id = :tripId AND s.day = :day AND s.sequence = :sequence")
-    Optional<Schedule> findScheduleBySequenceOfDay(@Param("tripId") Long tripId, @Param("day") Integer day, @Param("sequence") Integer sequence);
+    Optional<Schedule> findByTripAndDayAndSequence(@Param("tripId") Long tripId, @Param("day") Integer day, @Param("sequence") Integer sequence);
 }

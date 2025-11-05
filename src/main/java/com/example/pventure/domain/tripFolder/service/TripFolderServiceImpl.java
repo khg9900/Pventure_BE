@@ -89,13 +89,13 @@ public class TripFolderServiceImpl implements TripFolderService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
 
-        Trip trip = tripRepository.findByIdWithFolders(tripId)
+        Trip trip = tripRepository.findWithFolders(tripId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
 
         Folder folder = folderRepository.findByIdAndUser(folderId, user)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
 
-        Folder defaultFolder = folderRepository.findDefaultFolderByUser(user)
+        Folder defaultFolder = folderRepository.findDefaultByUser(user)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
 
         TripFolder tripFolder = tripFolderRepository.findByTripAndFolder(trip, folder)

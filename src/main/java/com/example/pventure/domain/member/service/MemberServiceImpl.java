@@ -48,28 +48,26 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public List<MemberSummaryDto> getMemberSummaryDtoList(Trip trip) {
-        return memberRepository.findByTripWithUser(trip).stream()
+        return memberRepository.findMembersInTrip(trip).stream()
                 .map(MemberSummaryDto::from)
                 .toList();
     }
 
     @Override
     public boolean canEdit(User user, Trip trip) {
-        return memberRepository.existsByTripAndUserAndMemberRoleIn(
-                trip, user, List.of(MemberRole.OWNER, MemberRole.EDITOR)
+        return memberRepository.hasAnyRoleInTrip(
+                user, trip, List.of(MemberRole.OWNER, MemberRole.EDITOR)
         );
     }
 
     @Override
     public boolean canDelete(User user, Trip trip) {
-        return memberRepository.existsByTripAndUserAndMemberRole(
-                trip, user, MemberRole.OWNER
-        );
+        return memberRepository.hasRoleInTrip(user, trip, MemberRole.OWNER);
     }
 
     @Override
     public boolean isMember(User user, Trip trip) {
-        return memberRepository.existsByTripAndUser(trip, user);
+        return memberRepository.isMemberOfTrip(user, trip);
     }
 
     private Trip getTripOrThrow(Long tripId) {

@@ -185,9 +185,9 @@ class TripFolderServiceTest {
         TripFolder anotherFolderRelation = new TripFolder(trip, defaultFolder);
         trip.getFolders().addAll(List.of(tripFolder1, anotherFolderRelation));
 
-        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.of(trip));
+        when(tripRepository.findWithFolders(anyLong())).thenReturn(Optional.of(trip));
         when(folderRepository.findByIdAndUser(anyLong(), any())).thenReturn(Optional.of(folder));
-        when(folderRepository.findDefaultFolderByUser(any())).thenReturn(Optional.of(defaultFolder));
+        when(folderRepository.findDefaultByUser(any())).thenReturn(Optional.of(defaultFolder));
         when(tripFolderRepository.findByTripAndFolder(trip, folder)).thenReturn(Optional.of(tripFolder1));
         when(memberService.isMember(any(), any())).thenReturn(true);
 
@@ -202,10 +202,10 @@ class TripFolderServiceTest {
         TripFolder onlyTripFolder = new TripFolder(trip, defaultFolder);
         trip.getFolders().add(onlyTripFolder);
 
-        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.of(trip));
+        when(tripRepository.findWithFolders(anyLong())).thenReturn(Optional.of(trip));
         when(memberService.isMember(user, trip)).thenReturn(true);
         when(folderRepository.findByIdAndUser(1L, user)).thenReturn(Optional.of(defaultFolder));
-        when(folderRepository.findDefaultFolderByUser(user)).thenReturn(Optional.of(defaultFolder));
+        when(folderRepository.findDefaultByUser(user)).thenReturn(Optional.of(defaultFolder));
         when(tripFolderRepository.findByTripAndFolder(trip, defaultFolder)).thenReturn(Optional.of(onlyTripFolder));
 
         assertThatThrownBy(() -> tripFolderService.deleteTrip(1L, 1L, 1L))
@@ -219,22 +219,22 @@ class TripFolderServiceTest {
         TripFolder onlyTripFolder = new TripFolder(trip, folder);
         trip.getFolders().add(onlyTripFolder);
 
-        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.of(trip));
+        when(tripRepository.findWithFolders(anyLong())).thenReturn(Optional.of(trip));
         when(folderRepository.findByIdAndUser(2L, user)).thenReturn(Optional.of(folder));
-        when(folderRepository.findDefaultFolderByUser(user)).thenReturn(Optional.of(defaultFolder));
+        when(folderRepository.findDefaultByUser(user)).thenReturn(Optional.of(defaultFolder));
         when(tripFolderRepository.findByTripAndFolder(trip, folder)).thenReturn(Optional.of(onlyTripFolder));
         when(memberService.isMember(user, trip)).thenReturn(true);
 
         tripFolderService.deleteTrip(2L, 1L, 1L);
 
         verify(tripFolderRepository, never()).delete(any());
-        verify(folderRepository).findDefaultFolderByUser(user);
+        verify(folderRepository).findDefaultByUser(user);
     }
 
     @DisplayName("deleteTrip 실패: 여행이 없으면 NOT_FOUND_TRIP 예외 발생")
     @Test
     void deleteTrip_fail_tripNotFound() {
-        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.empty());
+        when(tripRepository.findWithFolders(anyLong())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> tripFolderService.deleteTrip(2L, 999L, 1L))
                 .isInstanceOf(ApiException.class)
@@ -244,7 +244,7 @@ class TripFolderServiceTest {
     @DisplayName("deleteTrip 실패: 폴더가 없으면 NOT_FOUND_FOLDER 예외 발생")
     @Test
     void deleteTrip_fail_folderNotFound() {
-        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.of(trip));
+        when(tripRepository.findWithFolders(anyLong())).thenReturn(Optional.of(trip));
         when(folderRepository.findByIdAndUser(2L, user)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> tripFolderService.deleteTrip(2L, 1L, 1L))

@@ -15,11 +15,11 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-public class TripRepositoryImpl implements TripRepositoryCustom {
+public class TripRepositoryCustomImpl implements TripRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<Trip> findByUserAndDateRange(User user, LocalDate startDate, LocalDate endDate) {
+    public List<Trip> findByUserAndPeriod(User user, LocalDate startDate, LocalDate endDate) {
         QTrip trip = QTrip.trip;
         QMember member = QMember.member;
         BooleanBuilder builder = new BooleanBuilder();

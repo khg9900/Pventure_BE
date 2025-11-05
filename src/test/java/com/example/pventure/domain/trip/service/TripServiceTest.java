@@ -126,7 +126,7 @@ class TripServiceTest {
     @Test
     void getTrips_Success() {
         // given
-        when(tripRepository.findByUserAndDateRange(eq(user), any(), any()))
+        when(tripRepository.findByUserAndPeriod(eq(user), any(), any()))
                 .thenReturn(List.of(trip));
 
         MemberSummaryDto memberDto = new MemberSummaryDto(1L, "홍길동", "hong@example.com");
@@ -143,7 +143,7 @@ class TripServiceTest {
         assertThat(response.getMembers()).hasSize(1);
         assertThat(response.getMembers().get(0).getName()).isEqualTo("홍길동");
 
-        verify(tripRepository, times(1)).findByUserAndDateRange(eq(user), any(), any());
+        verify(tripRepository, times(1)).findByUserAndPeriod(eq(user), any(), any());
         verify(memberService, times(1)).getMemberSummaryDtoList(trip);
     }
 

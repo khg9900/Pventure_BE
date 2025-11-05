@@ -104,7 +104,7 @@ class ScheduleServiceTest {
     @DisplayName("getSchedules 성공")
     void getSchedules_success() {
         when(tripRepository.findById(anyLong())).thenReturn(Optional.of(trip));
-        when(scheduleRepository.findOrderedSchedules(trip, 1)).thenReturn(List.of(schedule));
+        when(scheduleRepository.findByTripAndDay(trip, 1)).thenReturn(List.of(schedule));
         when(memberService.isMember(user, trip)).thenReturn(true);
 
         List<ScheduleResponseDto> response = scheduleService.getSchedules(trip.getId(), user.getId(), 1);
@@ -130,9 +130,9 @@ class ScheduleServiceTest {
     @DisplayName("reorderSchedules 성공")
     void reorderSchedules_success() {
         when(tripRepository.findById(trip.getId())).thenReturn(Optional.of(trip));
-        when(scheduleRepository.findScheduleBySequenceOfDay(trip.getId(), 1, 1))
+        when(scheduleRepository.findByTripAndDayAndSequence(trip.getId(), 1, 1))
                 .thenReturn(Optional.of(schedule));
-        when(scheduleRepository.findOrderedSchedules(trip, 1)).thenReturn(List.of(schedule));
+        when(scheduleRepository.findByTripAndDay(trip, 1)).thenReturn(List.of(schedule));
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
         ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L, 2, 1);
@@ -195,7 +195,7 @@ class ScheduleServiceTest {
     @DisplayName("reorderSchedules 실패 - 없는 일정")
     void reorderSchedules_fail_scheduleNotFound() {
         when(tripRepository.findById(trip.getId())).thenReturn(Optional.of(trip));
-        when(scheduleRepository.findScheduleBySequenceOfDay(trip.getId(), 1, 1)).thenReturn(Optional.empty());
+        when(scheduleRepository.findByTripAndDayAndSequence(trip.getId(), 1, 1)).thenReturn(Optional.empty());
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
         ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L, 2, 1);
