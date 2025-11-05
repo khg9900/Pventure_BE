@@ -152,6 +152,10 @@ public class ScheduleServiceImpl implements ScheduleService {
         Schedule schedule = scheduleRepository.findById(scheduleId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_SCHEDULE));
 
+        if (!schedule.getTrip().getId().equals(tripId)) {
+            throw new ApiException(ErrorCode.NOT_FOUND_SCHEDULE);
+        }
+
         int day = schedule.getDay();
         int deletedSeq = schedule.getSequence();
 
