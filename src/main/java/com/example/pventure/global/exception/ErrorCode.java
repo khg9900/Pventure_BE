@@ -31,7 +31,7 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER("MB00701", HttpStatus.NOT_FOUND, "회원 정보를 찾을 수 없습니다."),
     DUPLICATE_MEMBER("MB00801", HttpStatus.CONFLICT, "이미 존재하는 회원입니다."),
     UNAUTHORIZED_MEMBER("MB00501", HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
-    UNAUTHORIZED_MEMBER_ACCESS("MB00502", HttpStatus.UNAUTHORIZED, "해당 여행에 권한이 없습니다."),
+    UNAUTHORIZED_MEMBER_ACCESS("MB00601", HttpStatus.FORBIDDEN, "해당 여행에 권한이 없습니다."),
 
     // ==========================
     // 🔹 Auth (AU)

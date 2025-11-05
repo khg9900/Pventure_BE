@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ScheduleUpdateDto {
 
-    private Boolean isComplete;
+    private Boolean isCompleted;
     private String memo;
 
 }

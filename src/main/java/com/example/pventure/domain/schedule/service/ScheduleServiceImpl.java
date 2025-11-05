@@ -132,7 +132,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         }
 
         if (dto.getMemo() != null) schedule.updateMemo(dto.getMemo());
-        if (dto.getIsComplete() != null) schedule.updateCompleted(dto.getIsComplete());
+        if (dto.getIsCompleted() != null) schedule.updateCompleted(dto.getIsCompleted());
 
         return ScheduleResponseDto.from(schedule);
     }
