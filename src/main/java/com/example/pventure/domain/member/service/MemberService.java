@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface MemberService {
 
-    List<MemberSummaryDto> registerOwner(User user, Trip trip);
+    void registerOwner(User user, Trip trip);
 
     List<MemberSummaryDto> inviteMember(User user, Long tripId, MemberRequestDto memberRequestDto);
 

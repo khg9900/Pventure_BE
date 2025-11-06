@@ -34,6 +34,7 @@ public class TripResponseDto {
     private List<MemberSummaryDto> members;
 
     public static TripResponseDto from(Trip trip, List<MemberSummaryDto> members) {
+
         return TripResponseDto.builder()
                 .id(trip.getId())
                 .title(trip.getTitle())

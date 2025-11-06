@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface TripService {
 
-    TripResponseDto createTrip(Long userId, TripRequestDto tripRequestDto);
+    TripResponseDto createTrip(Long userId, TripRequestDto tripRequestDto, boolean includeMembers);
 
-    List<TripResponseDto> getTrips(Long userId, TripSearchRequestDto searchRequest);
+    List<TripResponseDto> getTrips(Long userId, TripSearchRequestDto searchRequest, boolean includeMembers);
 
-    TripResponseDto getTrip(Long userId, Long tripId);
+    TripResponseDto getTrip(Long userId, Long tripId, boolean includeMembers);
 
-    TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto tripRequestDto);
+    TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto tripRequestDto, boolean includeMembers);
 
     void deleteTrip(Long userId, Long tripId);
 
