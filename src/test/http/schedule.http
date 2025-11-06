@@ -22,7 +22,7 @@ Content-Type: application/json
 
 {
   "memo": "저녁은 파크 내 식사로",
-  "isComplete": false
+  "isCompleted": false
 }
 
 ### 5️⃣ 일정 순서 변경 (Reorder Schedule Sequence)

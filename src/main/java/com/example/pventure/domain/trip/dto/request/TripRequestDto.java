@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 @Getter
 @NoArgsConstructor
@@ -50,14 +50,15 @@ public class TripRequestDto {
         Integer duration= this.totalDuration;
 
         if (startDate != null && endDate != null) {
-            duration = Period.between(startDate, endDate).getDays() + 1;
+            long days = ChronoUnit.DAYS.between(startDate, endDate);
+            duration = (int) days + 1;
         }
 
         return Trip.builder()
                 .title(title)
                 .thumbnail(thumbnail)
                 .destination(destination)
-                .totalDuration(duration)
+                .totalDuration(duration != null ? duration : 0)
                 .status(tripStatus != null ? tripStatus : TripStatus.PLANNED)
                 .startDate(startDate)
                 .endDate(endDate)

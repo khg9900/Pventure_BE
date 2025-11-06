@@ -143,11 +143,8 @@ class TripServiceTest {
     @Test
     void getTrip_Success() {
         // given
-        when(tripFinder.findById(eq(1L), anyBoolean())).thenReturn(trip);
+        when(tripFinder.findById(1L, false)).thenReturn(trip);
         when(memberService.isMember(user, trip)).thenReturn(true);
-        when(memberService.countMember(trip)).thenReturn(1L);
-        when(memberService.getMemberSummaryDtoList(trip)).thenReturn(Collections.emptyList());
-
         // when
         TripResponseDto response = tripService.getTrip(1L, 1L, false);
 
