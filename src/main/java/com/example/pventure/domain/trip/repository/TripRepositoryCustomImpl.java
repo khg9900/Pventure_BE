@@ -46,9 +46,9 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
         }
 
         var query = queryFactory
-                .selectFrom(trip)
-                .join(trip.members, member)
-                .fetchJoin();
+                .selectDistinct(trip)
+                .from(trip)
+                .join(trip.members, member).fetchJoin();
 
         if (includeMemberUserJoin) {
             query.join(member.user, QUser.user).fetchJoin();
@@ -56,7 +56,6 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
 
         return query
                 .where(builder)
-                .distinct()
                 .fetch();
     }
 }

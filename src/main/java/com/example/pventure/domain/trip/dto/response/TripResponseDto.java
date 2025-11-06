@@ -31,9 +31,11 @@ public class TripResponseDto {
 
     private LocalDate endDate;
 
+    private Long memberCount;
+
     private List<MemberSummaryDto> members;
 
-    public static TripResponseDto from(Trip trip, List<MemberSummaryDto> members) {
+    public static TripResponseDto from(Trip trip, List<MemberSummaryDto> members, Long memberCount) {
 
         return TripResponseDto.builder()
                 .id(trip.getId())
@@ -43,6 +45,7 @@ public class TripResponseDto {
                 .tripStatus(trip.getStatus())
                 .startDate(trip.getStartDate())
                 .endDate(trip.getEndDate())
+                .memberCount(memberCount)
                 .members(members)
                 .build();
     }

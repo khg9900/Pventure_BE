@@ -15,6 +15,8 @@ public interface MemberService {
 
     List<MemberSummaryDto> getMemberSummaryDtoList(Trip trip);
 
+    Long countMember(Trip trip);
+
     boolean isMember(User user, Trip trip);
 
     boolean canEdit(User user, Trip trip);

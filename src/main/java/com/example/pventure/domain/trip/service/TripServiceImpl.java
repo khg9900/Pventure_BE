@@ -108,11 +108,15 @@ public class TripServiceImpl implements TripService {
     }
 
     private TripResponseDto buildTripResponse(Trip trip, boolean includeMembers) {
+
+        Long memberCount = memberService.countMember(trip);
+
         List<MemberSummaryDto> members = Collections.emptyList();
+
         if (includeMembers) {
             members = memberService.getMemberSummaryDtoList(trip);
         }
-        return TripResponseDto.from(trip, members);
+        return TripResponseDto.from(trip, members, memberCount);
     }
 
     private void updateTripEntity(Trip trip, TripRequestDto dto) {

@@ -20,7 +20,7 @@ public class MemberSummaryDto{
 
     public static MemberSummaryDto from(Member member) {
         return MemberSummaryDto.builder()
-                .id(member.getId())
+                .id(member.getUser().getId())
                 .name(member.getUser().getName())
                 .email(member.getUser().getEmail())
                 .build();

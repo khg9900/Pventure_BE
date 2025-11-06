@@ -46,12 +46,17 @@ public class MemberServiceImpl implements MemberService {
 
         return getMemberSummaryDtoList(trip);
     }
-
+    @Override
     public List<MemberSummaryDto> getMemberSummaryDtoList(Trip trip) {
         Pageable top5 = PageRequest.of(0, 5);
         return memberRepository.findMembersInTrip(trip, top5).stream()
                 .map(MemberSummaryDto::from)
                 .toList();
+    }
+
+    @Override
+    public Long countMember(Trip trip) {
+        return memberRepository.countMember(trip);
     }
 
     @Override

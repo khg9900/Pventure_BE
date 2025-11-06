@@ -36,4 +36,8 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
         WHERE m.trip = :trip AND m.user = :user AND m.memberRole = :role
     """)
     boolean hasRoleInTrip(@Param("user") User user, @Param("trip") Trip trip, @Param("role") MemberRole role);
+
+
+    @Query("SELECT COALESCE(COUNT(m), 0) FROM Member m WHERE m.trip = :trip")
+    Long countMember(@Param("trip") Trip trip);
 }
