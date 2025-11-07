@@ -1,6 +1,6 @@
 package com.example.pventure.global.exception;
 
-import com.example.pventure.global.response.ApiResponseHelper;
+import com.example.pventure.global.response.CustomResponseHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -18,14 +18,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({NoResourceFoundException.class})
     public ResponseEntity<?> handleNoPageFoundException(NoResourceFoundException e) {
         log.warn("NoResourceFoundException: {}", e.getMessage());
-        return ApiResponseHelper.fail(new ApiException(ErrorCode.NOT_FOUND_ENDPOINT));
+        return CustomResponseHelper.fail(new ApiException(ErrorCode.NOT_FOUND_ENDPOINT));
     }
 
     //지원되지 않는 HTTP 메서드 예외 처리
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
      public ResponseEntity<?> handleMethodNotSupported(HttpRequestMethodNotSupportedException e) {
         log.warn("HttpRequestMethodNotSupportedException: {}", e.getMessage());
-        return ApiResponseHelper.fail(new ApiException(ErrorCode.METHOD_NOT_ALLOWED));
+        return CustomResponseHelper.fail(new ApiException(ErrorCode.METHOD_NOT_ALLOWED));
     }
 
     //유효성 검사 실패(@Valid, @Validated) 예외 처리
@@ -35,21 +35,21 @@ public class GlobalExceptionHandler {
         String fieldName = fieldError != null ? fieldError.getField() : null;
         String message = fieldError != null ? fieldError.getDefaultMessage() : "Validation failed";
         log.warn("Validation failed: {} ({})", message, fieldName);
-        return ApiResponseHelper.fail(new ApiException(ErrorCode.INVALID_INPUT_VALUE, fieldName));
+        return CustomResponseHelper.fail(new ApiException(ErrorCode.INVALID_INPUT_VALUE, fieldName));
     }
 
     // 커스텀 예외
     @ExceptionHandler(ApiException.class)
     public ResponseEntity<?> handleCustomException(ApiException e) {
         log.error("ApiException caught: {} ({})", e.getMessage(), e.getErrorCode().name());
-        return ApiResponseHelper.fail(e);
+        return CustomResponseHelper.fail(e);
     }
 
     // 기본 예외
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleException(Exception e) {
         log.error("Unexpected exception caught: {}", e.getMessage(), e);
-        return ApiResponseHelper.fail(new ApiException(ErrorCode.INTERNAL_SERVER_ERROR));
+        return CustomResponseHelper.fail(new ApiException(ErrorCode.INTERNAL_SERVER_ERROR));
     }
 
 

@@ -31,6 +31,7 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER("MB00701", HttpStatus.NOT_FOUND, "회원 정보를 찾을 수 없습니다."),
     DUPLICATE_MEMBER("MB00801", HttpStatus.CONFLICT, "이미 존재하는 회원입니다."),
     UNAUTHORIZED_MEMBER("MB00501", HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
+    UNAUTHORIZED_MEMBER_ACCESS("MB00502", HttpStatus.UNAUTHORIZED, "해당 여행에 권한이 없습니다."),
 
     // ==========================
     // 🔹 Auth (AU)
@@ -46,13 +47,6 @@ public enum ErrorCode {
     NOT_FOUND_USER("US00701", HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
     DUPLICATE_USER("US00801", HttpStatus.CONFLICT, "이미 존재하는 사용자입니다."),
     UNPROCESSABLE_USER("US00901", HttpStatus.UNPROCESSABLE_ENTITY, "사용자 정보를 처리할 수 없습니다."),
-
-    // ==========================
-    // 🔹 Team (TM)
-    // ==========================
-    NOT_FOUND_TEAM("TM00701", HttpStatus.NOT_FOUND, "팀을 찾을 수 없습니다."),
-    DUPLICATE_TEAM("TM00801", HttpStatus.CONFLICT, "이미 존재하는 팀 이름입니다."),
-    FORBIDDEN_TEAM_ACCESS("TM00601", HttpStatus.FORBIDDEN, "팀에 대한 접근 권한이 없습니다."),
 
     // ==========================
     // 🔹 Place (PL)

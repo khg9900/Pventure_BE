@@ -41,4 +41,23 @@ public class Trip extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Member> members = new ArrayList<>();
+
+    public void updateTitle(String title) {
+        if(title != null) this.title = title;
+    }
+
+    public void updateDestination(String destination) {
+        if(destination != null) this.destination = destination;
+    }
+
+    public void updateTripStatus(TripStatus tripStatus){
+        if(tripStatus != null) this.status = tripStatus;
+    }
+
+    public void updateDates(LocalDate startDate, LocalDate endDate) {
+         this.startDate = startDate;
+         this.endDate = endDate;
+    }
+
+
 }
