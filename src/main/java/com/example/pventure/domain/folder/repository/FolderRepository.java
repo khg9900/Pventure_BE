@@ -30,4 +30,6 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
 
     @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM Folder f WHERE f.user = :user AND f.isDefault = true")
     boolean existDefaultFolder(@Param("user") User user);
+    Optional<Folder> findDefaultFolderByUser(@Param("user") User user);
+
 }
