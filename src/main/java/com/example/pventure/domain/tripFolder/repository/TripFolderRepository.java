@@ -12,12 +12,19 @@ import java.util.Optional;
 
 public interface TripFolderRepository extends JpaRepository<TripFolder, Long> {
 
+
     @Query("SELECT DISTINCT tf FROM TripFolder tf " +
             "LEFT JOIN FETCH tf.trip t " +
             "LEFT JOIN FETCH t.members m " +
             "LEFT JOIN FETCH m.user u " +
             "WHERE tf.folder = :folder")
-    List<TripFolder> findByFolder(@Param("folder")Folder folder);
+    List<TripFolder> findByFolder(@Param("folder") Folder folder);
 
-    Optional<TripFolder> findByTripAndFolder(Trip trip, Folder folder);
+    @Query("SELECT tf FROM TripFolder tf " +
+            "WHERE tf.trip = :trip AND tf.folder = :folder")
+    Optional<TripFolder> findByTripAndFolder(@Param("trip") Trip trip, @Param("folder") Folder folder);
+
+    @Query("SELECT COUNT(tf.trip) FROM TripFolder tf " +
+            "JOIN tf.folder f WHERE tf.folder = :folder")
+    Long countTrips(@Param("folder") Folder folder);
 }

@@ -1,6 +1,7 @@
 package com.example.pventure.domain.folder.service;
 
 import com.example.pventure.domain.folder.dto.request.FolderRequestDto;
+import com.example.pventure.domain.folder.dto.response.FolderCountResponseDto;
 import com.example.pventure.domain.folder.dto.response.FolderResponseDto;
 import com.example.pventure.domain.folder.entity.Folder;
 import com.example.pventure.domain.user.entity.User;
@@ -11,7 +12,7 @@ public interface FolderService {
 
     FolderResponseDto createFolder(FolderRequestDto requestDto, Long userId);
 
-    List<FolderResponseDto> getAllFolders(Long userId);
+    List<FolderCountResponseDto> getAllFolders(Long userId);
 
     FolderResponseDto getFolder(Long folderId, Long userId);
 

@@ -1,9 +1,11 @@
 package com.example.pventure.domain.folder.service;
 
 import com.example.pventure.domain.folder.dto.request.FolderRequestDto;
+import com.example.pventure.domain.folder.dto.response.FolderCountResponseDto;
 import com.example.pventure.domain.folder.dto.response.FolderResponseDto;
 import com.example.pventure.domain.folder.entity.Folder;
 import com.example.pventure.domain.folder.repository.FolderRepository;
+import com.example.pventure.domain.tripFolder.service.TripFolderService;
 import com.example.pventure.domain.user.entity.User;
 import com.example.pventure.domain.user.repository.UserRepository;
 import com.example.pventure.global.exception.ApiException;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -23,6 +26,7 @@ public class FolderServiceImpl implements FolderService {
 
     private final UserRepository userRepository;
     private final FolderRepository folderRepository;
+    private final TripFolderService tripFolderService;
 
     @Override
     public FolderResponseDto createFolder(FolderRequestDto requestDto, Long userId) {
@@ -41,14 +45,18 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<FolderResponseDto> getAllFolders(Long userId) {
+    public List<FolderCountResponseDto> getAllFolders(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
 
-        return folderRepository.findAllByUser(user)
-                .stream()
-                .map(FolderResponseDto::from)
-                .toList();
+        List<Folder> folders = folderRepository.findAllByUser(user);
+
+        return folders.stream()
+                .map(folder -> {
+                    Long tripCount = tripFolderService.countTrips(folder);
+                    return FolderCountResponseDto.from(folder, tripCount);
+                })
+                .collect(Collectors.toList());
     }
 
     @Override

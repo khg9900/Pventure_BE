@@ -111,4 +111,9 @@ public class TripFolderServiceImpl implements TripFolderService {
         folder.getTripFolders().remove(tripFolder);
         tripFolderRepository.delete(tripFolder);
     }
+
+    @Override
+    public Long countTrips(Folder folder) {
+        return tripFolderRepository.countTrips(folder);
+    }
 }

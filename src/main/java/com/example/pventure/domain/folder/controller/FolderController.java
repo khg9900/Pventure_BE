@@ -1,6 +1,7 @@
 package com.example.pventure.domain.folder.controller;
 
 import com.example.pventure.domain.folder.dto.request.FolderRequestDto;
+import com.example.pventure.domain.folder.dto.response.FolderCountResponseDto;
 import com.example.pventure.domain.folder.dto.response.FolderResponseDto;
 import com.example.pventure.domain.folder.service.FolderService;
 import com.example.pventure.global.response.CustomResponse;
@@ -59,11 +60,11 @@ public class FolderController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "조회 성공",
-                    content = @Content(schema = @Schema(implementation = FolderResponseDto.class))),
+                    content = @Content(schema = @Schema(implementation = FolderCountResponseDto.class))),
             @ApiResponse(responseCode = "404", description = "사용자 없음", content = @Content)
     })
     @GetMapping
-    public ResponseEntity<CustomResponse<List<FolderResponseDto>>> getFolders(
+    public ResponseEntity<CustomResponse<List<FolderCountResponseDto>>> getFolders(
             @Parameter(description = "조회할 사용자의 ID", required = true) @RequestParam Long userId) {
         return CustomResponseHelper.ok(folderService.getAllFolders(userId));
     }

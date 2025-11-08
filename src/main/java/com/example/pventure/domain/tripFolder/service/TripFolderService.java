@@ -16,4 +16,6 @@ public interface TripFolderService {
     List<TripResponseDto> getTrips(Long folderId, Long userId);
 
     void deleteTrip(Long folderId, Long tripId, Long userId);
+
+    Long countTrips(Folder folder);
 }
