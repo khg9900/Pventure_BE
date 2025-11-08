@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface TripRepositoryCustom {
 
-    List<Trip> findByUserAndDateRange(User user, LocalDate startDate, LocalDate endDate);
+    List<Trip> findByUserAndPeriod(User user, LocalDate startDate, LocalDate endDate);
 }

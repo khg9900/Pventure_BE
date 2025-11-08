@@ -96,7 +96,7 @@ class FolderServiceTest {
     @Test
     @DisplayName("createFolder: 기본 폴더 중복 생성 시 실패")
     void createFolder_fail_duplicateDefault() {
-        when(folderRepository.existDefaultFolder(user)).thenReturn(true);
+        when(folderRepository.hasDefault(user)).thenReturn(true);
 
         assertThatThrownBy(() -> folderService.createFolder(defaultFolderRequestDto, 1L))
                 .isInstanceOf(ApiException.class)
@@ -106,7 +106,7 @@ class FolderServiceTest {
     @Test
     @DisplayName("getAllFolders: 유저의 모든 폴더 조회 성공")
     void getAllFolders_success() {
-        when(folderRepository.findFolderByUser(user)).thenReturn(List.of(defaultFolder, normalFolder));
+        when(folderRepository.findAllByUser(user)).thenReturn(List.of(defaultFolder, normalFolder));
 
         List<FolderResponseDto> result = folderService.getAllFolders(1L);
 
@@ -159,7 +159,7 @@ class FolderServiceTest {
     @DisplayName("deleteFolder: 일반 폴더 삭제 시 트립 이동 후 삭제 성공")
     void deleteFolder_success_moveTripsToDefault() {
         when(folderRepository.findWithTrips(2L, user)).thenReturn(Optional.of(normalFolder));
-        when(folderRepository.findDefaultFolderByUser(user)).thenReturn(Optional.of(defaultFolder));
+        when(folderRepository.findDefaultByUser(user)).thenReturn(Optional.of(defaultFolder));
 
         folderService.deleteFolder(2L, 1L);
 

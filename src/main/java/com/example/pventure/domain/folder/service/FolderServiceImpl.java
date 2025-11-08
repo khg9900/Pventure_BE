@@ -31,7 +31,7 @@ public class FolderServiceImpl implements FolderService {
 
         Folder folder = requestDto.toEntity(user);
 
-        if (folder.isDefault() && folderRepository.existDefaultFolder(user)) {
+        if (folder.isDefault() && folderRepository.hasDefault(user)) {
             throw new ApiException(ErrorCode.DUPLICATE_FOLDER);
         }
 
@@ -45,7 +45,7 @@ public class FolderServiceImpl implements FolderService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
 
-        return folderRepository.findFolderByUser(user)
+        return folderRepository.findAllByUser(user)
                 .stream()
                 .map(FolderResponseDto::from)
                 .toList();
@@ -92,7 +92,7 @@ public class FolderServiceImpl implements FolderService {
             throw new ApiException(ErrorCode.CANNOT_DELETE_DEFAULT_FOLDER);
         }
 
-        Folder defaultFolder = folderRepository.findDefaultFolderByUser(user)
+        Folder defaultFolder = folderRepository.findDefaultByUser(user)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
 
         folder.getTripFolders().forEach(tripFolder -> tripFolder.updateFolder(defaultFolder));

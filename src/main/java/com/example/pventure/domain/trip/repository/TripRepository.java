@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long> ,TripRepositoryCustom {
     @Query("SELECT t FROM Trip t LEFT JOIN FETCH t.folders WHERE t.id = :tripId")
-    Optional<Trip> findByIdWithFolders(@Param("tripId") Long tripId);
+    Optional<Trip> findWithFolders(@Param("tripId") Long tripId);
 }
