@@ -100,7 +100,7 @@ class FolderServiceTest {
 
         assertThatThrownBy(() -> folderService.createFolder(defaultFolderRequestDto, 1L))
                 .isInstanceOf(ApiException.class)
-                .hasMessageContaining(ErrorCode.DUPLICATE_FOLDER.getMessage());
+                .hasMessageContaining(ErrorCode.INVALID_DEFAULT_FOLDER_COUNT.getMessage());
     }
 
     @Test

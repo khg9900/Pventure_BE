@@ -87,11 +87,11 @@ public enum ErrorCode {
     // 🔹 Folder (FO)
     // ==========================
     NOT_FOUND_FOLDER("FO00701", HttpStatus.NOT_FOUND, "폴더를 찾을 수 없습니다."),
-    DUPLICATE_FOLDER("FO00801", HttpStatus.CONFLICT, "기본폴더 한개만 존재해야합니다."),
+    INVALID_DEFAULT_FOLDER_COUNT("FO00801", HttpStatus.CONFLICT, "기본 폴더는 하나만 존재해야 합니다."),
     FORBIDDEN_FOLDER_ACCESS("FO00601", HttpStatus.FORBIDDEN, "폴더 접근 권한이 없습니다."),
     CANNOT_EDIT_DEFAULT_FOLDER("FO00602", HttpStatus.FORBIDDEN, "기본 폴더는 수정할 수 없습니다."),
     CANNOT_DELETE_DEFAULT_FOLDER("FO00603", HttpStatus.FORBIDDEN, "기본 폴더는 삭제할 수 없습니다."),
-    TRIP_MUST_BELONG_TO_AT_LEAST_ONE_FOLDER("FO00604", HttpStatus.FORBIDDEN,"여행은 최소한 하나의 폴더에 속해야 합니다."),
+    TRIP_MUST_BELONG_TO_AT_LEAST_ONE_FOLDER("FO00604", HttpStatus.FORBIDDEN, "여행은 최소한 하나의 폴더에 속해야 합니다."),
 
     // ==========================
     // 🔹 FolderTrip (FT)
