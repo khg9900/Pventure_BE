@@ -35,7 +35,7 @@ public class TripFolder extends BaseEntity {
 
         this.folder = folder;
 
-        if (folder != null) {
+        if (folder != null && !folder.getTripFolders().contains(this)) {
             folder.getTripFolders().add(this);
         }
     }
@@ -48,7 +48,7 @@ public class TripFolder extends BaseEntity {
 
         this.trip = trip;
 
-        if (trip != null) {
+        if (trip != null && !trip.getFolders().contains(this)) {
             trip.getFolders().add(this);
         }
     }
