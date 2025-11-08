@@ -9,8 +9,6 @@ import com.example.pventure.global.response.CustomResponseHelper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,14 +31,7 @@ public class TripController {
             description = "사용자 ID와 여행 정보를 입력하여 새로운 여행을 생성합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "201",
-                    description = "생성 성공",
-                    content = @Content(
-                            schema = @Schema(implementation = TripResponseDto.class),
-                            examples = @ExampleObject(value = "{ \"tripId\": 1, \"title\": \"제주 여행\", \"startDate\": \"2025-11-01\", \"endDate\": \"2025-11-05\" }")
-                    )
-            ),
+            @ApiResponse(responseCode = "201", description = "생성 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content)
     })
     @PostMapping
@@ -57,14 +48,7 @@ public class TripController {
             description = "사용자 ID와 검색 조건으로 여행 목록을 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "조회 성공",
-                    content = @Content(
-                            schema = @Schema(implementation = TripResponseDto.class),
-                            examples = @ExampleObject(value = "[{ \"tripId\": 1, \"title\": \"제주 여행\", \"startDate\": \"2025-11-01\" }]")
-                    )
-            ),
+            @ApiResponse(responseCode = "200", description = "조회 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content)
     })
     @GetMapping
@@ -81,14 +65,7 @@ public class TripController {
             description = "사용자 ID와 여행 ID로 특정 여행 정보를 조회합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "조회 성공",
-                    content = @Content(
-                            schema = @Schema(implementation = TripResponseDto.class),
-                            examples = @ExampleObject(value = "{ \"tripId\": 1, \"title\": \"제주 여행\", \"startDate\": \"2025-11-01\" }")
-                    )
-            ),
+            @ApiResponse(responseCode = "200", description = "조회 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "404", description = "여행 없음", content = @Content)
     })
     @GetMapping("/{tripId}")
@@ -105,14 +82,7 @@ public class TripController {
             description = "사용자 ID와 여행 ID, 수정할 여행 정보를 입력하여 여행을 수정합니다."
     )
     @ApiResponses(value = {
-            @ApiResponse(
-                    responseCode = "200",
-                    description = "수정 성공",
-                    content = @Content(
-                            schema = @Schema(implementation = TripResponseDto.class),
-                            examples = @ExampleObject(value = "{ \"tripId\": 1, \"title\": \"제주 여행 - 수정\", \"startDate\": \"2025-11-01\" }")
-                    )
-            ),
+            @ApiResponse(responseCode = "200", description = "수정 성공", useReturnTypeSchema = true),
             @ApiResponse(responseCode = "400", description = "잘못된 요청", content = @Content),
             @ApiResponse(responseCode = "404", description = "여행 없음", content = @Content)
     })

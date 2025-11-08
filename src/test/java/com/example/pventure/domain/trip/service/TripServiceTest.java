@@ -83,7 +83,8 @@ class TripServiceTest {
                 "제주",
                 TripStatus.PLANNED,
                 LocalDate.now(),
-                LocalDate.now().plusDays(3)
+                LocalDate.now().plusDays(3),
+                1L
         );
 
         // Trip Entity
@@ -109,7 +110,7 @@ class TripServiceTest {
         // given
         when(tripRepository.save(any(Trip.class))).thenReturn(trip);
         when(memberService.registerOwner(user, trip)).thenReturn(List.of(new MemberSummaryDto()));
-        when(folderService.getDefaultFolderForUser(user)).thenReturn(folder);
+        when(folderService.getFolderEntity(user, folder.getId() )).thenReturn(folder);
 
         // when
         TripResponseDto response = tripService.createTrip(1L, requestDto);
@@ -118,7 +119,7 @@ class TripServiceTest {
         assertThat(response.getTitle()).isEqualTo("제주 여행");
         verify(tripRepository, times(1)).save(any(Trip.class));
         verify(memberService, times(1)).registerOwner(user, trip);
-        verify(folderService, times(1)).getDefaultFolderForUser(user);
+        verify(folderService, times(1)).getFolderEntity(user,folder.getId() );
         verify(tripFolderService, times(1)).createTripFolder(trip, folder);
     }
 
@@ -184,7 +185,7 @@ class TripServiceTest {
 
         TripRequestDto updateDto = new TripRequestDto(
                 "서울 여행", "thumbnail2", "서울", TripStatus.PLANNED,
-                LocalDate.now(), LocalDate.now().plusDays(2)
+                LocalDate.now(), LocalDate.now().plusDays(2),1L
         );
 
         // when
