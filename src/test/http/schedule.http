@@ -1,0 +1,39 @@
+### 1️⃣ 일정 생성 (Create Schedule)
+POST http://localhost:8080/api/trips/1/schedules?userId=1
+Content-Type: application/json
+
+{
+  "day": 1,
+  "sequence": 1,
+  "memo": "사진 많이 찍기"
+}
+
+### 2️⃣ 특정 날짜의 일정 목록 조회 (Get Schedules of a Day)
+GET http://localhost:8080/api/trips/1/days/1/schedules?userId=1
+Accept: application/json
+
+### 3️⃣ 단일 일정 상세 조회 (Get Schedule Detail)
+GET http://localhost:8080/api/trips/1/schedules/1?userId=1
+Accept: application/json
+
+### 4️⃣ 일정 수정 (Update Schedule)
+PUT http://localhost:8080/api/trips/1/schedules/1?userId=1
+Content-Type: application/json
+
+{
+  "memo": "저녁은 파크 내 식사로",
+  "isComplete": false
+}
+
+### 5️⃣ 일정 순서 변경 (Reorder Schedule Sequence)
+PUT http://localhost:8080/api/trips/1/days/1/schedules/reorder?userId=1
+Content-Type: application/json
+
+{
+  "scheduleId": 1,
+  "oldSeq": 3,
+  "newSeq": 1
+}
+
+### 6️⃣ 일정 삭제 (Delete Schedule)
+DELETE http://localhost:8080/api/trips/1/schedules/1?userId=1

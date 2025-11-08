@@ -6,7 +6,6 @@ import com.example.pventure.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +19,6 @@ public class Schedule extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip_id", nullable = false)
     private Trip trip;
-
-    @Column(nullable = false)
-    private LocalDate date;
 
     @Column(nullable = false)
     private Integer day;
@@ -40,6 +36,18 @@ public class Schedule extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Place> places = new ArrayList<>();
+
+    public void updateSequence(Integer sequence) {
+        this.sequence = sequence;
+    }
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public void updateCompleted(boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
 
 
 }

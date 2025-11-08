@@ -119,6 +119,7 @@ class TripFolderServiceTest {
 
         doReturn(Optional.of(trip)).when(tripRepository).findById(tripId);
         doReturn(Optional.of(folder)).when(folderRepository).findByIdAndUser(folderId, user);
+        when(memberService.isMember(user, trip)).thenReturn(true);
         doReturn(tripFolder).when(tripFolderService).createTripFolder(trip, folder);
 
         FolderResponseDto response = tripFolderService.addTrip(folderId, tripId, userId);
@@ -154,6 +155,7 @@ class TripFolderServiceTest {
     void getTrips_success() {
         when(folderRepository.findByIdAndUser(2L, user)).thenReturn(Optional.of(folder));
         when(tripFolderRepository.findByFolder(folder)).thenReturn(List.of(tripFolder));
+        when(memberService.isMember(user, trip)).thenReturn(true);
         when(memberService.getMemberSummaryDtoList(trip)).thenReturn(List.of(new MemberSummaryDto(1L,"홍길동","image")));
 
         List<TripResponseDto> result = tripFolderService.getTrips(2L, 1L);
@@ -175,18 +177,19 @@ class TripFolderServiceTest {
                 .hasMessageContaining(ErrorCode.NOT_FOUND_FOLDER.getMessage());
     }
 
+
     @DisplayName("deleteTrip 성공: 일반 폴더, 여러 폴더에 속한 여행 삭제")
     @Test
     void deleteTrip_success_normalFolder_multipleTrips() {
-        // trip.getFolders()에 여러 TripFolder 존재하도록 설정
         TripFolder tripFolder1 = new TripFolder(trip, folder);
         TripFolder anotherFolderRelation = new TripFolder(trip, defaultFolder);
         trip.getFolders().addAll(List.of(tripFolder1, anotherFolderRelation));
 
-        when(tripRepository.findById(1L)).thenReturn(Optional.of(trip));
-        when(folderRepository.findByIdAndUser(2L, user)).thenReturn(Optional.of(folder));
-        when(folderRepository.findDefaultFolderByUser(user)).thenReturn(Optional.of(defaultFolder));
+        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.of(trip));
+        when(folderRepository.findByIdAndUser(anyLong(), any())).thenReturn(Optional.of(folder));
+        when(folderRepository.findDefaultFolderByUser(any())).thenReturn(Optional.of(defaultFolder));
         when(tripFolderRepository.findByTripAndFolder(trip, folder)).thenReturn(Optional.of(tripFolder1));
+        when(memberService.isMember(any(), any())).thenReturn(true);
 
         tripFolderService.deleteTrip(2L, 1L, 1L);
 
@@ -199,7 +202,8 @@ class TripFolderServiceTest {
         TripFolder onlyTripFolder = new TripFolder(trip, defaultFolder);
         trip.getFolders().add(onlyTripFolder);
 
-        when(tripRepository.findById(1L)).thenReturn(Optional.of(trip));
+        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.of(trip));
+        when(memberService.isMember(user, trip)).thenReturn(true);
         when(folderRepository.findByIdAndUser(1L, user)).thenReturn(Optional.of(defaultFolder));
         when(folderRepository.findDefaultFolderByUser(user)).thenReturn(Optional.of(defaultFolder));
         when(tripFolderRepository.findByTripAndFolder(trip, defaultFolder)).thenReturn(Optional.of(onlyTripFolder));
@@ -215,10 +219,11 @@ class TripFolderServiceTest {
         TripFolder onlyTripFolder = new TripFolder(trip, folder);
         trip.getFolders().add(onlyTripFolder);
 
-        when(tripRepository.findById(1L)).thenReturn(Optional.of(trip));
+        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.of(trip));
         when(folderRepository.findByIdAndUser(2L, user)).thenReturn(Optional.of(folder));
         when(folderRepository.findDefaultFolderByUser(user)).thenReturn(Optional.of(defaultFolder));
         when(tripFolderRepository.findByTripAndFolder(trip, folder)).thenReturn(Optional.of(onlyTripFolder));
+        when(memberService.isMember(user, trip)).thenReturn(true);
 
         tripFolderService.deleteTrip(2L, 1L, 1L);
 
@@ -229,7 +234,7 @@ class TripFolderServiceTest {
     @DisplayName("deleteTrip 실패: 여행이 없으면 NOT_FOUND_TRIP 예외 발생")
     @Test
     void deleteTrip_fail_tripNotFound() {
-        when(tripRepository.findById(999L)).thenReturn(Optional.empty());
+        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> tripFolderService.deleteTrip(2L, 999L, 1L))
                 .isInstanceOf(ApiException.class)
@@ -239,7 +244,7 @@ class TripFolderServiceTest {
     @DisplayName("deleteTrip 실패: 폴더가 없으면 NOT_FOUND_FOLDER 예외 발생")
     @Test
     void deleteTrip_fail_folderNotFound() {
-        when(tripRepository.findById(1L)).thenReturn(Optional.of(trip));
+        when(tripRepository.findByIdWithFolders(anyLong())).thenReturn(Optional.of(trip));
         when(folderRepository.findByIdAndUser(2L, user)).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> tripFolderService.deleteTrip(2L, 1L, 1L))
