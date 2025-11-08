@@ -69,19 +69,21 @@ public class TripFolderServiceImpl implements TripFolderService {
 
         List<TripFolder> tripFolders =tripFolderRepository.findByFolder(folder);
 
-        return tripFolders.stream()
+        List<Trip> trips = tripFolders.stream()
                 .map(TripFolder::getTrip)
-                .filter(trip -> {
-                    if (!memberService.isMember(user, trip)) {
-                        throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
-                    }
-                    return true;
-                })
+                .toList();
+
+        trips.forEach(trip -> {
+            if (!memberService.isMember(user, trip)) {
+                throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+            }
+        });
+
+        return trips.stream()
                 .map(trip -> {
                     List<MemberSummaryDto> members = memberService.getMemberSummaryDtoList(trip);
                     Long memberCount = memberService.countMember(trip);
-                    return TripResponseDto.from(trip, members,memberCount);
-                })
+                    return TripResponseDto.from(trip, members, memberCount);})
                 .toList();
     }
 
@@ -90,33 +92,30 @@ public class TripFolderServiceImpl implements TripFolderService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
 
-        Trip trip = tripRepository.findWithFolders(tripId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
-
         Folder folder = folderRepository.findByIdAndUser(folderId, user)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
 
-        Folder defaultFolder = folderRepository.findDefaultByUser(user)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
+        if (folder.isDefault()) {
+            throw new ApiException(ErrorCode.CANNOT_REMOVE_TRIP_FROM_DEFAULT_FOLDER);
+        }
 
-        TripFolder tripFolder = tripFolderRepository.findByTripAndFolder(trip, folder)
+        Trip trip = tripRepository.findWithFolders(tripId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
+
+        TripFolder tripFolder = tripFolderRepository.findByTripAndFolder(trip,folder)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER_TRIP));
 
         if (!memberService.isMember(user, trip)) {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
         }
 
-        if (folder.isDefault() && trip.getFolders().size() == 1) {
-            throw new ApiException(ErrorCode.TRIP_MUST_BELONG_TO_AT_LEAST_ONE_FOLDER);
-        }
-
-        if (!folder.isDefault() && trip.getFolders().size() == 1) {
-            tripFolder.updateFolder(defaultFolder);
-            return;
-        }
-
         trip.getFolders().remove(tripFolder);
         folder.getTripFolders().remove(tripFolder);
         tripFolderRepository.delete(tripFolder);
+    }
+
+    @Override
+    public Long countTrips(Folder folder) {
+        return tripFolderRepository.countTrips(folder);
     }
 }

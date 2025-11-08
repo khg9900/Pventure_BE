@@ -1,6 +1,7 @@
 package com.example.pventure.domain.folder.service;
 
 import com.example.pventure.domain.folder.dto.request.FolderRequestDto;
+import com.example.pventure.domain.folder.dto.response.FolderCountResponseDto;
 import com.example.pventure.domain.folder.dto.response.FolderResponseDto;
 import com.example.pventure.domain.folder.entity.Folder;
 import com.example.pventure.domain.folder.repository.FolderRepository;
@@ -100,7 +101,7 @@ class FolderServiceTest {
 
         assertThatThrownBy(() -> folderService.createFolder(defaultFolderRequestDto, 1L))
                 .isInstanceOf(ApiException.class)
-                .hasMessageContaining(ErrorCode.INVALID_DEFAULT_FOLDER_COUNT.getMessage());
+                .hasMessageContaining(ErrorCode.DUPLICATE_FOLDER.getMessage());
     }
 
     @Test
@@ -108,7 +109,7 @@ class FolderServiceTest {
     void getAllFolders_success() {
         when(folderRepository.findAllByUser(user)).thenReturn(List.of(defaultFolder, normalFolder));
 
-        List<FolderResponseDto> result = folderService.getAllFolders(1L);
+        List<FolderCountResponseDto> result = folderService.getAllFolders(1L);
 
         assertThat(result).hasSize(2);
         assertEquals("기본 폴더", result.get(0).getName());

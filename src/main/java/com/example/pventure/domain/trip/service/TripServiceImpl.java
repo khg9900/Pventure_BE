@@ -38,10 +38,17 @@ public class TripServiceImpl implements TripService {
     @Override
     public TripResponseDto createTrip(Long userId, TripRequestDto tripRequestDto, boolean includeMembers) {
         User user = getUserOrThrow(userId);
+
         Trip trip = tripRepository.save(tripRequestDto.toEntity());
+
         memberService.registerOwner(user, trip);
 
         Folder folder = folderService.getFolderEntity(user, tripRequestDto.getFolderId());
+
+        if (!folder.isDefault()) {
+            Folder defaultFolder = folderService.getDefaultFolder(user);
+            tripFolderService.createTripFolder(trip, defaultFolder);
+        }
         tripFolderService.createTripFolder(trip, folder);
 
         return buildTripResponse(trip, includeMembers);

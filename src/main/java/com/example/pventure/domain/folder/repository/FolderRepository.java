@@ -14,7 +14,10 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
     @Query("SELECT f FROM Folder f WHERE f.user = :user AND f.isDefault = true")
     Optional<Folder> findDefaultByUser(@Param("user") User user);
 
-    @Query("SELECT f FROM Folder f WHERE f.user = :user")
+    @Query("SELECT DISTINCT f FROM Folder f " +
+            "LEFT JOIN FETCH f.tripFolders tf " +
+            "LEFT JOIN FETCH tf.trip t " +
+            "WHERE f.user = :user")
     List<Folder> findAllByUser(@Param("user") User user);
 
     @Query("SELECT f FROM Folder f WHERE f.id = :id AND f.user = :user")
