@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long> ,TripRepositoryCustom {
     @Query("""
-    SELECT t
+    SELECT DISTINCT t
     FROM Trip t
     LEFT JOIN FETCH t.folders
     WHERE t.id = :tripId

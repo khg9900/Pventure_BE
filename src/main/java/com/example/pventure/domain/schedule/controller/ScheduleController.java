@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class ScheduleController {
                               "isCompleted": true
                             }
                             """)))
-            @RequestBody ScheduleRequestDto scheduleRequestDto
+            @Valid @RequestBody ScheduleRequestDto scheduleRequestDto
     ) {
         return CustomResponseHelper.created(
                 scheduleService.createSchedule(tripId, userId, scheduleRequestDto)
@@ -95,7 +96,7 @@ public class ScheduleController {
                               "isCompleted": true
                             }
                             """)))
-            @RequestBody ScheduleUpdateDto scheduleUpdateDto
+            @Valid @RequestBody ScheduleUpdateDto scheduleUpdateDto
     ) {
         return CustomResponseHelper.ok(
                 scheduleService.updateSchedule(tripId, scheduleId, userId, scheduleUpdateDto)
@@ -116,7 +117,7 @@ public class ScheduleController {
                               "newSeq": 1
                             }
                             """)))
-            @RequestBody ScheduleReorderRequestDto scheduleReorderRequest
+            @Valid @RequestBody ScheduleReorderRequestDto scheduleReorderRequest
     ) {
         return CustomResponseHelper.ok(
                 scheduleService.reorderSchedules(tripId, userId, day, scheduleReorderRequest)

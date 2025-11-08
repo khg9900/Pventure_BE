@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class TripController {
     @PostMapping
     public ResponseEntity<CustomResponse<TripResponseDto>> createTrip(
             @Parameter(description = "사용자 ID", required = true, example = "1") @RequestParam Long userId,
-            @Parameter(description = "여행 생성 요청 DTO", required = true) @RequestBody TripRequestDto tripRequestDto,
+            @Parameter(description = "여행 생성 요청 DTO", required = true) @RequestBody @Valid TripRequestDto tripRequestDto,
             @Parameter(description = "여행에 멤버 정보를 포함할지 여부", example = "false") @RequestParam(defaultValue = "false") boolean includeMembers
     ) {
         TripResponseDto response = tripService.createTrip(userId, tripRequestDto, includeMembers);
@@ -93,7 +94,7 @@ public class TripController {
     public ResponseEntity<CustomResponse<TripResponseDto>> updateTrip(
             @Parameter(description = "사용자 ID", required = true, example = "1") @RequestParam Long userId,
             @Parameter(description = "여행 ID", required = true, example = "1") @PathVariable Long tripId,
-            @Parameter(description = "여행 수정 요청 DTO", required = true) @RequestBody TripRequestDto tripRequestDto,
+            @Parameter(description = "여행 수정 요청 DTO", required = true) @Valid @RequestBody TripRequestDto tripRequestDto,
             @Parameter(description = "여행에 멤버 정보를 포함할지 여부", example = "false") @RequestParam(defaultValue = "false") boolean includeMembers
     ) {
         TripResponseDto response = tripService.updateTrip(userId, tripId, tripRequestDto, includeMembers);

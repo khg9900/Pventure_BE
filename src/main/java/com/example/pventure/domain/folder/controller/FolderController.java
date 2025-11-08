@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -50,7 +51,7 @@ public class FolderController {
     @PostMapping
     public ResponseEntity<CustomResponse<FolderResponseDto>> createFolder(
             @Parameter(description = "폴더를 생성할 사용자 ID", required = true) @RequestParam Long userId,
-            @RequestBody FolderRequestDto requestDto) {
+            @Valid @RequestBody FolderRequestDto requestDto) {
         return CustomResponseHelper.created(folderService.createFolder(requestDto, userId));
     }
 
@@ -116,7 +117,7 @@ public class FolderController {
     public ResponseEntity<CustomResponse<FolderResponseDto>> updateFolder(
             @Parameter(description = "수정할 사용자의 ID", required = true) @RequestParam Long userId,
             @Parameter(description = "수정할 폴더의 ID", required = true) @PathVariable Long folderId,
-            @RequestBody FolderRequestDto requestDto) {
+            @Valid @RequestBody FolderRequestDto requestDto) {
         return CustomResponseHelper.ok(folderService.updateFolder(folderId, requestDto, userId));
     }
 
