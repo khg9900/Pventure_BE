@@ -92,17 +92,18 @@ public class FolderServiceImpl implements FolderService {
             throw new ApiException(ErrorCode.CANNOT_DELETE_DEFAULT_FOLDER);
         }
 
-        Folder defaultFolder = folderRepository.findDefaultByUser(user)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
-
-        folder.getTripFolders().forEach(tripFolder -> tripFolder.updateFolder(defaultFolder));
-
         folderRepository.delete(folder);
     }
 
     @Override
     public Folder getFolderEntity(User user, Long folderId) {
         return folderRepository.findWithTrips(folderId, user)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
+    }
+
+    @Override
+    public Folder getDefaultFolder(User user) {
+        return folderRepository.findDefaultByUser(user)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
     }
 }

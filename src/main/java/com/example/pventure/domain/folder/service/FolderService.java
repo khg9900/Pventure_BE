@@ -20,4 +20,6 @@ public interface FolderService {
     void deleteFolder(Long folderId, Long userId);
 
     Folder getFolderEntity(User user, Long folderId);
+
+    Folder getDefaultFolder(User user);
 }
