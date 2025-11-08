@@ -13,13 +13,13 @@ import lombok.NoArgsConstructor;
 public class FolderCountResponseDto {
     private Long id;
     private String name;
-    private Long CountFolder;
+    private Long countTrip;
 
-    public static FolderCountResponseDto from(Folder folder, Long countFolder) {
+    public static FolderCountResponseDto from(Folder folder, Long countTrip) {
         return FolderCountResponseDto.builder()
                 .id(folder.getId())
                 .name(folder.getName())
-                .CountFolder(countFolder)
+                .countTrip(countTrip)
                 .build();
     }
 

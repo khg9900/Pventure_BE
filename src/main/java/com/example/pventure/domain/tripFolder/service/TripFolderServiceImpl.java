@@ -69,19 +69,21 @@ public class TripFolderServiceImpl implements TripFolderService {
 
         List<TripFolder> tripFolders =tripFolderRepository.findByFolder(folder);
 
-        return tripFolders.stream()
+        List<Trip> trips = tripFolders.stream()
                 .map(TripFolder::getTrip)
-                .filter(trip -> {
-                    if (!memberService.isMember(user, trip)) {
-                        throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
-                    }
-                    return true;
-                })
+                .toList();
+
+        trips.forEach(trip -> {
+            if (!memberService.isMember(user, trip)) {
+                throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+            }
+        });
+
+        return trips.stream()
                 .map(trip -> {
                     List<MemberSummaryDto> members = memberService.getMemberSummaryDtoList(trip);
                     Long memberCount = memberService.countMember(trip);
-                    return TripResponseDto.from(trip, members, memberCount);
-                })
+                    return TripResponseDto.from(trip, members, memberCount);})
                 .toList();
     }
 
