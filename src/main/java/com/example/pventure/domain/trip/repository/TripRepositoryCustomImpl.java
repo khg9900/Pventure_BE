@@ -19,7 +19,17 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    @Override
     public List<Trip> findByUserAndPeriod(User user, LocalDate startDate, LocalDate endDate) {
+        return findByUserAndPeriod(user, startDate, endDate, false);
+    }
+
+    @Override
+    public List<Trip> findByUserAndPeriodWithUser(User user, LocalDate startDate, LocalDate endDate) {
+        return findByUserAndPeriod(user, startDate, endDate, true);
+    }
+
+    private List<Trip> findByUserAndPeriod(User user, LocalDate startDate, LocalDate endDate, boolean includeMemberUserJoin) {
         QTrip trip = QTrip.trip;
         QMember member = QMember.member;
         BooleanBuilder builder = new BooleanBuilder();
@@ -35,14 +45,17 @@ public class TripRepositoryCustomImpl implements TripRepositoryCustom {
                     .and(trip.endDate.isNull());
         }
 
-        return queryFactory
-                .selectFrom(trip)
-                .join(trip.members, member)
-                .fetchJoin()
-                .join(member.user, QUser.user)
-                .fetchJoin()
+        var query = queryFactory
+                .selectDistinct(trip)
+                .from(trip)
+                .join(trip.members, member).fetchJoin();
+
+        if (includeMemberUserJoin) {
+            query.join(member.user, QUser.user).fetchJoin();
+        }
+
+        return query
                 .where(builder)
-                .distinct()
                 .fetch();
     }
 }

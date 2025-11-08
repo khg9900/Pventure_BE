@@ -79,7 +79,8 @@ public class TripFolderServiceImpl implements TripFolderService {
                 })
                 .map(trip -> {
                     List<MemberSummaryDto> members = memberService.getMemberSummaryDtoList(trip);
-                    return TripResponseDto.from(trip, members);
+                    Long memberCount = memberService.countMember(trip);
+                    return TripResponseDto.from(trip, members,memberCount);
                 })
                 .toList();
     }

@@ -12,6 +12,8 @@ import com.example.pventure.domain.user.entity.User;
 import com.example.pventure.global.exception.ApiException;
 import com.example.pventure.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +29,11 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     @Transactional
-    public List<MemberSummaryDto> registerOwner(User user, Trip trip) {
+    public void registerOwner(User user, Trip trip) {
         Member owner = new MemberRequestDto(MemberRole.OWNER, MemberStatus.ACCEPTED)
                 .toEntity(user, trip);
 
         memberRepository.save(owner);
-        return List.of(MemberSummaryDto.from(owner));
     }
 
     @Override
@@ -45,12 +46,17 @@ public class MemberServiceImpl implements MemberService {
 
         return getMemberSummaryDtoList(trip);
     }
-
     @Override
     public List<MemberSummaryDto> getMemberSummaryDtoList(Trip trip) {
-        return memberRepository.findMembersInTrip(trip).stream()
+        Pageable top5 = PageRequest.of(0, 5);
+        return memberRepository.findMembersInTrip(trip, top5).stream()
                 .map(MemberSummaryDto::from)
                 .toList();
+    }
+
+    @Override
+    public Long countMember(Trip trip) {
+        return memberRepository.countMember(trip);
     }
 
     @Override

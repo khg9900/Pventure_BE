@@ -32,7 +32,7 @@ public class FolderServiceImpl implements FolderService {
         Folder folder = requestDto.toEntity(user);
 
         if (folder.isDefault() && folderRepository.hasDefault(user)) {
-            throw new ApiException(ErrorCode.INVALID_DEFAULT_FOLDER_COUNT);
+            throw new ApiException(ErrorCode.DUPLICATE_FOLDER);
         }
 
         Folder savedFolder = folderRepository.save(folder);

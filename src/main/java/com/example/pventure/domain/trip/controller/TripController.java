@@ -37,9 +37,10 @@ public class TripController {
     @PostMapping
     public ResponseEntity<CustomResponse<TripResponseDto>> createTrip(
             @Parameter(description = "사용자 ID", required = true, example = "1") @RequestParam Long userId,
-            @Parameter(description = "여행 생성 요청 DTO", required = true) @RequestBody TripRequestDto tripRequestDto
+            @Parameter(description = "여행 생성 요청 DTO", required = true) @RequestBody TripRequestDto tripRequestDto,
+            @Parameter(description = "여행에 멤버 정보를 포함할지 여부", example = "false") @RequestParam(defaultValue = "false") boolean includeMembers
     ) {
-        TripResponseDto response = tripService.createTrip(userId, tripRequestDto);
+        TripResponseDto response = tripService.createTrip(userId, tripRequestDto, includeMembers);
         return CustomResponseHelper.created(response);
     }
 
@@ -54,9 +55,10 @@ public class TripController {
     @GetMapping
     public ResponseEntity<CustomResponse<List<TripResponseDto>>> getTrips(
             @Parameter(description = "검색 조건 DTO") @ModelAttribute TripSearchRequestDto searchRequest,
-            @Parameter(description = "사용자 ID", required = true, example = "1") @RequestParam Long userId
+            @Parameter(description = "사용자 ID", required = true, example = "1") @RequestParam Long userId,
+            @Parameter(description = "여행에 멤버 정보를 포함할지 여부", example = "false") @RequestParam(defaultValue = "false") boolean includeMembers
     ) {
-        List<TripResponseDto> trips = tripService.getTrips(userId, searchRequest);
+        List<TripResponseDto> trips = tripService.getTrips(userId, searchRequest, includeMembers);
         return CustomResponseHelper.ok(trips);
     }
 
@@ -71,9 +73,10 @@ public class TripController {
     @GetMapping("/{tripId}")
     public ResponseEntity<CustomResponse<TripResponseDto>> getTrip(
             @Parameter(description = "사용자 ID", required = true, example = "1") @RequestParam Long userId,
-            @Parameter(description = "여행 ID", required = true, example = "1") @PathVariable Long tripId
+            @Parameter(description = "여행 ID", required = true, example = "1") @PathVariable Long tripId,
+            @Parameter(description = "여행에 멤버 정보를 포함할지 여부", example = "false") @RequestParam(defaultValue = "false") boolean includeMembers
     ) {
-        TripResponseDto response = tripService.getTrip(userId, tripId);
+        TripResponseDto response = tripService.getTrip(userId, tripId, includeMembers);
         return CustomResponseHelper.ok(response);
     }
 
@@ -90,9 +93,10 @@ public class TripController {
     public ResponseEntity<CustomResponse<TripResponseDto>> updateTrip(
             @Parameter(description = "사용자 ID", required = true, example = "1") @RequestParam Long userId,
             @Parameter(description = "여행 ID", required = true, example = "1") @PathVariable Long tripId,
-            @Parameter(description = "여행 수정 요청 DTO", required = true) @RequestBody TripRequestDto tripRequestDto
+            @Parameter(description = "여행 수정 요청 DTO", required = true) @RequestBody TripRequestDto tripRequestDto,
+            @Parameter(description = "여행에 멤버 정보를 포함할지 여부", example = "false") @RequestParam(defaultValue = "false") boolean includeMembers
     ) {
-        TripResponseDto response = tripService.updateTrip(userId, tripId, tripRequestDto);
+        TripResponseDto response = tripService.updateTrip(userId, tripId, tripRequestDto, includeMembers);
         return CustomResponseHelper.ok(response);
     }
 

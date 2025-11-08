@@ -9,6 +9,7 @@ import com.example.pventure.domain.trip.dto.request.TripSearchRequestDto;
 import com.example.pventure.domain.trip.dto.response.TripResponseDto;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.trip.repository.TripRepository;
+import com.example.pventure.domain.trip.util.TripFinder;
 import com.example.pventure.domain.tripFolder.service.TripFolderService;
 import com.example.pventure.domain.user.entity.User;
 import com.example.pventure.domain.user.repository.UserRepository;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -29,71 +31,69 @@ public class TripServiceImpl implements TripService {
     private final TripRepository tripRepository;
     private final MemberService memberService;
     private final FolderService folderService;
+    private final TripFinder tripFinder;
     private final TripFolderService tripFolderService;
 
     @Transactional
     @Override
-    public TripResponseDto createTrip(Long userId, TripRequestDto tripRequestDto) {
+    public TripResponseDto createTrip(Long userId, TripRequestDto tripRequestDto, boolean includeMembers) {
         User user = getUserOrThrow(userId);
-
         Trip trip = tripRepository.save(tripRequestDto.toEntity());
+        memberService.registerOwner(user, trip);
 
-        List<MemberSummaryDto> members = memberService.registerOwner(user, trip);
+        Folder folder = folderService.getFolderEntity(user, tripRequestDto.getFolderId());
+        tripFolderService.createTripFolder(trip, folder);
 
-        Folder folder = folderService.getFolderEntity(user,tripRequestDto.getFolderId());
-
-        tripFolderService.createTripFolder(trip,folder);
-
-        return TripResponseDto.from(trip, members);
+        return buildTripResponse(trip, includeMembers);
     }
 
     @Override
-    public List<TripResponseDto> getTrips(Long userId, TripSearchRequestDto searchRequest) {
+    public List<TripResponseDto> getTrips(Long userId, TripSearchRequestDto searchRequest, boolean includeMembers) {
         User user = getUserOrThrow(userId);
-
-        List<Trip> trips = tripRepository.findByUserAndPeriod(
-                user, searchRequest.getStartDate(), searchRequest.getEndDate()
-        );
+        List<Trip> trips = tripFinder.findByUserAndPeriod(user, searchRequest.getStartDate(), searchRequest.getEndDate(), includeMembers);
 
         return trips.stream()
-                .map(trip -> TripResponseDto.from(trip, memberService.getMemberSummaryDtoList(trip)))
+                .filter(trip -> {
+                    if (!memberService.isMember(user, trip)) {
+                        throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+                    }
+                    return true;
+                })
+                .map(trip -> buildTripResponse(trip, includeMembers))
                 .toList();
     }
 
     @Override
-    public TripResponseDto getTrip(Long userId, Long tripId) {
+    public TripResponseDto getTrip(Long userId, Long tripId, boolean includeMembers) {
         User user = getUserOrThrow(userId);
-        Trip trip = getTripOrThrow(tripId);
+        Trip trip = tripFinder.findById(tripId, includeMembers);
 
         if (!memberService.isMember(user, trip)) {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
         }
 
-        return TripResponseDto.from(trip, memberService.getMemberSummaryDtoList(trip));
+        return buildTripResponse(trip, includeMembers);
     }
 
     @Transactional
     @Override
-    public TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto tripRequestDto) {
+    public TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto tripRequestDto, boolean includeMembers) {
         User user = getUserOrThrow(userId);
-        Trip trip = getTripOrThrow(tripId);
+        Trip trip = tripFinder.findById(tripId, includeMembers);
 
         if (!memberService.canEdit(user, trip)) {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
         }
 
-        if (tripRequestDto.getTitle() != null) trip.updateTitle(tripRequestDto.getTitle());
-        if (tripRequestDto.getDestination() != null) trip.updateDestination(tripRequestDto.getDestination());
-        trip.updateDates(tripRequestDto.getStartDate(), tripRequestDto.getEndDate());
-
-        return TripResponseDto.from(trip, memberService.getMemberSummaryDtoList(trip));
+        updateTripEntity(trip, tripRequestDto);
+        return buildTripResponse(trip, includeMembers);
     }
 
     @Transactional
     @Override
     public void deleteTrip(Long userId, Long tripId) {
         User user = getUserOrThrow(userId);
-        Trip trip = getTripOrThrow(tripId);
+        Trip trip = tripFinder.findById(tripId, true);
 
         if (!memberService.canDelete(user, trip)) {
             throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
@@ -107,8 +107,22 @@ public class TripServiceImpl implements TripService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
     }
 
-    private Trip getTripOrThrow(Long tripId) {
-        return tripRepository.findById(tripId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_TRIP));
+    private TripResponseDto buildTripResponse(Trip trip, boolean includeMembers) {
+
+        Long memberCount = memberService.countMember(trip);
+
+        List<MemberSummaryDto> members = Collections.emptyList();
+
+        if (includeMembers) {
+            members = memberService.getMemberSummaryDtoList(trip);
+        }
+        return TripResponseDto.from(trip, members, memberCount);
+    }
+
+    private void updateTripEntity(Trip trip, TripRequestDto dto) {
+        if (dto.getTitle() != null) trip.updateTitle(dto.getTitle());
+        if (dto.getDestination() != null) trip.updateDestination(dto.getDestination());
+        trip.updateDates(dto.getStartDate(), dto.getEndDate());
     }
 }
+
