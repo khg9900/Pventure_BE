@@ -5,7 +5,7 @@ Content-Type: application/json
 {
   "day": 1,
   "sequence": 1,
-  "memo": "사진 많이 찍기"
+  "timeSlot": "MORNING"
 }
 
 ### 특정 날짜의 일정 목록 조회 (Get Schedules of a Day)
@@ -21,7 +21,6 @@ PUT http://localhost:8080/api/trips/1/schedules/1?userId=1
 Content-Type: application/json
 
 {
-  "memo": "저녁은 파크 내 식사로",
   "isCompleted": false
 }
 
@@ -32,7 +31,8 @@ Content-Type: application/json
 {
   "scheduleId": 1,
   "oldSeq": 3,
-  "newSeq": 1
+  "newSeq": 1,
+  "timeSlot": "AFTER_LUNCH"
 }
 
 ### 일정 삭제 (Delete Schedule)
