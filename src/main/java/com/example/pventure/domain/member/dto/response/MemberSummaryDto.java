@@ -18,11 +18,14 @@ public class MemberSummaryDto{
 
     private String email;
 
+    private String imageUrl;
+
     public static MemberSummaryDto from(Member member) {
         return MemberSummaryDto.builder()
                 .id(member.getUser().getId())
                 .name(member.getUser().getName())
                 .email(member.getUser().getEmail())
+                .imageUrl(member.getUser().getImageUrl())
                 .build();
     }
 }
