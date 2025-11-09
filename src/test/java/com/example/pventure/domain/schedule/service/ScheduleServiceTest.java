@@ -137,6 +137,7 @@ class ScheduleServiceTest {
         verify(sequenceUtil).reorder(trip.getId(), 1, 1, 2);
         assertEquals(1, response.size());
         assertEquals(2, response.get(0).getSequence());
+        assertEquals(TimeSlot.AFTER_EVENING, response.get(0).getTimeSlot());
     }
 
     @Test
