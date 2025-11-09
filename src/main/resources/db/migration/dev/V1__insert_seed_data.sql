@@ -54,24 +54,28 @@ VALUES
 -- =====================================================
 -- 5. Schedule
 -- =====================================================
-INSERT INTO schedule (id, trip_id, day, sequence, is_completed, created_at, updated_at)
+INSERT INTO schedule (id, trip_id, day, sequence, is_completed, time_slot,created_at, updated_at)
 VALUES
     -- 서울 여행
-    (1, 1, 1, 1, FALSE, NOW(), NOW()),
-    (2, 1, 2, 1, FALSE, NOW(), NOW()),
+    (1, 1, 1, 1, FALSE, 'MORNING', NOW(), NOW()),
+    (2, 1, 2, 1, FALSE, 'AFTER_EVENING', NOW(), NOW()),
+
     -- 부산 여행
-    (3, 2, 1, 1, FALSE, NOW(), NOW()),
-    (4, 2, 2, 1, FALSE, NOW(), NOW()),
+    (3, 2, 1, 1, FALSE, 'LUNCH', NOW(), NOW()),
+    (4, 2, 2, 1, FALSE, 'EVENING', NOW(), NOW()),
+
     -- 제주 여행
-    (5, 3, 1, 1, FALSE, NOW(), NOW()),
-    (6, 3, 2, 1, FALSE, NOW(), NOW()),
-    (7, 3, 3, 1, FALSE, NOW(), NOW()),
+    (5, 3, 1, 1, FALSE, 'EARLY_MORNING', NOW(), NOW()),
+    (6, 3, 2, 1, FALSE, 'AFTER_LUNCH', NOW(), NOW()),
+    (7, 3, 3, 1, FALSE, 'EVENING', NOW(), NOW()),
+
     -- 강릉 여행
-    (8, 4, 1, 1, FALSE, NOW(), NOW()),
-    (9, 4, 2, 1, FALSE, NOW(), NOW()),
+    (8, 4, 1, 1, FALSE, 'MORNING', NOW(), NOW()),
+    (9, 4, 2, 1, FALSE, 'AFTER_LUNCH', NOW(), NOW()),
+
     -- 여수 여행
-    (10, 5, 1, 1, FALSE, NOW(), NOW()),
-    (11, 5, 2, 1, FALSE, NOW(), NOW());
+    (10, 5, 1, 1, FALSE, 'LUNCH', NOW(), NOW()),
+    (11, 5, 2, 1, FALSE, 'AFTER_EVENING', NOW(), NOW());
 
 -- =====================================================
 -- 6. Place
