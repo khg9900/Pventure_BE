@@ -12,6 +12,5 @@ import lombok.NoArgsConstructor;
 public class ScheduleUpdateDto {
 
     private Boolean isCompleted;
-    private String memo;
 
 }
