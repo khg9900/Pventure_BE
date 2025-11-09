@@ -3,6 +3,7 @@ package com.example.pventure.domain.schedule.dto.request;
 import com.example.pventure.domain.schedule.entity.Schedule;
 import com.example.pventure.domain.schedule.enums.TimeSlot;
 import com.example.pventure.domain.trip.entity.Trip;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,9 +15,14 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ScheduleRequestDto {
 
+    @NotNull(message = "일차(day)는 필수 값입니다.")
     private Integer day;
+
     private Integer sequence;
+
     private Boolean isCompleted;
+
+    @NotNull(message = "시간대(timeSlot)는 필수 값입니다.")
     private TimeSlot timeSlot;
 
     public Schedule toEntity(Trip trip,Integer finalSeq) {
