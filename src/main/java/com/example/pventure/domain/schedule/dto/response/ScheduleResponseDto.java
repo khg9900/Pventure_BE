@@ -21,7 +21,6 @@ public class ScheduleResponseDto {
     private Integer day;
     private Integer sequence;
     private LocalDate date;
-    private String memo;
 
     public static ScheduleResponseDto from(Schedule schedule) {
         LocalDate date = null;
@@ -38,7 +37,6 @@ public class ScheduleResponseDto {
                 .sequence(schedule.getSequence())
                 .isCompleted(schedule.isCompleted())
                 .date(date)
-                .memo(schedule.getMemo())
                 .build();
     }
 }

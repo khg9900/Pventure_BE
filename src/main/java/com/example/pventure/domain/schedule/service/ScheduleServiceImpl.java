@@ -131,7 +131,6 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ApiException(ErrorCode.NOT_FOUND_SCHEDULE);
         }
 
-        if (dto.getMemo() != null) schedule.updateMemo(dto.getMemo());
         if (dto.getIsCompleted() != null) schedule.updateCompleted(dto.getIsCompleted());
 
         return ScheduleResponseDto.from(schedule);

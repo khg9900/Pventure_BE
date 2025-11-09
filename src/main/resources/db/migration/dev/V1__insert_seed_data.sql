@@ -54,46 +54,46 @@ VALUES
 -- =====================================================
 -- 5. Schedule
 -- =====================================================
-INSERT INTO schedule (id, trip_id, day, sequence, memo, is_completed, created_at, updated_at)
+INSERT INTO schedule (id, trip_id, day, sequence, is_completed, created_at, updated_at)
 VALUES
     -- 서울 여행
-    (1, 1, 1, 1, '경복궁 방문', FALSE, NOW(), NOW()),
-    (2, 1, 2, 1, '남산타워 전망대', FALSE, NOW(), NOW()),
+    (1, 1, 1, 1, FALSE, NOW(), NOW()),
+    (2, 1, 2, 1, FALSE, NOW(), NOW()),
     -- 부산 여행
-    (3, 2, 1, 1, '해운대 산책', FALSE, NOW(), NOW()),
-    (4, 2, 2, 1, '광안리 야경', FALSE, NOW(), NOW()),
+    (3, 2, 1, 1, FALSE, NOW(), NOW()),
+    (4, 2, 2, 1, FALSE, NOW(), NOW()),
     -- 제주 여행
-    (5, 3, 1, 1, '한라산 등반', FALSE, NOW(), NOW()),
-    (6, 3, 2, 1, '성산일출봉 방문', FALSE, NOW(), NOW()),
-    (7, 3, 3, 1, '협재 해수욕장', FALSE, NOW(), NOW()),
+    (5, 3, 1, 1, FALSE, NOW(), NOW()),
+    (6, 3, 2, 1, FALSE, NOW(), NOW()),
+    (7, 3, 3, 1, FALSE, NOW(), NOW()),
     -- 강릉 여행
-    (8, 4, 1, 1, '정동진 일출', FALSE, NOW(), NOW()),
-    (9, 4, 2, 1, '경포대 산책', FALSE, NOW(), NOW()),
+    (8, 4, 1, 1, FALSE, NOW(), NOW()),
+    (9, 4, 2, 1, FALSE, NOW(), NOW()),
     -- 여수 여행
-    (10, 5, 1, 1, '오동도 관광', FALSE, NOW(), NOW()),
-    (11, 5, 2, 1, '돌산대교 야경', FALSE, NOW(), NOW());
+    (10, 5, 1, 1, FALSE, NOW(), NOW()),
+    (11, 5, 2, 1, FALSE, NOW(), NOW());
 
 -- =====================================================
 -- 6. Place
 -- =====================================================
-INSERT INTO place (id, name, link, address, latitude, longitude, place_category, schedule_id, created_at, updated_at)
+INSERT INTO place (id, name, link, address, latitude, longitude, place_category, schedule_id, memo, created_at, updated_at)
 VALUES
     -- 서울 여행
-    (1, '경복궁', 'https://gyeongbokgung.or.kr', '서울 종로구 사직로 161', 37.579617, 126.977041, 'TOURIST_ATTRACTION', 1, NOW(), NOW()),
-    (2, '남산타워', 'https://nseoultower.co.kr', '서울 용산구 남산공원길 105', 37.551169, 126.988227, 'TOURIST_ATTRACTION', 2, NOW(), NOW()),
+    (1, '경복궁', 'https://gyeongbokgung.or.kr', '서울 종로구 사직로 161', 37.579617, 126.977041, 'TOURIST_ATTRACTION', 1, '경복궁 방문', NOW(), NOW()),
+    (2, '남산타워', 'https://nseoultower.co.kr', '서울 용산구 남산공원길 105', 37.551169, 126.988227, 'TOURIST_ATTRACTION', 2, '남산타워 전망대', NOW(), NOW()),
     -- 부산 여행
-    (3, '해운대', 'https://www.haeundae.go.kr', '부산 해운대구', 35.1587, 129.1604, 'TOURIST_ATTRACTION', 3, NOW(), NOW()),
-    (4, '광안리', 'https://www.gwangalli.go.kr', '부산 수영구', 35.1535, 129.1187, 'TOURIST_ATTRACTION', 4, NOW(), NOW()),
+    (3, '해운대', 'https://www.haeundae.go.kr', '부산 해운대구', 35.1587, 129.1604, 'TOURIST_ATTRACTION', 3, '해운대 산책', NOW(), NOW()),
+    (4, '광안리', 'https://www.gwangalli.go.kr', '부산 수영구', 35.1535, 129.1187, 'TOURIST_ATTRACTION', 4, '광안리 야경', NOW(), NOW()),
     -- 제주 여행
-    (5, '한라산', 'https://www.hallasan.go.kr', '제주 한라산', 33.3617, 126.5292, 'TOURIST_ATTRACTION', 5, NOW(), NOW()),
-    (6, '성산일출봉', 'https://www.jeju.go.kr', '제주 성산', 33.4581, 126.9410, 'TOURIST_ATTRACTION', 6, NOW(), NOW()),
-    (7, '협재 해수욕장', 'https://www.jeju.go.kr', '제주 협재', 33.2479, 126.2395, 'TOURIST_ATTRACTION', 7, NOW(), NOW()),
+    (5, '한라산', 'https://www.hallasan.go.kr', '제주 한라산', 33.3617, 126.5292, 'TOURIST_ATTRACTION', 5, '한라산 등반', NOW(), NOW()),
+    (6, '성산일출봉', 'https://www.jeju.go.kr', '제주 성산', 33.4581, 126.9410, 'TOURIST_ATTRACTION', 6, '성산일출봉 방문', NOW(), NOW()),
+    (7, '협재 해수욕장', 'https://www.jeju.go.kr', '제주 협재', 33.2479, 126.2395, 'TOURIST_ATTRACTION', 7, '협재 해수욕장', NOW(), NOW()),
     -- 강릉 여행
-    (8, '정동진', 'https://www.jeongdongjin.go.kr', '강릉 정동진', 37.7566, 129.1133, 'TOURIST_ATTRACTION', 8, NOW(), NOW()),
-    (9, '경포대', 'https://www.gangneung.go.kr', '강릉 경포', 37.7519, 128.8955, 'TOURIST_ATTRACTION', 9, NOW(), NOW()),
+    (8, '정동진', 'https://www.jeongdongjin.go.kr', '강릉 정동진', 37.7566, 129.1133, 'TOURIST_ATTRACTION', 8, '정동진 일출', NOW(), NOW()),
+    (9, '경포대', 'https://www.gangneung.go.kr', '강릉 경포', 37.7519, 128.8955, 'TOURIST_ATTRACTION', 9, '경포대 산책', NOW(), NOW()),
     -- 여수 여행
-    (10, '오동도', 'https://www.yeosu.go.kr', '여수 오동도', 34.7405, 127.7212, 'TOURIST_ATTRACTION', 10, NOW(), NOW()),
-    (11, '돌산대교', 'https://www.yeosu.go.kr', '여수 돌산대교', 34.7291, 127.7576, 'TOURIST_ATTRACTION', 11, NOW(), NOW());
+    (10, '오동도', 'https://www.yeosu.go.kr', '여수 오동도', 34.7405, 127.7212, 'TOURIST_ATTRACTION', 10, '오동도 관광', NOW(), NOW()),
+    (11, '돌산대교', 'https://www.yeosu.go.kr', '여수 돌산대교', 34.7291, 127.7576, 'TOURIST_ATTRACTION', 11, '돌산대교 야경', NOW(), NOW());
 
 -- =====================================================
 -- 7. Album

@@ -69,7 +69,6 @@ class ScheduleServiceTest {
                 .trip(trip)
                 .day(1)
                 .sequence(1)
-                .memo("메모")
                 .build();
         setId(schedule, 1L);
 
@@ -90,14 +89,13 @@ class ScheduleServiceTest {
         when(scheduleRepository.save(any(Schedule.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모");
+        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false);
         ScheduleResponseDto response = scheduleService.createSchedule(trip.getId(), user.getId(), dto);
 
         verify(sequenceUtil).shiftOnInsert(trip.getId(), 1, 1);
         verify(scheduleRepository).save(any(Schedule.class));
         assertEquals(1, response.getDay());
         assertEquals(1, response.getSequence());
-        assertEquals("메모", response.getMemo());
     }
 
     @Test
@@ -109,7 +107,6 @@ class ScheduleServiceTest {
 
         List<ScheduleResponseDto> response = scheduleService.getSchedules(trip.getId(), user.getId(), 1);
         assertEquals(1, response.size());
-        assertEquals("메모", response.get(0).getMemo());
     }
 
     @Test
@@ -119,10 +116,8 @@ class ScheduleServiceTest {
         when(scheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        ScheduleUpdateDto dto = new ScheduleUpdateDto(true, "new memo");
+        ScheduleUpdateDto dto = new ScheduleUpdateDto(true);
         ScheduleResponseDto response = scheduleService.updateSchedule(trip.getId(), schedule.getId(), user.getId(), dto);
-
-        assertEquals("new memo", response.getMemo());
         assertTrue(response.isCompleted());
     }
 
@@ -161,7 +156,7 @@ class ScheduleServiceTest {
     void createSchedule_fail_userNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모");
+        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false);
 
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.createSchedule(trip.getId(), 999L, dto));
@@ -185,7 +180,7 @@ class ScheduleServiceTest {
         when(scheduleRepository.findById(999L)).thenReturn(Optional.empty());
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        ScheduleUpdateDto dto = new ScheduleUpdateDto(true, "memo");
+        ScheduleUpdateDto dto = new ScheduleUpdateDto(true);
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.updateSchedule(trip.getId(), 999L, user.getId(), dto));
         assertEquals(ErrorCode.NOT_FOUND_SCHEDULE, ex.getErrorCode());
