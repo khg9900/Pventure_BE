@@ -84,6 +84,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         sequenceUtil.reorder(tripId, day, dto.getOldSeq(), dto.getNewSeq());
 
         target.updateSequence(dto.getNewSeq());
+        target.updateTimeSlot(dto.getTimeSlot());
 
         List<Schedule> schedules = scheduleRepository.findByTripAndDay(trip, day);
         return schedules.stream()
