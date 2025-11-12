@@ -113,7 +113,8 @@ public class ScheduleController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "재정렬 요청 DTO",
                     content = @Content(examples = @ExampleObject(value = """
-                            {
+                         {
+                              "scheduleId": 5,
                               "oldSeq": 3,
                               "newSeq": 1,
                               "timeSlot": "MORNING"
