@@ -23,9 +23,6 @@ public class Place extends BaseEntity {
     @Column(length = 500)
     private String address;
 
-    @Column(length = 500)
-    private String memo;
-
     @Column
     @DecimalMax(value = "90.0")
     @DecimalMin(value = "-90.0")

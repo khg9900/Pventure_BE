@@ -22,6 +22,8 @@ public class ScheduleRequestDto {
 
     private Boolean isCompleted;
 
+    private String memo;
+
     @NotNull(message = "시간대(timeSlot)는 필수 값입니다.")
     private TimeSlot timeSlot;
 
@@ -30,6 +32,7 @@ public class ScheduleRequestDto {
                 .day(day)
                 .sequence(finalSeq)
                 .isCompleted(isCompleted != null && isCompleted)
+                .memo(memo)
                 .timeSlot(timeSlot)
                 .trip(trip)
                 .build();

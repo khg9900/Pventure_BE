@@ -27,6 +27,9 @@ public class Schedule extends BaseEntity {
     @Column(nullable = false)
     private Integer sequence;
 
+    @Column(length = 500)
+    private String memo;
+
     @Builder.Default
     @Column(nullable = false)
     private boolean isCompleted = false;
@@ -45,6 +48,10 @@ public class Schedule extends BaseEntity {
 
     public void updateCompleted(boolean isCompleted) {
         this.isCompleted = isCompleted;
+    }
+
+    public void updateMemo(String memo) {
+        this.memo = memo;
     }
 
     public void updateTimeSlot(TimeSlot timeSlot) {

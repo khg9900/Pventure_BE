@@ -22,6 +22,7 @@ public class ScheduleResponseDto {
     private Integer day;
     private Integer sequence;
     private LocalDate date;
+    private String memo;
     private TimeSlot timeSlot;
 
     public static ScheduleResponseDto from(Schedule schedule) {
@@ -39,6 +40,7 @@ public class ScheduleResponseDto {
                 .sequence(schedule.getSequence())
                 .isCompleted(schedule.isCompleted())
                 .date(date)
+                .memo(schedule.getMemo())
                 .timeSlot(schedule.getTimeSlot())
                 .build();
     }
