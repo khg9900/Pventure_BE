@@ -49,6 +49,7 @@ public class ScheduleController {
                               "timeSlot": "MORNING",
                               "sequence": 1,
                               "isCompleted": true
+                              "memo": "사진 많이 찍기"
                             }
                             """)))
             @Valid @RequestBody ScheduleRequestDto scheduleRequestDto
@@ -92,6 +93,7 @@ public class ScheduleController {
                     description = "수정 요청 DTO",
                     content = @Content(examples = @ExampleObject(value = """
                             {
+                              "memo": "사진 많이 찍기",
                               "isCompleted": true
                             }
                             """)))

@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ScheduleUpdateDto {
 
-    @NotNull(message = "완료 여부(isCompleted)는 필수 값입니다.")
     private Boolean isCompleted;
 
     private String memo;
