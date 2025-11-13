@@ -1,6 +1,7 @@
 package com.example.pventure.domain.schedule.util;
 
 import com.example.pventure.domain.schedule.entity.Schedule;
+import com.example.pventure.domain.schedule.enums.TimeSlot;
 import com.example.pventure.domain.schedule.repository.ScheduleRepository;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.trip.enums.TripStatus;
@@ -44,7 +45,7 @@ class ScheduleSequenceUtilTest {
                 .sequence(1)
                 .day(1)
                 .isCompleted(false)
-                .memo("테스트 메모")
+                .timeSlot(TimeSlot.EVENING)
                 .trip(trip)
                 .build();
     }

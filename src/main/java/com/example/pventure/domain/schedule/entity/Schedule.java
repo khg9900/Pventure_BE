@@ -1,6 +1,7 @@
 package com.example.pventure.domain.schedule.entity;
 
 import com.example.pventure.domain.place.entity.Place;
+import com.example.pventure.domain.schedule.enums.TimeSlot;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -33,6 +34,10 @@ public class Schedule extends BaseEntity {
     @Column(nullable = false)
     private boolean isCompleted = false;
 
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TimeSlot timeSlot;
+
     @Builder.Default
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Place> places = new ArrayList<>();
@@ -41,13 +46,16 @@ public class Schedule extends BaseEntity {
         this.sequence = sequence;
     }
 
-    public void updateMemo(String memo) {
-        this.memo = memo;
-    }
-
     public void updateCompleted(boolean isCompleted) {
         this.isCompleted = isCompleted;
     }
 
+    public void updateMemo(String memo) {
+        this.memo = memo;
+    }
+
+    public void updateTimeSlot(TimeSlot timeSlot) {
+        this.timeSlot = timeSlot;
+    }
 
 }

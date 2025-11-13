@@ -84,6 +84,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         sequenceUtil.reorder(tripId, day, dto.getOldSeq(), dto.getNewSeq());
 
         target.updateSequence(dto.getNewSeq());
+        target.updateTimeSlot(dto.getTimeSlot());
 
         List<Schedule> schedules = scheduleRepository.findByTripAndDay(trip, day);
         return schedules.stream()
@@ -131,8 +132,8 @@ public class ScheduleServiceImpl implements ScheduleService {
             throw new ApiException(ErrorCode.NOT_FOUND_SCHEDULE);
         }
 
-        if (dto.getMemo() != null) schedule.updateMemo(dto.getMemo());
         if (dto.getIsCompleted() != null) schedule.updateCompleted(dto.getIsCompleted());
+        if (dto.getMemo() != null) schedule.updateMemo(dto.getMemo());
 
         return ScheduleResponseDto.from(schedule);
     }

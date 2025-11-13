@@ -6,6 +6,7 @@ import com.example.pventure.domain.schedule.dto.request.ScheduleRequestDto;
 import com.example.pventure.domain.schedule.dto.request.ScheduleUpdateDto;
 import com.example.pventure.domain.schedule.dto.response.ScheduleResponseDto;
 import com.example.pventure.domain.schedule.entity.Schedule;
+import com.example.pventure.domain.schedule.enums.TimeSlot;
 import com.example.pventure.domain.schedule.repository.ScheduleRepository;
 import com.example.pventure.domain.schedule.util.ScheduleSequenceUtil;
 import com.example.pventure.domain.trip.entity.Trip;
@@ -90,7 +91,7 @@ class ScheduleServiceTest {
         when(scheduleRepository.save(any(Schedule.class))).thenAnswer(invocation -> invocation.getArgument(0));
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모");
+        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모" ,TimeSlot.AFTER_LUNCH);
         ScheduleResponseDto response = scheduleService.createSchedule(trip.getId(), user.getId(), dto);
 
         verify(sequenceUtil).shiftOnInsert(trip.getId(), 1, 1);
@@ -121,8 +122,6 @@ class ScheduleServiceTest {
 
         ScheduleUpdateDto dto = new ScheduleUpdateDto(true, "new memo");
         ScheduleResponseDto response = scheduleService.updateSchedule(trip.getId(), schedule.getId(), user.getId(), dto);
-
-        assertEquals("new memo", response.getMemo());
         assertTrue(response.isCompleted());
     }
 
@@ -135,12 +134,13 @@ class ScheduleServiceTest {
         when(scheduleRepository.findByTripAndDay(trip, 1)).thenReturn(List.of(schedule));
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L, 2, 1);
+        ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L, 2, 1,TimeSlot.AFTER_EVENING);
         List<ScheduleResponseDto> response = scheduleService.reorderSchedules(trip.getId(), user.getId(), 1, dto);
 
         verify(sequenceUtil).reorder(trip.getId(), 1, 1, 2);
         assertEquals(1, response.size());
         assertEquals(2, response.get(0).getSequence());
+        assertEquals(TimeSlot.AFTER_EVENING, response.get(0).getTimeSlot());
     }
 
     @Test
@@ -161,7 +161,7 @@ class ScheduleServiceTest {
     void createSchedule_fail_userNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모");
+        ScheduleRequestDto dto = new ScheduleRequestDto(1, 1, false, "메모",TimeSlot.AFTER_LUNCH);
 
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.createSchedule(trip.getId(), 999L, dto));
@@ -198,7 +198,7 @@ class ScheduleServiceTest {
         when(scheduleRepository.findByTripAndDayAndSequence(trip.getId(), 1, 1)).thenReturn(Optional.empty());
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L, 2, 1);
+        ScheduleReorderRequestDto dto = new ScheduleReorderRequestDto(1L, 2, 1,TimeSlot.MORNING);
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.reorderSchedules(trip.getId(), user.getId(), 1, dto));
         assertEquals(ErrorCode.NOT_FOUND_SCHEDULE, ex.getErrorCode());

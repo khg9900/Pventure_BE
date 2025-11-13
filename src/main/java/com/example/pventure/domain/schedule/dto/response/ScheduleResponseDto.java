@@ -1,6 +1,7 @@
 package com.example.pventure.domain.schedule.dto.response;
 
 import com.example.pventure.domain.schedule.entity.Schedule;
+import com.example.pventure.domain.schedule.enums.TimeSlot;
 import com.example.pventure.domain.trip.entity.Trip;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,6 +23,7 @@ public class ScheduleResponseDto {
     private Integer sequence;
     private LocalDate date;
     private String memo;
+    private TimeSlot timeSlot;
 
     public static ScheduleResponseDto from(Schedule schedule) {
         LocalDate date = null;
@@ -39,6 +41,7 @@ public class ScheduleResponseDto {
                 .isCompleted(schedule.isCompleted())
                 .date(date)
                 .memo(schedule.getMemo())
+                .timeSlot(schedule.getTimeSlot())
                 .build();
     }
 }

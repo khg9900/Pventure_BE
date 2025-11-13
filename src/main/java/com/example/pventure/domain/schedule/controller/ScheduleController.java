@@ -46,9 +46,10 @@ public class ScheduleController {
                     content = @Content(examples = @ExampleObject(value = """
                             {
                               "day": 1,
-                              "memo": "사진 많이 찍기",
+                              "timeSlot": "MORNING",
                               "sequence": 1,
                               "isCompleted": true
+                              "memo": "사진 많이 찍기"
                             }
                             """)))
             @Valid @RequestBody ScheduleRequestDto scheduleRequestDto
@@ -92,7 +93,7 @@ public class ScheduleController {
                     description = "수정 요청 DTO",
                     content = @Content(examples = @ExampleObject(value = """
                             {
-                              "memo": "저녁은 파크 내 식사로",
+                              "memo": "사진 많이 찍기",
                               "isCompleted": true
                             }
                             """)))
@@ -112,9 +113,11 @@ public class ScheduleController {
             @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     description = "재정렬 요청 DTO",
                     content = @Content(examples = @ExampleObject(value = """
-                            {
+                         {
+                              "scheduleId": 5,
                               "oldSeq": 3,
-                              "newSeq": 1
+                              "newSeq": 1,
+                              "timeSlot": "MORNING"
                             }
                             """)))
             @Valid @RequestBody ScheduleReorderRequestDto scheduleReorderRequest
