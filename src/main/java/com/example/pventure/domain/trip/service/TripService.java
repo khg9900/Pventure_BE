@@ -16,6 +16,10 @@ public interface TripService {
 
     TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto tripRequestDto, boolean includeMembers);
 
+    Long countTrip(Long userId);
+
+    Long countTripsWithNoDate(Long userId);
+
     void deleteTrip(Long userId, Long tripId);
 
 }

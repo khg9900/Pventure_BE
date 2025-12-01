@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,102 +35,127 @@ public class TripServiceImpl implements TripService {
     private final TripFinder tripFinder;
     private final TripFolderService tripFolderService;
 
+    // ------------------ CREATE ------------------
     @Transactional
     @Override
-    public TripResponseDto createTrip(Long userId, TripRequestDto tripRequestDto, boolean includeMembers) {
-        User user = getUserOrThrow(userId);
+    public TripResponseDto createTrip(Long userId, TripRequestDto dto, boolean includeMembers) {
+        User user = loadUser(userId);
 
-        Trip trip = tripRepository.save(tripRequestDto.toEntity());
-
+        Trip trip = tripRepository.save(dto.toEntity());
         memberService.registerOwner(user, trip);
 
-        Folder folder = folderService.getFolderEntity(user, tripRequestDto.getFolderId());
-
-        if (!folder.isDefault()) {
-            Folder defaultFolder = folderService.getDefaultFolder(user);
-            tripFolderService.createTripFolder(trip, defaultFolder);
-        }
-        tripFolderService.createTripFolder(trip, folder);
+        attachFolderIfPresent(dto, user, trip);
 
         return buildTripResponse(trip, includeMembers);
     }
 
+    private void attachFolderIfPresent(TripRequestDto dto, User user, Trip trip) {
+        Optional.ofNullable(dto.getFolderId())
+                .ifPresent(folderId -> {
+                    Folder folder = folderService.getFolderEntity(user, folderId);
+                    tripFolderService.createTripFolder(trip, folder);
+                });
+    }
+
+    // ------------------ READ ------------------
     @Override
     public List<TripResponseDto> getTrips(Long userId, TripSearchRequestDto searchRequest, boolean includeMembers) {
-        User user = getUserOrThrow(userId);
-        List<Trip> trips = tripFinder.findByUserAndPeriod(user, searchRequest.getStartDate(), searchRequest.getEndDate(), includeMembers);
+        User user = loadUser(userId);
+
+        List<Trip> trips = tripFinder.findByUserAndPeriod(user,
+                            searchRequest.getStartDate(),
+                            searchRequest.getEndDate(),
+                            includeMembers,
+                            searchRequest.getTripDateFilter());
 
         return trips.stream()
-                .filter(trip -> {
-                    if (!memberService.isMember(user, trip)) {
-                        throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
-                    }
-                    return true;
-                })
+                .peek(trip -> checkMember(user, trip))
                 .map(trip -> buildTripResponse(trip, includeMembers))
                 .toList();
     }
 
     @Override
     public TripResponseDto getTrip(Long userId, Long tripId, boolean includeMembers) {
-        User user = getUserOrThrow(userId);
+        User user = loadUser(userId);
         Trip trip = tripFinder.findById(tripId, includeMembers);
 
-        if (!memberService.isMember(user, trip)) {
-            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
-        }
+        checkMember(user, trip);
+        return buildTripResponse(trip, includeMembers);
+    }
+
+    @Override
+    public Long countTrip(Long userId) {
+        User user = loadUser(userId);
+        return tripRepository.countTrip(user);
+    }
+
+    @Override
+    public Long countTripsWithNoDate(Long userId) {
+        User user = loadUser(userId);
+        return tripRepository.countTripsWithNoDate(user);
+    }
+
+    // ------------------ UPDATE ------------------
+    @Transactional
+    @Override
+    public TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto dto, boolean includeMembers) {
+        User user = loadUser(userId);
+        Trip trip = tripFinder.findById(tripId, includeMembers);
+
+        checkEditable(user, trip);
+        applyTripUpdates(trip, dto);
 
         return buildTripResponse(trip, includeMembers);
     }
 
-    @Transactional
-    @Override
-    public TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto tripRequestDto, boolean includeMembers) {
-        User user = getUserOrThrow(userId);
-        Trip trip = tripFinder.findById(tripId, includeMembers);
-
-        if (!memberService.canEdit(user, trip)) {
-            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
-        }
-
-        updateTripEntity(trip, tripRequestDto);
-        return buildTripResponse(trip, includeMembers);
-    }
-
-    @Transactional
-    @Override
-    public void deleteTrip(Long userId, Long tripId) {
-        User user = getUserOrThrow(userId);
-        Trip trip = tripFinder.findById(tripId, true);
-
-        if (!memberService.canDelete(user, trip)) {
-            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
-        }
-
-        tripRepository.delete(trip);
-    }
-
-    private User getUserOrThrow(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
-    }
-
-    private TripResponseDto buildTripResponse(Trip trip, boolean includeMembers) {
-
-        Long memberCount = memberService.countMember(trip);
-
-        List<MemberSummaryDto> members = Collections.emptyList();
-
-        if (includeMembers) {
-            members = memberService.getMemberSummaryDtoList(trip);
-        }
-        return TripResponseDto.from(trip, members, memberCount);
-    }
-
-    private void updateTripEntity(Trip trip, TripRequestDto dto) {
+    private void applyTripUpdates(Trip trip, TripRequestDto dto) {
         if (dto.getTitle() != null) trip.updateTitle(dto.getTitle());
         if (dto.getDestination() != null) trip.updateDestination(dto.getDestination());
         trip.updateDates(dto.getStartDate(), dto.getEndDate());
     }
-}
 
+    // ------------------ DELETE ------------------
+    @Transactional
+    @Override
+    public void deleteTrip(Long userId, Long tripId) {
+        User user = loadUser(userId);
+        Trip trip = tripFinder.findById(tripId, true);
+
+        checkDeletable(user, trip);
+        tripRepository.delete(trip);
+    }
+
+    // ------------------ HELPER ------------------
+    private User loadUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
+    }
+
+    private void checkMember(User user, Trip trip) {
+        if (!memberService.isMember(user, trip)) {
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
+    }
+
+    private void checkEditable(User user, Trip trip) {
+        if (!memberService.canEdit(user, trip)) {
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
+    }
+
+    private void checkDeletable(User user, Trip trip) {
+        if (!memberService.canDelete(user, trip)) {
+            throw new ApiException(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
+        }
+    }
+
+    private TripResponseDto buildTripResponse(Trip trip, boolean includeMembers) {
+        Long memberCount = memberService.countMember(trip);
+
+        List<MemberSummaryDto> members = includeMembers
+                ? memberService.getMemberSummaryDtoList(trip)
+                : Collections.emptyList();
+
+        return TripResponseDto.from(trip, members, memberCount);
+    }
+}

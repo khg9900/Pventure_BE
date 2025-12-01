@@ -3,7 +3,7 @@ package com.example.pventure.domain.folder.controller;
 import com.example.pventure.domain.folder.dto.request.FolderRequestDto;
 import com.example.pventure.domain.folder.dto.response.FolderCountResponseDto;
 import com.example.pventure.domain.folder.dto.response.FolderResponseDto;
-import com.example.pventure.domain.folder.service.FolderService;
+import com.example.pventure.domain.folder.service.FolderFacade;
 import com.example.pventure.global.response.CustomResponse;
 import com.example.pventure.global.response.CustomResponseHelper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +27,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FolderController {
 
-    private final FolderService folderService;
+    private final FolderFacade folderFacade;
 
     @Operation(
             summary = "폴더 생성",
@@ -52,7 +52,7 @@ public class FolderController {
     public ResponseEntity<CustomResponse<FolderResponseDto>> createFolder(
             @Parameter(description = "폴더를 생성할 사용자 ID", required = true) @RequestParam Long userId,
             @Valid @RequestBody FolderRequestDto requestDto) {
-        return CustomResponseHelper.created(folderService.createFolder(requestDto, userId));
+        return CustomResponseHelper.created(folderFacade.createFolder(requestDto, userId));
     }
 
     @Operation(
@@ -67,7 +67,7 @@ public class FolderController {
     @GetMapping
     public ResponseEntity<CustomResponse<List<FolderCountResponseDto>>> getFolders(
             @Parameter(description = "조회할 사용자의 ID", required = true) @RequestParam Long userId) {
-        return CustomResponseHelper.ok(folderService.getAllFolders(userId));
+        return CustomResponseHelper.ok(folderFacade.getAllFolders(userId));
     }
 
     @Operation(
@@ -92,7 +92,7 @@ public class FolderController {
     public ResponseEntity<CustomResponse<FolderResponseDto>> getFolder(
             @Parameter(description = "조회할 사용자의 ID", required = true) @RequestParam Long userId,
             @Parameter(description = "조회할 폴더의 ID", required = true) @PathVariable Long folderId) {
-        return CustomResponseHelper.ok(folderService.getFolder(folderId, userId));
+        return CustomResponseHelper.ok(folderFacade.getFolder(folderId, userId));
     }
 
     @Operation(
@@ -118,7 +118,7 @@ public class FolderController {
             @Parameter(description = "수정할 사용자의 ID", required = true) @RequestParam Long userId,
             @Parameter(description = "수정할 폴더의 ID", required = true) @PathVariable Long folderId,
             @Valid @RequestBody FolderRequestDto requestDto) {
-        return CustomResponseHelper.ok(folderService.updateFolder(folderId, requestDto, userId));
+        return CustomResponseHelper.ok(folderFacade.updateFolder(folderId, requestDto, userId));
     }
 
     @Operation(
@@ -133,7 +133,7 @@ public class FolderController {
     public ResponseEntity<Void> deleteFolder(
             @Parameter(description = "삭제할 사용자의 ID", required = true) @RequestParam Long userId,
             @Parameter(description = "삭제할 폴더의 ID", required = true) @PathVariable Long folderId) {
-        folderService.deleteFolder(folderId, userId);
+        folderFacade.deleteFolder(folderId, userId);
         return CustomResponseHelper.noContent();
     }
 }

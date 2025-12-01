@@ -11,9 +11,6 @@ import java.util.Optional;
 
 public interface FolderRepository extends JpaRepository<Folder, Long> {
 
-    @Query("SELECT f FROM Folder f WHERE f.user = :user AND f.isDefault = true")
-    Optional<Folder> findDefaultByUser(@Param("user") User user);
-
     @Query("SELECT DISTINCT f FROM Folder f " +
             "LEFT JOIN FETCH f.tripFolders tf " +
             "LEFT JOIN FETCH tf.trip t " +
@@ -31,7 +28,4 @@ public interface FolderRepository extends JpaRepository<Folder, Long> {
         WHERE f.user = :user AND f.id = :id
     """)
     Optional<Folder> findWithTrips(@Param("id") Long id, @Param("user") User user);
-
-    @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END FROM Folder f WHERE f.user = :user AND f.isDefault = true")
-    boolean hasDefault(@Param("user") User user);
 }
