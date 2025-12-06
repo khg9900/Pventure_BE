@@ -45,13 +45,14 @@ public class TripFinder {
 
     private List<Trip> findSpecified(User user, LocalDate start, LocalDate end, boolean includeMembers) {
         return includeMembers
-                ? tripRepository.findByUserAndPeriod(user, start, end)
-                : tripRepository.findByUserAndPeriodWithUser(user, start, end);
+                ? tripRepository.findByUserAndPeriodWithUser(user, start, end)
+                :   tripRepository.findByUserAndPeriod(user, start, end);
     }
 
     private List<Trip> findUnspecified(User user, boolean includeMembers) {
         return includeMembers
-                ? tripRepository.findByUserAndPeriod(user, null, null)
-                : tripRepository.findByUserAndPeriodWithUser(user, null, null);
+                ? tripRepository.findByUserAndPeriodWithUser(user, null, null)
+                : tripRepository.findByUserAndPeriod(user, null, null);
+
     }
 }

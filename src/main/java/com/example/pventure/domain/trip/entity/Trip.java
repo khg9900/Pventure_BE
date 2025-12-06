@@ -43,7 +43,7 @@ public class Trip extends BaseEntity {
     private List<TripFolder> folders = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "trip", cascade = CascadeType.REMOVE)
     private List<Member> members = new ArrayList<>();
 
     public void updateTitle(String title) {
