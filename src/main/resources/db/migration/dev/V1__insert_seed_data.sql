@@ -16,18 +16,18 @@ VALUES
 -- =====================================================
 -- 2. Folder (유저별 기본폴더)
 -- =====================================================
-INSERT INTO folder (id, name, user_id, is_default, created_at, updated_at)
+INSERT INTO folder (id, name, user_id, created_at, updated_at)
 VALUES
-    (1, '기본 폴더', 1, TRUE, NOW(), NOW()),
-    (2, '기본 폴더', 2, TRUE, NOW(), NOW()),
-    (3, '기본 폴더', 3, TRUE, NOW(), NOW()),
-    (4, '기본 폴더', 4, TRUE, NOW(), NOW()),
-    (5, '기본 폴더', 5, TRUE, NOW(), NOW()),
-    (6, '기본 폴더', 6, TRUE, NOW(), NOW()),
-    (7, '기본 폴더', 7, TRUE, NOW(), NOW()),
-    (8, '기본 폴더', 8, TRUE, NOW(), NOW()),
-    (9, '기본 폴더', 9, TRUE, NOW(), NOW()),
-    (10, '기본 폴더', 10, TRUE, NOW(), NOW());
+    (1, '기본 폴더', 1, NOW(), NOW()),
+    (2, '기본 폴더', 2, NOW(), NOW()),
+    (3, '기본 폴더', 3, NOW(), NOW()),
+    (4, '기본 폴더', 4, NOW(), NOW()),
+    (5, '기본 폴더', 5, NOW(), NOW()),
+    (6, '기본 폴더', 6, NOW(), NOW()),
+    (7, '기본 폴더', 7, NOW(), NOW()),
+    (8, '기본 폴더', 8, NOW(), NOW()),
+    (9, '기본 폴더', 9, NOW(), NOW()),
+    (10, '기본 폴더', 10, NOW(), NOW());
 
 -- =====================================================
 -- 3. Trip (소유자: 기본폴더와 연결)
