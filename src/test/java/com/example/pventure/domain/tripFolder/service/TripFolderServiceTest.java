@@ -142,7 +142,8 @@ class TripFolderServiceTest {
         when(folderRepository.findByIdAndUser(anyLong(), any())).thenReturn(Optional.of(folder));
         when(tripFolderRepository.findByFolder(any())).thenReturn(List.of(tripFolder));
         when(memberService.isMember(any(), any())).thenReturn(true);
-        when(memberService.getMemberSummaryDtoList(any())).thenReturn(List.of(new MemberSummaryDto(1L, "홍길동", "example@gmail.com","image")));
+        when(memberService.getMemberSummaryDtoList(any()))
+                .thenReturn(List.of(new MemberSummaryDto(1L, user.getName(), user.getEmail(), user.getImageUrl())));
         when(memberService.countMember(any())).thenReturn(1L);
 
         List<TripResponseDto> result = tripFolderService.getTrips(2L, 1L);
