@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -17,8 +18,8 @@ import java.time.temporal.ChronoUnit;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Schema(description = "여행 생성/수정 요청 DTO")
-public class TripRequestDto {
+@Schema(description = "여행 생성 요청 DTO")
+public class TripRequestDto implements FolderAttachable {
     @Schema(description = "여행 제목", example = "부산 여행")
     @NotBlank(message = "여행 제목은 필수 입력값입니다.")
     @Size(max = 100, message = "제목은 최대 100자까지 입력 가능합니다.")

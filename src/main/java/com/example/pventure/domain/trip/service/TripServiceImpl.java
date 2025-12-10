@@ -4,8 +4,10 @@ import com.example.pventure.domain.folder.entity.Folder;
 import com.example.pventure.domain.folder.service.FolderService;
 import com.example.pventure.domain.member.dto.response.MemberSummaryDto;
 import com.example.pventure.domain.member.service.MemberService;
+import com.example.pventure.domain.trip.dto.request.FolderAttachable;
 import com.example.pventure.domain.trip.dto.request.TripRequestDto;
 import com.example.pventure.domain.trip.dto.request.TripSearchRequestDto;
+import com.example.pventure.domain.trip.dto.request.TripUpdateDto;
 import com.example.pventure.domain.trip.dto.response.TripResponseDto;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.trip.repository.TripRepository;
@@ -49,14 +51,6 @@ public class TripServiceImpl implements TripService {
         return buildTripResponse(trip, includeMembers);
     }
 
-    private void attachFolderIfPresent(TripRequestDto dto, User user, Trip trip) {
-        Optional.ofNullable(dto.getFolderId())
-                .ifPresent(folderId -> {
-                    Folder folder = folderService.getFolderEntity(user, folderId);
-                    tripFolderService.createTripFolder(trip, folder);
-                });
-    }
-
     // ------------------ READ ------------------
     @Override
     public List<TripResponseDto> getTrips(Long userId, TripSearchRequestDto searchRequest, boolean includeMembers) {
@@ -98,20 +92,16 @@ public class TripServiceImpl implements TripService {
     // ------------------ UPDATE ------------------
     @Transactional
     @Override
-    public TripResponseDto updateTrip(Long userId, Long tripId, TripRequestDto dto, boolean includeMembers) {
+    public TripResponseDto updateTrip(Long userId, Long tripId, TripUpdateDto tripUpdateDto, boolean includeMembers) {
         User user = loadUser(userId);
         Trip trip = tripFinder.findById(tripId, includeMembers);
 
         checkEditable(user, trip);
-        applyTripUpdates(trip, dto);
+        tripUpdateDto.applyTo(trip);
+
+        attachFolderIfPresent(tripUpdateDto, user, trip);
 
         return buildTripResponse(trip, includeMembers);
-    }
-
-    private void applyTripUpdates(Trip trip, TripRequestDto dto) {
-        if (dto.getTitle() != null) trip.updateTitle(dto.getTitle());
-        if (dto.getDestination() != null) trip.updateDestination(dto.getDestination());
-        trip.updateDates(dto.getStartDate(), dto.getEndDate());
     }
 
     // ------------------ DELETE ------------------
@@ -157,5 +147,13 @@ public class TripServiceImpl implements TripService {
                 : Collections.emptyList();
 
         return TripResponseDto.from(trip, members, memberCount);
+    }
+
+    private <T extends FolderAttachable> void attachFolderIfPresent(T dto, User user, Trip trip) {
+        Optional.ofNullable(dto.getFolderId())
+                .ifPresent(folderId -> {
+                    Folder folder = folderService.getFolderEntity(user, folderId);
+                    tripFolderService.createTripFolder(trip, folder);
+                });
     }
 }

@@ -182,7 +182,7 @@ class TripServiceTest {
         );
 
         // when
-        TripResponseDto response = tripService.updateTrip(1L, 1L, updateDto, true);
+        TripResponseDto response = tripService.updateTrip(1L, 1L, tripUpdateDto, true);
 
         // then
         assertThat(response.getTitle()).isEqualTo("서울 여행");
@@ -197,7 +197,7 @@ class TripServiceTest {
 
         // when & then
         ApiException ex = assertThrows(ApiException.class, () ->
-                tripService.updateTrip(1L, 1L, requestDto, true)
+                tripService.updateTrip(1L, 1L, tripUpdateDto, true)
         );
 
         assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);
