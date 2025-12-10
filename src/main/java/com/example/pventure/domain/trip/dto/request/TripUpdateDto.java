@@ -2,6 +2,7 @@ package com.example.pventure.domain.trip.dto.request;
 
 import com.example.pventure.domain.trip.entity.Trip;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,11 +41,17 @@ public class TripUpdateDto implements FolderAttachable {
     @Schema(description = "소속될 폴더 ID", example = "10")
     private Long folderId;
 
+    @AssertTrue(message = "종료일은 시작일 이후여야 합니다.")
+    public boolean isEndDateAfterStartDate() {
+        if (startDate == null || endDate == null) return true;
+        return !endDate.isBefore(startDate);
+    }
+
     public void applyTo(Trip trip) {
         if (title != null) {trip.updateTitle(title);}
         if (destination != null) {trip.updateDestination(destination);}
         if (thumbnail != null) {trip.updateThumbnail(thumbnail);}
-        if (startDate != null && endDate != null) {trip.updateDates(startDate, endDate);}
+        trip.updateDates(startDate, endDate);
         if (totalDuration != null && totalDuration > 0) {trip.updateTotalDuration(totalDuration);}
     }
 
