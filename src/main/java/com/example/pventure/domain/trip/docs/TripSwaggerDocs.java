@@ -3,7 +3,7 @@ package com.example.pventure.domain.trip.docs;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TripSwaggerDocs {
 
     // --- Create ---
