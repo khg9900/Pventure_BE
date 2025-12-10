@@ -1,6 +1,5 @@
 package com.example.pventure.domain.folder.docs;
 
-import com.example.pventure.domain.folder.docs.FolderSwaggerDocs;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
