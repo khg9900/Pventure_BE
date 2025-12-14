@@ -69,14 +69,12 @@ class TripFolderServiceTest {
 
         defaultFolder = Folder.builder()
                 .name("기본 폴더")
-                .isDefault(true)
                 .user(user)
                 .build();
         setId(defaultFolder, 1L);
 
         folder = Folder.builder()
                 .name("사용자 지정 폴더")
-                .isDefault(false)
                 .user(user)
                 .build();
         setId(folder, 2L);
@@ -144,7 +142,8 @@ class TripFolderServiceTest {
         when(folderRepository.findByIdAndUser(anyLong(), any())).thenReturn(Optional.of(folder));
         when(tripFolderRepository.findByFolder(any())).thenReturn(List.of(tripFolder));
         when(memberService.isMember(any(), any())).thenReturn(true);
-        when(memberService.getMemberSummaryDtoList(any())).thenReturn(List.of(new MemberSummaryDto(1L, "홍길동", "image")));
+        when(memberService.getMemberSummaryDtoList(any()))
+                .thenReturn(List.of(new MemberSummaryDto(1L, user.getName(), user.getEmail(), user.getImageUrl())));
         when(memberService.countMember(any())).thenReturn(1L);
 
         List<TripResponseDto> result = tripFolderService.getTrips(2L, 1L);
@@ -181,16 +180,6 @@ class TripFolderServiceTest {
         tripFolderService.deleteTrip(2L, 1L, 1L);
 
         verify(tripFolderRepository).delete(tf1);
-    }
-
-    @DisplayName("deleteTrip 실패: 기본 폴더에서 Trip 삭제 시 예외 발생")
-    @Test
-    void deleteTrip_fail_cannotRemoveFromDefaultFolder() {
-        when(folderRepository.findByIdAndUser(anyLong(), any())).thenReturn(Optional.of(defaultFolder));
-
-        assertThatThrownBy(() -> tripFolderService.deleteTrip(1L, 1L, 1L))
-                .isInstanceOf(ApiException.class)
-                .hasMessageContaining(ErrorCode.CANNOT_REMOVE_TRIP_FROM_DEFAULT_FOLDER.getMessage());
     }
 
     @DisplayName("deleteTrip 실패: Trip 없음 → NOT_FOUND_TRIP 예외 발생")

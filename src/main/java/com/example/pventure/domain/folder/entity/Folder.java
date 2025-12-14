@@ -24,10 +24,6 @@ public class Folder extends BaseEntity {
     private User user;
 
     @Builder.Default
-    @Column(nullable = false)
-    private boolean isDefault = false;
-
-    @Builder.Default
     @OneToMany(mappedBy = "folder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TripFolder> tripFolders = new ArrayList<>();
 

@@ -1,14 +1,10 @@
 package com.example.pventure.domain.schedule.entity;
 
-import com.example.pventure.domain.place.entity.Place;
 import com.example.pventure.domain.schedule.enums.TimeSlot;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -37,10 +33,6 @@ public class Schedule extends BaseEntity {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private TimeSlot timeSlot;
-
-    @Builder.Default
-    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Place> places = new ArrayList<>();
 
     public void updateSequence(Integer sequence) {
         this.sequence = sequence;

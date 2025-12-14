@@ -16,6 +16,7 @@ public class FolderCountResponseDto {
     private Long countTrip;
 
     public static FolderCountResponseDto from(Folder folder, Long countTrip) {
+
         return FolderCountResponseDto.builder()
                 .id(folder.getId())
                 .name(folder.getName())

@@ -8,6 +8,7 @@ import com.example.pventure.domain.trip.dto.request.TripRequestDto;
 import com.example.pventure.domain.trip.dto.request.TripSearchRequestDto;
 import com.example.pventure.domain.trip.dto.response.TripResponseDto;
 import com.example.pventure.domain.trip.entity.Trip;
+import com.example.pventure.domain.trip.enums.TripDateFilter;
 import com.example.pventure.domain.trip.enums.TripStatus;
 import com.example.pventure.domain.trip.repository.TripRepository;
 import com.example.pventure.domain.trip.util.TripFinder;
@@ -66,7 +67,6 @@ class TripServiceTest {
 
         folder = Folder.builder()
                 .name("기본 폴더")
-                .isDefault(true)
                 .user(user)
                 .build();
         setId(folder, 1L);
@@ -87,6 +87,7 @@ class TripServiceTest {
         searchRequest = new TripSearchRequestDto();
         searchRequest.setStartDate(LocalDate.now());
         searchRequest.setEndDate(LocalDate.now().plusDays(3));
+        searchRequest.setTripDateFilter(TripDateFilter.SPECIFIED);
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
     }
@@ -118,12 +119,12 @@ class TripServiceTest {
     @Test
     void getTrips_Success() {
         // given
-        when(tripFinder.findByUserAndPeriod(user, searchRequest.getStartDate(), searchRequest.getEndDate(), true))
+        when(tripFinder.findByUserAndPeriod(user, searchRequest.getStartDate(), searchRequest.getEndDate(),true, searchRequest.getTripDateFilter()))
                 .thenReturn(List.of(trip));
         when(memberService.isMember(user, trip)).thenReturn(true);
         when(memberService.countMember(trip)).thenReturn(1L);
 
-        MemberSummaryDto memberDto = new MemberSummaryDto(1L, "홍길동", "hong@example.com");
+        MemberSummaryDto memberDto = new MemberSummaryDto(1L, "홍길동", "hong@example.com","image");
         when(memberService.getMemberSummaryDtoList(trip)).thenReturn(List.of(memberDto));
 
         // when
@@ -137,7 +138,7 @@ class TripServiceTest {
         assertThat(response.getMemberCount()).isEqualTo(1L);
 
         verify(tripFinder, times(1))
-                .findByUserAndPeriod(user, searchRequest.getStartDate(), searchRequest.getEndDate(), true);
+                .findByUserAndPeriod(user, searchRequest.getStartDate(), searchRequest.getEndDate(), true, searchRequest.getTripDateFilter());
     }
 
     @Test

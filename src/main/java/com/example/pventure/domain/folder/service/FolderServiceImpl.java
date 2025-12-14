@@ -28,30 +28,22 @@ public class FolderServiceImpl implements FolderService {
     private final FolderRepository folderRepository;
     private final TripFolderService tripFolderService;
 
+    // ------------------ CREATE ------------------
     @Override
     public FolderResponseDto createFolder(FolderRequestDto requestDto, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
+        User user = loadUser(userId);
 
-        Folder folder = requestDto.toEntity(user);
-
-        if (folder.isDefault() && folderRepository.hasDefault(user)) {
-            throw new ApiException(ErrorCode.DUPLICATE_FOLDER);
-        }
-
-        Folder savedFolder = folderRepository.save(folder);
-        return FolderResponseDto.from(savedFolder);
+        Folder folder = folderRepository.save(requestDto.toEntity(user));
+        return FolderResponseDto.from(folder);
     }
 
+    // ------------------ READ ------------------
     @Override
     @Transactional(readOnly = true)
     public List<FolderCountResponseDto> getAllFolders(Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
+        User user = loadUser(userId);
 
-        List<Folder> folders = folderRepository.findAllByUser(user);
-
-        return folders.stream()
+        return folderRepository.findAllByUser(user).stream()
                 .map(folder -> {
                     Long tripCount = tripFolderService.countTrips(folder);
                     return FolderCountResponseDto.from(folder, tripCount);
@@ -62,56 +54,44 @@ public class FolderServiceImpl implements FolderService {
     @Override
     @Transactional(readOnly = true)
     public FolderResponseDto getFolder(Long folderId, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
-
-        Folder folder = folderRepository.findByIdAndUser(folderId, user)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
-
+        User user = loadUser(userId);
+        Folder folder = loadFolder(folderId, user);
         return FolderResponseDto.from(folder);
     }
 
+    // ------------------ UPDATE ------------------
     @Override
     public FolderResponseDto updateFolder(Long folderId, FolderRequestDto requestDto, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
-
-        Folder folder = folderRepository.findByIdAndUser(folderId, user)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
-
-        if (folder.isDefault()){
-            throw new ApiException(ErrorCode.CANNOT_EDIT_DEFAULT_FOLDER);
-        }
+        User user = loadUser(userId);
+        Folder folder = loadFolder(folderId, user);
 
         folder.updateFolderName(requestDto.getName());
-
         return FolderResponseDto.from(folder);
     }
 
+    // ------------------ DELETE ------------------
     @Override
     public void deleteFolder(Long folderId, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
-
-        Folder folder = folderRepository.findWithTrips(folderId, user)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
-
-        if (folder.isDefault()) {
-            throw new ApiException(ErrorCode.CANNOT_DELETE_DEFAULT_FOLDER);
-        }
+        User user = loadUser(userId);
+        Folder folder = loadFolder(folderId, user);
 
         folderRepository.delete(folder);
+    }
+
+    // ------------------ HELPER ------------------
+    private User loadUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_USER));
+    }
+
+    private Folder loadFolder(Long folderId, User user) {
+        return folderRepository.findByIdAndUser(folderId, user)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
     }
 
     @Override
     public Folder getFolderEntity(User user, Long folderId) {
         return folderRepository.findWithTrips(folderId, user)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
-    }
-
-    @Override
-    public Folder getDefaultFolder(User user) {
-        return folderRepository.findDefaultByUser(user)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_FOLDER));
     }
 }

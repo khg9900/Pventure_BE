@@ -3,12 +3,10 @@ package com.example.pventure.domain.folder.service;
 import com.example.pventure.domain.folder.dto.request.FolderRequestDto;
 import com.example.pventure.domain.folder.dto.response.FolderCountResponseDto;
 import com.example.pventure.domain.folder.dto.response.FolderResponseDto;
-import com.example.pventure.domain.folder.entity.Folder;
-import com.example.pventure.domain.user.entity.User;
 
 import java.util.List;
 
-public interface FolderService {
+public interface FolderFacade {
 
     FolderResponseDto createFolder(FolderRequestDto requestDto, Long userId);
 
@@ -19,6 +17,4 @@ public interface FolderService {
     FolderResponseDto updateFolder(Long folderId, FolderRequestDto requestDto, Long userId);
 
     void deleteFolder(Long folderId, Long userId);
-
-    Folder getFolderEntity(User user, Long folderId);
 }

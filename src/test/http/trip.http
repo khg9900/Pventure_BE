@@ -9,8 +9,7 @@ Content-Type: application/json
   "tripStatus": "PLANNED",
   "startDate": "2025-11-01",
   "endDate": "2025-11-03",
-  "totalDuration": 3,
-  "folderId": 1
+  "totalDuration": 3
 }
 
 ### 여행 목록 조회 (Get Trips)
@@ -30,8 +29,7 @@ Content-Type: application/json
   "tripStatus": "PLANNED",
   "startDate": "2025-11-02",
   "endDate": "2025-11-04",
-  "totalDuration": 3,
-  "folderId": 1
+  "totalDuration": 3
 }
 
 ### 여행 삭제 (Delete Trip)

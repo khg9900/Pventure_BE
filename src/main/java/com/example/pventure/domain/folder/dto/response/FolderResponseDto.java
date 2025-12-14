@@ -13,13 +13,11 @@ import lombok.NoArgsConstructor;
 public class FolderResponseDto {
     private Long id;
     private String name;
-    private boolean isDefault;
 
     public static FolderResponseDto from(Folder folder) {
         return FolderResponseDto.builder()
                 .id(folder.getId())
                 .name(folder.getName())
-                .isDefault(folder.isDefault())
                 .build();
     }
 }
