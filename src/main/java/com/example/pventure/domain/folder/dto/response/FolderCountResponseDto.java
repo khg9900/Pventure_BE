@@ -1,7 +1,6 @@
 package com.example.pventure.domain.folder.dto.response;
 
 import com.example.pventure.domain.folder.entity.Folder;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 @Schema(description = "폴더 정보 + 포함된 여행 수")
 public class FolderCountResponseDto {
 
