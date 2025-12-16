@@ -6,6 +6,7 @@ import com.example.pventure.domain.member.dto.response.MemberSummaryDto;
 import com.example.pventure.domain.member.service.MemberService;
 import com.example.pventure.domain.trip.dto.request.TripRequestDto;
 import com.example.pventure.domain.trip.dto.request.TripSearchRequestDto;
+import com.example.pventure.domain.trip.dto.request.TripUpdateDto;
 import com.example.pventure.domain.trip.dto.response.TripResponseDto;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.trip.enums.TripDateFilter;
@@ -53,6 +54,7 @@ class TripServiceTest {
     private Trip trip;
     private TripRequestDto requestDto;
     private TripSearchRequestDto searchRequest;
+    private TripUpdateDto tripUpdateDto;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -84,10 +86,22 @@ class TripServiceTest {
 
         trip = requestDto.toEntity();
 
+        tripUpdateDto = new TripUpdateDto(
+                "부산 여행",
+                "thumbnail",
+                "부산",
+                5,
+                LocalDate.now(),
+                LocalDate.now().plusDays(4),
+                1L
+        );
+
         searchRequest = new TripSearchRequestDto();
         searchRequest.setStartDate(LocalDate.now());
         searchRequest.setEndDate(LocalDate.now().plusDays(3));
         searchRequest.setTripDateFilter(TripDateFilter.SPECIFIED);
+
+
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
     }
@@ -176,16 +190,11 @@ class TripServiceTest {
         when(memberService.countMember(trip)).thenReturn(1L);
         when(memberService.getMemberSummaryDtoList(trip)).thenReturn(Collections.emptyList());
 
-        TripRequestDto updateDto = new TripRequestDto(
-                "서울 여행", "thumbnail2", "서울", 3, TripStatus.PLANNED,
-                LocalDate.now(), LocalDate.now().plusDays(2), 1L
-        );
-
         // when
-        TripResponseDto response = tripService.updateTrip(1L, 1L, updateDto, true);
+        TripResponseDto response = tripService.updateTrip(1L, 1L, tripUpdateDto, true);
 
         // then
-        assertThat(response.getTitle()).isEqualTo("서울 여행");
+        assertThat(response.getTitle()).isEqualTo("부산 여행");
         verify(memberService, times(1)).canEdit(user, trip);
     }
 
@@ -197,7 +206,7 @@ class TripServiceTest {
 
         // when & then
         ApiException ex = assertThrows(ApiException.class, () ->
-                tripService.updateTrip(1L, 1L, requestDto, true)
+                tripService.updateTrip(1L, 1L, tripUpdateDto, true)
         );
 
         assertThat(ex.getErrorCode()).isEqualTo(ErrorCode.UNAUTHORIZED_MEMBER_ACCESS);

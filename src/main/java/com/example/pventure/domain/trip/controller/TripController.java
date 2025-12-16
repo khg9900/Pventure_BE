@@ -3,6 +3,7 @@ package com.example.pventure.domain.trip.controller;
 import com.example.pventure.domain.trip.docs.*;
 import com.example.pventure.domain.trip.dto.request.TripRequestDto;
 import com.example.pventure.domain.trip.dto.request.TripSearchRequestDto;
+import com.example.pventure.domain.trip.dto.request.TripUpdateDto;
 import com.example.pventure.domain.trip.dto.response.TripResponseDto;
 import com.example.pventure.domain.trip.service.TripService;
 import com.example.pventure.global.response.CustomResponse;
@@ -61,10 +62,10 @@ public class TripController {
     public ResponseEntity<CustomResponse<TripResponseDto>> updateTrip(
             @RequestParam Long userId,
             @PathVariable Long tripId,
-            @RequestBody @Valid TripRequestDto tripRequestDto,
+            @RequestBody @Valid TripUpdateDto tripUpdateDto,
             @RequestParam(defaultValue = "false") boolean includeMembers
     ) {
-        TripResponseDto response = tripService.updateTrip(userId, tripId, tripRequestDto, includeMembers);
+        TripResponseDto response = tripService.updateTrip(userId, tripId, tripUpdateDto, includeMembers);
         return CustomResponseHelper.ok(response);
     }
 

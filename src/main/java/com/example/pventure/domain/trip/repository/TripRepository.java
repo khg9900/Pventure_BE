@@ -62,14 +62,11 @@ public interface TripRepository extends JpaRepository<Trip, Long>, TripRepositor
     List<Trip> findByUserWithMember(@Param("user") User user);
 
     @Query("""
-    SELECT COUNT(DISTINCT t)
-    FROM Trip t
-    JOIN t.members m
-    WHERE m.user = :user
-      AND (
-            t.startDate IS NULL
-            OR t.endDate IS NULL
-          )
-""")
+        SELECT COUNT(DISTINCT t)
+        FROM Trip t
+        JOIN t.members m
+        WHERE m.user = :user
+        AND (t.startDate IS NULL OR t.endDate IS NULL)
+    """)
     Long countTripsWithNoDate(@Param("user") User user);
 }
