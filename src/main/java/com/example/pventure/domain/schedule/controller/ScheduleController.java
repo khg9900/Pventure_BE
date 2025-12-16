@@ -38,7 +38,7 @@ public class ScheduleController {
         );
     }
 
-    // ------------------ 일정 목록 조회 ------------------
+    // ------------------ 일정 목록 조회 -----------------
     @GetSchedulesDocs
     @GetMapping("/days/{day}/schedules")
     public ResponseEntity<CustomResponse<List<ScheduleResponseDto>>> getSchedules(
