@@ -18,7 +18,7 @@ public class ScheduleReorderRequestDto {
     private Long scheduleId;
 
     @NotNull(message = "새로운 순번(newSeq)은 필수 값입니다.")
-    @Schema(description = "기존 순서", example = "3")
+    @Schema(description = "새로운 순서", example = "3")
     private Integer newSeq;
 
     @NotNull(message = "기존 순번(oldSeq)은 필수 값입니다.")
