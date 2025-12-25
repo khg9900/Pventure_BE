@@ -108,24 +108,24 @@ VALUES
 -- =====================================================
 -- 8. Photo
 -- =====================================================
-INSERT INTO photo (id, album_id, url, caption, created_at, updated_at)
+INSERT INTO photo (id, trip_id, album_id, uploader_id, original_file_name, content_type, file_size, s3key, created_at, updated_at)
 VALUES
     -- 서울
-    (1, 1, 'https://example.com/photo1.png', '경복궁 입구', NOW(), NOW()),
-    (2, 1, 'https://example.com/photo2.png', '남산타워 전망', NOW(), NOW()),
+    (1, 1, 1, 2, 'IMG_01.JPG', 'image/jpeg', 2301234,'trips/1/photos/photo1.png', NOW(), NOW()),
+    (2, 1, 1, 2, 'IMG_02.JPG', 'image/jpeg', 2301234,'trips/1/photos/photo2.png', NOW(), NOW()),
     -- 부산
-    (3, 2, 'https://example.com/photo3.png', '해운대 해변', NOW(), NOW()),
-    (4, 2, 'https://example.com/photo4.png', '광안리 야경', NOW(), NOW()),
+    (3, 2, 2, 1, 'IMG_03.JPG', 'image/jpeg', 2301234,'trips/2/photos/photo3.png', NOW(), NOW()),
+    (4, 2, 2, 1, 'IMG_04.JPG', 'image/jpeg', 2301234,'trips/2/photos/photo4.png', NOW(), NOW()),
     -- 제주
-    (5, 3, 'https://example.com/photo5.png', '한라산 정상', NOW(), NOW()),
-    (6, 3, 'https://example.com/photo6.png', '성산일출봉', NOW(), NOW()),
-    (7, 3, 'https://example.com/photo7.png', '협재 해수욕장', NOW(), NOW()),
+    (5, 3, 3, 7, 'IMG_05.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo5.png', NOW(), NOW()),
+    (6, 3, 3, 7, 'IMG_06.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo6.png', NOW(), NOW()),
+    (7, 3, 3, 7, 'IMG_07.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo7.png', NOW(), NOW()),
     -- 강릉
-    (8, 4, 'https://example.com/photo8.png', '정동진 일출', NOW(), NOW()),
-    (9, 4, 'https://example.com/photo9.png', '경포대 산책', NOW(), NOW()),
+    (8, 4, 4, 10, 'IMG_08.JPG', 'image/jpeg', 2301234,'trips/4/photos/photo8.png', NOW(), NOW()),
+    (9, 4, 4, 10, 'IMG_09.JPG', 'image/jpeg', 2301234,'trips/4/photos/photo9.png', NOW(), NOW()),
     -- 여수
-    (10, 5, 'https://example.com/photo10.png', '오동도 풍경', NOW(), NOW()),
-    (11, 5, 'https://example.com/photo11.png', '돌산대교 야경', NOW(), NOW());
+    (10, 5, 5, 2, 'IMG_10.JPG', 'image/jpeg', 2301234,'trips/5/photos/photo10.png', NOW(), NOW()),
+    (11, 5, 5, 2, 'IMG_11.JPG', 'image/jpeg', 2301234,'trips/5/photos/photo11.png', NOW(), NOW());
 
 -- =====================================================
 -- 9. Member
