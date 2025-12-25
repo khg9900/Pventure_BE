@@ -16,11 +16,11 @@ public class AlbumRepositoryCustomImpl implements AlbumRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
+    private static final QAlbum album = QAlbum.album;
+    private static final QPhoto photo = QPhoto.photo;
+
     @Override
     public List<AlbumWithPhotoCountQDto> findAllByTripWithPhotoCount(Long tripId) {
-
-        QAlbum album = QAlbum.album;
-
         return queryAlbumWithPhotoCount()
             .where(album.trip.id.eq(tripId))
             .fetch();
@@ -28,9 +28,6 @@ public class AlbumRepositoryCustomImpl implements AlbumRepositoryCustom {
 
     @Override
     public AlbumWithPhotoCountQDto findByIdAndTripWithPhotoCount(Long albumId, Long tripId) {
-
-        QAlbum album = QAlbum.album;
-
         return queryAlbumWithPhotoCount()
             .where(
                 album.id.eq(albumId),
@@ -40,10 +37,6 @@ public class AlbumRepositoryCustomImpl implements AlbumRepositoryCustom {
     }
 
     private JPAQuery<AlbumWithPhotoCountQDto> queryAlbumWithPhotoCount() {
-
-        QAlbum album = QAlbum.album;
-        QPhoto photo = QPhoto.photo;
-
         return queryFactory
             .select(Projections.constructor(
                 AlbumWithPhotoCountQDto.class,
