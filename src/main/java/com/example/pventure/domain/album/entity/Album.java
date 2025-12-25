@@ -24,6 +24,8 @@ public class Album extends BaseEntity {
     private String title;
 
     @Builder.Default
-    @OneToMany(mappedBy = "album", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "album")
     private List<Photo> photos = new ArrayList<>();
+
+    public void updateTitle(String title) { this.title = title; }
 }

@@ -1,1 +1,0 @@
-# Album 관련 API 요청 DTO

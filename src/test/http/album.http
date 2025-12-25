@@ -1,0 +1,24 @@
+### 앨범 생성 (Create Album)
+POST http://localhost:8080/api/trips/1/albums?userId=1
+Content-Type: application/json
+
+{
+  "title": "테스트"
+}
+
+### 앨범 목록 조회 (Get Albums)
+GET http://localhost:8080/api/trips/1/albums?userId=1
+
+### 앨범 상세 조회 (Get Album)
+GET http://localhost:8080/api/trips/1/albums/1?userId=1
+
+### 앨범 수정 (Update Album)
+PUT http://localhost:8080/api/trips/1/albums/1?userId=1
+Content-Type: application/json
+
+{
+  "title": "테스트2"
+}
+
+### 앨범 삭제 (Delete Album)
+DELETE http://localhost:8080/api/trips/1/albums/1?userId=1
