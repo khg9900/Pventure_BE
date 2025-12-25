@@ -1,0 +1,44 @@
+### 업로드 URL 생성 (Generate Upload Urls)
+POST http://localhost:8080/api/trips/1/photos/upload-urls?userId=1
+Content-Type: application/json
+
+[
+  {
+    "originalFileName": "sampleImage1.jpeg",
+    "contentType": "image/jpeg",
+    "fileSize": 175042
+  }
+]
+
+### 사진 생성 (Create Photos)
+POST http://localhost:8080/api/trips/1/photos?userId=1
+Content-Type: application/json
+
+[
+  {
+    "s3Key" : "trips/1/photos/b1f7fdb1-9b2a-403b-9f4a-37cad070e306.jpeg",
+    "originalFileName" : "sampleImage1.jpeg",
+    "contentType" : "image/jpeg",
+    "fileSize" : 175042
+  }
+]
+
+### 앨범별 사진 조회 (Get Photos By Album)
+GET http://localhost:8080/api/trips/1/albums/1/photos?userId=1
+
+### 앨범 미지정 사진 조회 (Get Unassigned Photos)
+GET http://localhost:8080/api/trips/1/photos/unassigned?userId=1
+
+### 사진 상세 조회 (Get Photo)
+GET http://localhost:8080/api/trips/1/photos/1?userId=1
+
+### 특정 앨범으로 사진 이동 (Move Photos)
+PATCH http://localhost:8080/api/trips/1/albums/1/photos/move?userId=1
+Content-Type: application/json
+
+{
+  "photoIds" : [13]
+}
+
+### 사진 삭제 (Delete Photos)
+DELETE http://localhost:8080/api/trips/1?userId=1&photoIds=12
