@@ -25,3 +25,9 @@ logging:
     root: info
     org.hibernate.SQL: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+aws:
+  s3:
+    bucket: ${S3_BUCKET}
+    region: ${S3_REGION}
+    duration: PT10M
