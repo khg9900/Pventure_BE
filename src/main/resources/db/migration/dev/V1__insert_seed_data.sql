@@ -1,14 +1,14 @@
 -- 1. Users
 -- =====================================================
 INSERT INTO users (id, name, email, social_provider, provider_id, image_url, created_at, updated_at)
-VALUES (1, '테스트 사용자1', 'test1@example.com', 'GOOGLE', 'google_001', 'https://example.com/image1.png', NOW(), NOW()),
-       (2, '테스트 사용자2', 'test2@example.com', 'NAVER', 'naver_001', 'https://example.com/image2.png', NOW(), NOW()),
+VALUES (1, '테스트 사용자1', 'test1@example.com', 'GOOGLE', 'google_001', 'https://example.com/image1.jpg', NOW(), NOW()),
+       (2, '테스트 사용자2', 'test2@example.com', 'NAVER', 'naver_001', 'https://example.com/image2.jpg', NOW(), NOW()),
        (3, '테스트 사용자3', 'test3@example.com', 'KAKAO', 'kakao_001', NULL, NOW(), NOW()),
        (4, '테스트 사용자4', 'test4@example.com', 'KAKAO', 'kakao_002', NULL, NOW(), NOW()),
        (5, '테스트 사용자5', 'test5@example.com', 'KAKAO', 'kakao_003', NULL, NOW(), NOW()),
        (6, '테스트 사용자6', 'test6@example.com', 'KAKAO', 'kakao_004', NULL, NOW(), NOW()),
-       (7, '테스트 사용자7', 'test7@example.com', 'GOOGLE', 'google_007', 'https://example.com/image7.png', NOW(), NOW()),
-       (8, '테스트 사용자8', 'test8@example.com', 'NAVER', 'naver_008', 'https://example.com/image8.png', NOW(), NOW()),
+       (7, '테스트 사용자7', 'test7@example.com', 'GOOGLE', 'google_007', 'https://example.com/image7.jpg', NOW(), NOW()),
+       (8, '테스트 사용자8', 'test8@example.com', 'NAVER', 'naver_008', 'https://example.com/image8.jpg', NOW(), NOW()),
        (9, '테스트 사용자9', 'test9@example.com', 'KAKAO', 'kakao_009', NULL, NOW(), NOW()),
        (10, '테스트 사용자10', 'test10@example.com', 'KAKAO', 'kakao_010', NULL, NOW(), NOW());
 
@@ -111,21 +111,21 @@ VALUES
 INSERT INTO photo (id, trip_id, album_id, uploader_id, original_file_name, content_type, file_size, s3key, created_at, updated_at)
 VALUES
     -- 서울
-    (1, 1, 1, 2, 'IMG_01.JPG', 'image/jpeg', 2301234,'trips/1/photos/photo1.png', NOW(), NOW()),
-    (2, 1, 1, 2, 'IMG_02.JPG', 'image/jpeg', 2301234,'trips/1/photos/photo2.png', NOW(), NOW()),
+    (1, 1, 1, 2, 'IMG_01.JPG', 'image/jpeg', 2301234,'trips/1/photos/photo1.jpg', NOW(), NOW()),
+    (2, 1, 1, 2, 'IMG_02.JPG', 'image/jpeg', 2301234,'trips/1/photos/photo2.jpg', NOW(), NOW()),
     -- 부산
-    (3, 2, 2, 1, 'IMG_03.JPG', 'image/jpeg', 2301234,'trips/2/photos/photo3.png', NOW(), NOW()),
-    (4, 2, 2, 1, 'IMG_04.JPG', 'image/jpeg', 2301234,'trips/2/photos/photo4.png', NOW(), NOW()),
+    (3, 2, 2, 1, 'IMG_03.JPG', 'image/jpeg', 2301234,'trips/2/photos/photo3.jpg', NOW(), NOW()),
+    (4, 2, 2, 1, 'IMG_04.JPG', 'image/jpeg', 2301234,'trips/2/photos/photo4.jpg', NOW(), NOW()),
     -- 제주
-    (5, 3, 3, 7, 'IMG_05.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo5.png', NOW(), NOW()),
-    (6, 3, 3, 7, 'IMG_06.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo6.png', NOW(), NOW()),
-    (7, 3, 3, 7, 'IMG_07.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo7.png', NOW(), NOW()),
+    (5, 3, 3, 7, 'IMG_05.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo5.jpg', NOW(), NOW()),
+    (6, 3, 3, 7, 'IMG_06.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo6.jpg', NOW(), NOW()),
+    (7, 3, 3, 7, 'IMG_07.JPG', 'image/jpeg', 2301234,'trips/3/photos/photo7.jpg', NOW(), NOW()),
     -- 강릉
-    (8, 4, 4, 10, 'IMG_08.JPG', 'image/jpeg', 2301234,'trips/4/photos/photo8.png', NOW(), NOW()),
-    (9, 4, 4, 10, 'IMG_09.JPG', 'image/jpeg', 2301234,'trips/4/photos/photo9.png', NOW(), NOW()),
+    (8, 4, 4, 10, 'IMG_08.JPG', 'image/jpeg', 2301234,'trips/4/photos/photo8.jpg', NOW(), NOW()),
+    (9, 4, 4, 10, 'IMG_09.JPG', 'image/jpeg', 2301234,'trips/4/photos/photo9.jpg', NOW(), NOW()),
     -- 여수
-    (10, 5, 5, 2, 'IMG_10.JPG', 'image/jpeg', 2301234,'trips/5/photos/photo10.png', NOW(), NOW()),
-    (11, 5, 5, 2, 'IMG_11.JPG', 'image/jpeg', 2301234,'trips/5/photos/photo11.png', NOW(), NOW());
+    (10, 5, 5, 2, 'IMG_10.JPG', 'image/jpeg', 2301234,'trips/5/photos/photo10.jpg', NOW(), NOW()),
+    (11, 5, 5, 2, 'IMG_11.JPG', 'image/jpeg', 2301234,'trips/5/photos/photo11.jpg', NOW(), NOW());
 
 -- =====================================================
 -- 9. Member

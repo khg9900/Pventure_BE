@@ -41,4 +41,4 @@ Content-Type: application/json
 }
 
 ### 사진 삭제 (Delete Photos)
-DELETE http://localhost:8080/api/trips/1?userId=1&photoIds=12
+DELETE http://localhost:8080/api/trips/1/photos?userId=1&photoIds=12

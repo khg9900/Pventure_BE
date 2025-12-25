@@ -18,7 +18,7 @@ public interface PhotoService {
 
     List<PhotoResponseDto> getUnassignedPhotos(Long userId, Long tripId);
 
-    PhotoDetailResponseDto getPhoto(Long userId, Long albumId, Long photoId);
+    PhotoDetailResponseDto getPhoto(Long userId, Long tripId, Long photoId);
 
     void movePhotos(Long userId, Long tripId, Long targetAlbumId, List<Long> albumIds);
 

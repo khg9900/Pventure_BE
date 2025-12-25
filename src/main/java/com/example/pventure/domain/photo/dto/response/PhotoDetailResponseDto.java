@@ -1,8 +1,10 @@
 package com.example.pventure.domain.photo.dto.response;
 
 import com.example.pventure.domain.photo.entity.Photo;
+import com.example.pventure.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,7 +45,9 @@ public class PhotoDetailResponseDto {
         return PhotoDetailResponseDto.builder()
             .id(photo.getId())
             .downloadUrl(downloadUrl)
-            .uploaderName(photo.getUploader().getName())
+            .uploaderName(Optional.ofNullable(photo.getUploader())
+                .map(User::getName)
+                .orElse("Unknown"))
             .originalFileName(photo.getOriginalFileName())
             .contentType(photo.getContentType())
             .fileSize(photo.getFileSize())

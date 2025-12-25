@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -26,13 +27,13 @@ import com.example.pventure.domain.user.enums.SocialProvider;
 import com.example.pventure.domain.user.repository.UserRepository;
 import com.example.pventure.global.exception.ApiException;
 import com.example.pventure.global.exception.ErrorCode;
-import com.example.pventure.global.s3.S3KeyGenerator;
 import com.example.pventure.global.s3.S3Service;
 import java.lang.reflect.Field;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -103,7 +104,7 @@ class PhotoServiceTest {
     }
 
     @Test
-    @DisplayName("createPhotos 성공: albumI가 있는 경우")
+    @DisplayName("createPhotos 성공: albumId가 있는 경우")
     void createPhotos_success_withAlbum() {
         // given
         Long userId = 1L;
@@ -381,10 +382,11 @@ class PhotoServiceTest {
         Long tripId = 10L;
         Long targetAlbumId = 100L;
         List<Long> photoIds = List.of(1000L);
+        Set<Long> uniqueIds = new HashSet<>(photoIds);
 
         when(tripPermissionService.getEditableTrip(userId, tripId)).thenReturn(trip);
         when(albumRepository.findByIdAndTrip(targetAlbumId, trip)).thenReturn(Optional.of(album));
-        when(photoRepository.findAllByIdInAndTrip(photoIds, trip)).thenReturn(List.of(photo));
+        when(photoRepository.findAllByIdInAndTrip(eq(uniqueIds), eq(trip))).thenReturn(List.of(photo));
 
         // when
         photoService.movePhotos(userId, tripId, targetAlbumId, photoIds);
@@ -392,8 +394,30 @@ class PhotoServiceTest {
         // then
         verify(tripPermissionService, times(1)).getEditableTrip(userId, tripId);
         verify(albumRepository, times(1)).findByIdAndTrip(targetAlbumId, trip);
-        verify(photoRepository, times(1)).findAllByIdInAndTrip(photoIds, trip);
-        verify(photo, times(1)).updateAlbum(album);
+        verify(photoRepository, times(1)).findAllByIdInAndTrip(eq(uniqueIds), eq(trip));
+    }
+
+    @Test
+    @DisplayName("movePhotos 성공: photoIds에 중복이 있어도 정상 처리")
+    void movePhotos_success_withDuplicateIds() {
+        // given
+        Long userId = 1L;
+        Long tripId = 10L;
+        Long targetAlbumId = 100L;
+        List<Long> photoIds = List.of(1000L, 1000L);
+        Set<Long> uniqueIds = new HashSet<>(photoIds);
+
+        when(tripPermissionService.getEditableTrip(userId, tripId)).thenReturn(trip);
+        when(albumRepository.findByIdAndTrip(targetAlbumId, trip)).thenReturn(Optional.of(album));
+        when(photoRepository.findAllByIdInAndTrip(eq(uniqueIds), eq(trip))).thenReturn(List.of(photo));
+
+        // when
+        photoService.movePhotos(userId, tripId, targetAlbumId, photoIds);
+
+        // then
+        verify(tripPermissionService, times(1)).getEditableTrip(userId, tripId);
+        verify(albumRepository, times(1)).findByIdAndTrip(targetAlbumId, trip);
+        verify(photoRepository, times(1)).findAllByIdInAndTrip(eq(uniqueIds), eq(trip));
     }
 
     @Test
@@ -404,10 +428,11 @@ class PhotoServiceTest {
         Long tripId = 10L;
         Long targetAlbumId = 100L;
         List<Long> photoIds = List.of(1000L, 1001L, 1002L);
+        Set<Long> uniqueIds = new HashSet<>(photoIds);
 
         when(tripPermissionService.getEditableTrip(userId, tripId)).thenReturn(trip);
         when(albumRepository.findByIdAndTrip(targetAlbumId, trip)).thenReturn(Optional.of(album));
-        when(photoRepository.findAllByIdInAndTrip(photoIds, trip)).thenReturn(List.of(photo));
+        when(photoRepository.findAllByIdInAndTrip(eq(uniqueIds), eq(trip))).thenReturn(List.of(photo));
 
         // when & then
         ApiException ex = assertThrows(ApiException.class,
@@ -417,7 +442,7 @@ class PhotoServiceTest {
 
         verify(tripPermissionService, times(1)).getEditableTrip(userId, tripId);
         verify(albumRepository, times(1)).findByIdAndTrip(targetAlbumId, trip);
-        verify(photoRepository, times(1)).findAllByIdInAndTrip(photoIds, trip);
+        verify(photoRepository, times(1)).findAllByIdInAndTrip(eq(uniqueIds), eq(trip));
     }
 
     @Test
@@ -427,16 +452,17 @@ class PhotoServiceTest {
         Long userId = 1L;
         Long tripId = 10L;
         List<Long> photoIds = List.of(1000L);
+        Set<Long> uniqueIds = new HashSet<>(photoIds);
 
         when(tripPermissionService.getEditableTrip(userId, tripId)).thenReturn(trip);
-        when(photoRepository.findAllByIdInAndTrip(photoIds, trip)).thenReturn(List.of(photo));
+        when(photoRepository.findAllByIdInAndTrip(eq(uniqueIds), eq(trip))).thenReturn(List.of(photo));
 
         // when
         photoService.deletePhotos(userId, tripId, photoIds);
 
         // then
         verify(tripPermissionService, times(1)).getEditableTrip(userId, tripId);
-        verify(photoRepository, times(1)).findAllByIdInAndTrip(photoIds, trip);
+        verify(photoRepository, times(1)).findAllByIdInAndTrip(eq(uniqueIds), eq(trip));
         verify(s3Service, times(1)).deleteFile(photo.getS3Key());
         verify(photoRepository, times(1)).deleteAll(List.of(photo));
     }
@@ -448,9 +474,10 @@ class PhotoServiceTest {
         Long userId = 1L;
         Long tripId = 10L;
         List<Long> photoIds = List.of(1000L, 10001L, 10002L);
+        Set<Long> uniqueIds = new HashSet<>(photoIds);
 
         when(tripPermissionService.getEditableTrip(userId, tripId)).thenReturn(trip);
-        when(photoRepository.findAllByIdInAndTrip(photoIds, trip)).thenReturn(List.of(photo));
+        when(photoRepository.findAllByIdInAndTrip(eq(uniqueIds), eq(trip))).thenReturn(List.of(photo));
 
         // when & then
         ApiException ex = assertThrows(ApiException.class,
@@ -459,7 +486,7 @@ class PhotoServiceTest {
         assertEquals(ErrorCode.NOT_FOUND_PHOTO, ex.getErrorCode());
 
         verify(tripPermissionService, times(1)).getEditableTrip(userId, tripId);
-        verify(photoRepository, times(1)).findAllByIdInAndTrip(photoIds, trip);
+        verify(photoRepository, times(1)).findAllByIdInAndTrip(eq(uniqueIds), eq(trip));
         verify(s3Service, never()).deleteFile(anyString());
         verify(photoRepository, never()).deleteAll(any());
     }

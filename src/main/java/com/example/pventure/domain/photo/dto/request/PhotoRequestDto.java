@@ -5,6 +5,7 @@ import com.example.pventure.domain.photo.entity.Photo;
 import com.example.pventure.domain.trip.entity.Trip;
 import com.example.pventure.domain.user.entity.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,7 @@ public class PhotoRequestDto {
 
     @Schema(description = "파일 크기", example = "345678")
     @NotNull(message = "파일 크기를 입력해주세요.")
+    @Min(value = 1, message = "파일 크기는 1바이트 이상이어야 합니다.")
     private Long fileSize;
 
     public Photo toEntity(Trip trip, Album album, User user) {

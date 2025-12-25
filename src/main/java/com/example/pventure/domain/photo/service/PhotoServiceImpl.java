@@ -18,7 +18,9 @@ import com.example.pventure.global.exception.ApiException;
 import com.example.pventure.global.exception.ErrorCode;
 import com.example.pventure.global.s3.S3KeyGenerator;
 import com.example.pventure.global.s3.S3Service;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -150,12 +152,7 @@ public class PhotoServiceImpl implements PhotoService {
             album = null;
         }
 
-        List<Photo> photos = photoRepository.findAllByIdInAndTrip(photoIds, trip);
-
-        if (photos.size() != photoIds.size()) {
-            throw new ApiException(ErrorCode.NOT_FOUND_PHOTO);
-        }
-
+        List<Photo> photos = loadPhotos(photoIds, trip);
         photos.forEach(photo -> photo.updateAlbum(album));
     }
 
@@ -168,12 +165,7 @@ public class PhotoServiceImpl implements PhotoService {
 
         Trip trip = tripPermissionService.getEditableTrip(userId, tripId);
 
-        List<Photo> photos = photoRepository.findAllByIdInAndTrip(photoIds, trip);
-
-        if (photos.size() != photoIds.size()) {
-            throw new ApiException(ErrorCode.NOT_FOUND_PHOTO);
-        }
-
+        List<Photo> photos = loadPhotos(photoIds, trip);
         photos.forEach(photo -> s3Service.deleteFile(photo.getS3Key()));
 
         photoRepository.deleteAll(photos);
@@ -197,5 +189,15 @@ public class PhotoServiceImpl implements PhotoService {
     private Album loadAlbum(Long albumId, Trip trip) {
         return albumRepository.findByIdAndTrip(albumId, trip)
             .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND_ALBUM));
+    }
+
+    private List<Photo> loadPhotos(List<Long> photoIds, Trip trip) {
+        Set<Long> uniqueIds = new HashSet<>(photoIds);
+        List<Photo> photos = photoRepository.findAllByIdInAndTrip(uniqueIds, trip);
+
+        if (photos.size() != uniqueIds.size()) {
+            throw new ApiException(ErrorCode.NOT_FOUND_PHOTO);
+        }
+        return photos;
     }
 }
