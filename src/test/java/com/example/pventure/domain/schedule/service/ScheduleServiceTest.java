@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
+
 class ScheduleServiceTest {
 
     @Mock private ScheduleRepository scheduleRepository;
@@ -120,9 +121,9 @@ class ScheduleServiceTest {
         when(scheduleRepository.findById(schedule.getId())).thenReturn(Optional.of(schedule));
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        ScheduleUpdateDto dto = new ScheduleUpdateDto(true, "new memo");
+        ScheduleUpdateDto dto = new ScheduleUpdateDto("new memo", true);
         ScheduleResponseDto response = scheduleService.updateSchedule(trip.getId(), schedule.getId(), user.getId(), dto);
-        assertTrue(response.isCompleted());
+        assertTrue(response.getIsCompleted());
     }
 
     @Test
@@ -185,7 +186,7 @@ class ScheduleServiceTest {
         when(scheduleRepository.findById(999L)).thenReturn(Optional.empty());
         when(memberService.canEdit(user, trip)).thenReturn(true);
 
-        ScheduleUpdateDto dto = new ScheduleUpdateDto(true, "memo");
+        ScheduleUpdateDto dto = new ScheduleUpdateDto("memo", true);
         ApiException ex = assertThrows(ApiException.class,
                 () -> scheduleService.updateSchedule(trip.getId(), 999L, user.getId(), dto));
         assertEquals(ErrorCode.NOT_FOUND_SCHEDULE, ex.getErrorCode());
