@@ -21,10 +21,6 @@ public interface TripService {
 
     Long countTripsWithNoDate(Long userId);
 
-    Long countTrip(Long userId);
-
-    Long countTripsWithNoDate(Long userId);
-
     void deleteTrip(Long userId, Long tripId);
 
 }
